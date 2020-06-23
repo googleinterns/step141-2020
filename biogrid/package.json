@@ -4,6 +4,8 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
+    "api:dev": "nx serve api",
+    "frontend:dev": "nx serve biogrid-mvp",
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
