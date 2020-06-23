@@ -1,12 +1,12 @@
-import * as express from 'express';
+import express from 'express';
 import { Message } from '@biogrid/api-interfaces';
 
 const app = express();
 
 const greeting: Message = { message: 'Welcome to api!' };
 
-app.get('/api', (req, res) => {
-  res.send(greeting);
+app.get('/api', (req: unknown, res: unknown) => {
+  // res.send(greeting);
 });
 
 const port = process.env.port || 3333;
