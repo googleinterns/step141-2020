@@ -23,7 +23,14 @@
     "update": "nx migrate latest",
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "check": "gts check",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run check"
   },
   "private": true,
   "dependencies": {
@@ -34,12 +41,12 @@
   },
   "devDependencies": {
     "@nrwl/workspace": "9.4.5",
-    "@types/node": "~8.9.4",
+    "@types/node": "^13.11.1",
     "dotenv": "6.2.0",
     "ts-node": "~7.0.0",
     "tslint": "~6.0.0",
     "eslint": "6.8.0",
-    "typescript": "~3.8.3",
+    "typescript": "^3.8.3",
     "prettier": "2.0.4",
     "@nrwl/react": "9.4.5",
     "@nrwl/express": "9.4.5",
@@ -68,6 +75,7 @@
     "@babel/preset-react": "7.9.4",
     "babel-jest": "25.1.0",
     "@nrwl/node": "9.4.5",
-    "@types/express": "4.17.0"
+    "@types/express": "4.17.0",
+    "gts": "^2.0.2"
   }
 }
