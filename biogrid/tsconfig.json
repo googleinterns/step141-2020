@@ -13,7 +13,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@biogrid/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@biogrid/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@biogrid/components": ["libs/components/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
