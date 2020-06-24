@@ -31,7 +31,7 @@
     npm run frontend:dev
     ``` 
 
-## TSOA and API Background
+## Tsoa and API Background
 The backend uses [Tsoa](https://github.com/lukeautry/tsoa) and takes inspiration from a [Tsoa Api repo](https://github.com/MakingSense/tsoa-api).
 
 ## NX
