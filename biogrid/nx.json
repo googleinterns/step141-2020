@@ -34,6 +34,9 @@
     },
     "components": {
       "tags": []
+    },
+    "interfaces": {
+      "tags": []
     }
   }
 }
