@@ -3,23 +3,18 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "out-tsc",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "esModuleInterop": true,
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "jsx": "react",
     "baseUrl": ".",
     "paths": {
-      "@biogrid/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@biogrid/components": ["libs/components/src/index.ts"]
-    },
-    "types": ["cypress", "jest"]
+      "@biogrid/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+    }
   },
-  "exclude": ["node_modules", "tmp", "**/*.spec.ts", "**/*.spec.tsx"]
+  "exclude": ["node_modules", "tmp"]
 }
