@@ -9,6 +9,12 @@
   sudo npm i -g @nrwl/cli
   ```
 
+- Then you have to install tsoa and run the tsoa script so that you can run `npm i` without any errors
+  ```
+  npm i tsoa
+  npm build:tsoa
+  ```
+
 - Then install all npm modules for this workspace
   ```
   npm i
