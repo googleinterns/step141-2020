@@ -9,7 +9,6 @@
     "build:routes": "cd apps/api && tsoa routes",
     "build:swagger": "cd apps/api && tsoa swagger --basePath /service",
     "build:tsoa": "npm run build:routes && npm run build:swagger",
-    "build:prod": "npm build:tsoa && nx build api --prod",
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
