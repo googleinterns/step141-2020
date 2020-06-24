@@ -1,14 +1,15 @@
 import React from 'react';
 
-import './components.css';
+import './header.css';
 
-/* eslint-disable-next-line */
-export interface ComponentsProps {}
+export interface ComponentsProps {
+  title: string;
+}
 
 export const Components = (props: ComponentsProps) => {
   return (
     <div>
-      <h1>Welcome to components!</h1>
+      <h1>Welcome to components: {props.title}</h1>
     </div>
   );
 };

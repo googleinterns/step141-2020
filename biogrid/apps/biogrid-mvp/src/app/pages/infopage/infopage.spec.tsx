@@ -9,13 +9,14 @@ describe('Info page', () => {
   });
 
   it('should render successfully', async () => {
+    const message = 'my message';
     global['fetch'] = jest.fn().mockResolvedValueOnce({
       json: () => ({
-        message: 'my message',
+        message,
       }),
     });
 
     const { baseElement } = render(<InfoPage />);
-    await wait(() => getByText(baseElement, 'my message'));
+    await wait(() => getByText(baseElement, message));
   });
 });
