@@ -2,7 +2,7 @@
 
 ## Setting up
 - First make sure to have node js and npm installed.
-  - [Install Node and npm](https://www.geeksforgeeks.org/installation-of-node-js-on-linux/)
+  - [Install Node and Npm](https://www.geeksforgeeks.org/installation-of-node-js-on-linux/)
 
 - Then install Nx globally
   ```
