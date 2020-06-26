@@ -1,1 +1,2 @@
-src/app/build
+src/app/build/routes.ts
+src/app/build/swagger.json
