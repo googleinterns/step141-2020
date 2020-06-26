@@ -1,7 +1,9 @@
-import { State } from '../state';
+import { StateGraph } from '../state';
 import { GridAction } from '../grid-action';
 
+// TODO add in town interface
 export interface Grid {
-  getSystemState: () => State;
+  setupGrid: (town: unknown) => void
+  getSystemState: () => StateGraph;
   takeAction: (action: GridAction) => void;
 }

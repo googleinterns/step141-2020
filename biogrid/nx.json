@@ -37,6 +37,9 @@
     },
     "grid-simulator": {
       "tags": []
+    },
+    "biogrid-simulator": {
+      "tags": []
     }
   }
 }
