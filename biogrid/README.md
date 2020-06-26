@@ -2,16 +2,27 @@
 
 ## Setting up
 - First make sure to have node js and npm installed.
-  - [Install Node and npm](https://www.geeksforgeeks.org/installation-of-node-js-on-linux/)
+  - [Install Node and Npm](https://www.geeksforgeeks.org/installation-of-node-js-on-linux/)
 
 - Then install Nx globally
   ```
   sudo npm i -g @nrwl/cli
   ```
 
+- Then you have to install tsoa and run the tsoa script so that you can run `npm i` without any errors
+  ```
+  npm i tsoa
+  npm build:tsoa
+  ```
+
 - Then install all npm modules for this workspace
   ```
   npm i
+  ```
+
+- Then install docker
+  ```
+  sudo apt install docker.io
   ```
 
 ## Getting running
@@ -24,6 +35,9 @@
     ```
     npm run frontend:dev
     ``` 
+
+## Tsoa and API Background
+The backend uses [Tsoa](https://github.com/lukeautry/tsoa) and takes inspiration from a [Tsoa Api repo](https://github.com/MakingSense/tsoa-api).
 
 ## NX
 This project was generated using [Nx](https://nx.dev)

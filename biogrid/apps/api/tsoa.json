@@ -1,0 +1,14 @@
+{
+  "swagger": {
+    "entryFile": "./src/app/controllers/index.ts",
+    "outputDirectory": "./src/app/build/",
+    "specMerging": "recursive",
+    "spec": {}
+  },
+  "routes": {
+    "entryFile": "./src/app/controllers/index.ts",
+    "routesDir": "./src/app/build",
+    "basePath": "/api/",
+    "middleware": "express"
+  }
+}

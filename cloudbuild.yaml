@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'gcr.io/step-alr-2020/api-image', '.' ]
+images:
+- 'gcr.io/step-alr-2020/api-image'
