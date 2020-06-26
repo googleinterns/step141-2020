@@ -20,6 +20,11 @@
   npm i
   ```
 
+- Then install docker
+  ```
+  sudo apt install docker.io
+  ```
+
 ## Getting running
 - In order to run the development instance locally
   - Run the api
