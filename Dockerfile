@@ -36,4 +36,4 @@ RUN chmod 777 /usr/local/bin/docker-entrypoint.sh \
   && ln -s /usr/local/bin/docker-entrypoint.sh 
 EXPOSE 8080
 
-CMD ["ls"]
+CMD ["node", "dist/apps/api/main.js"]
