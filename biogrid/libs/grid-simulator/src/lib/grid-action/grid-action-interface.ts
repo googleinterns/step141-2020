@@ -1,6 +1,6 @@
 
 
-//TODO add proper interfaces for batteries once created once created
+//TODO add proper interfaces for batteries once created
 export interface SwitchedOnBatteryAction {
   battery: unknown,
   batteryState: unknown
