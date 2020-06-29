@@ -1,6 +1,5 @@
 import {
   Grid,
-  StateGraph,
   GridAction,
   GridOptions,
 } from '@biogrid/grid-simulator';
@@ -22,6 +21,7 @@ export class Biogrid implements Grid {
   }
 
   takeAction(action: GridAction) {
+    // TODO implement actions taken later
     return;
   }
 }
