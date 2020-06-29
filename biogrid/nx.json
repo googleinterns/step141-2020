@@ -35,7 +35,10 @@
     "components": {
       "tags": []
     },
-    "interfaces": {
+    "grid-simulator": {
+      "tags": []
+    },
+    "biogrid-simulator": {
       "tags": []
     }
   }

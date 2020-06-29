@@ -1,9 +1,9 @@
 module.exports = {
-  name: 'interfaces',
+  name: 'biogrid-simulator',
   preset: '../../jest.config.js',
   transform: {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'html'],
-  coverageDirectory: '../../coverage/libs/interfaces',
+  coverageDirectory: '../../coverage/libs/biogrid-simulator',
 };
