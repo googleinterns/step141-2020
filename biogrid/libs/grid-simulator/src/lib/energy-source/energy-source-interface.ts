@@ -1,5 +1,4 @@
-import { outputEnergy, typeOfEnergy } from "./energy-types-interface";
-
-export interface energySource {
-  getpowerAmount(inputEnergy: typeOfEnergy): outputEnergy;
+import { Energy } from "../measurements";
+export interface EnergySource {
+  getpowerAmount(): Energy;
 }

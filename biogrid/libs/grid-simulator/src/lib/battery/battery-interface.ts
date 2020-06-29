@@ -1,11 +1,17 @@
 // This is going to be implemented by the battery-class
-// Did not export variables because I want them to be private and interfaces does not implement that
+// Did not export variables like batteryCapacity because 
+// I want them to be private and interfaces does not implement that
+
+import { Energy } from '../measurements';
 
 export interface Battery {
-  getEnergyAmount(): number;
-  getMaxcapacity(): number;
+  getEnergyAmount(): Energy;
+  getMaxcapacity(): Energy;
   isEmpty(): boolean;
   isFull(): boolean;
+  startCharging(inputPower: Energy): void;
+  stopCharging(): void;
+  supplyPower(outputenergy: Energy): Energy;
 }
 
 export interface BatteryState {
