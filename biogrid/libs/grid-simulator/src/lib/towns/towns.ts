@@ -1,4 +1,4 @@
-import { EnergyUsers } from "./energyusers"; 
+import { EnergyUsers } from '../energyusers';
 
 export interface Towns{
 
