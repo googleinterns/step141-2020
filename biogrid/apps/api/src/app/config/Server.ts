@@ -42,7 +42,7 @@ export class Server {
   }
 
   private allowCors(req: express.Request, res: express.Response, next: express.NextFunction): void {
-    // In a later PR only specific sites will have access. For now, as we get setup, any site can have API access
+    // TODO: in a later PR only specific sites will have access. For now, as we get setup, any site can have API access
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
       'Access-Control-Allow-Headers',
