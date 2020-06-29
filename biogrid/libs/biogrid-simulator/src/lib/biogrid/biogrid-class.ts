@@ -11,7 +11,7 @@ export interface BiogridOptions extends GridOptions {
   numberOfLargeBatteryCells?: number;
 }
 
-export class BioGrid implements Grid {
+export class Biogrid implements Grid {
   private state: BiogridState;
   constructor(town: unknown, opts?: BiogridOptions) {
     this.state = new BiogridState(10, []);
