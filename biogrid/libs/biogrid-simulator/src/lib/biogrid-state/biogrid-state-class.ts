@@ -23,16 +23,13 @@ export class BiogridState implements StateGraph {
     return this.graph;
   }
 
-  private addAllEdges(vertexIndex: number, edges?: StateGraphEdge[]) {
-    edges?.forEach((edge) => {
+  private addAllEdges(vertexIndex: number, edges: StateGraphEdge[]) {
+    edges.forEach((edge) => {
       this.graph.addEdge(
         new jsgraphs.Edge(vertexIndex, edge.toIndex, edge.weight)
       );
-      if (edge.label) {
-        // Typecast because the graph edge maybe null
-        (this.graph.edge(vertexIndex, edge.toIndex) as jsgraphs.Edge).label =
-          edge.label;
-      }
+      (this.graph.edge(vertexIndex, edge.toIndex) as jsgraphs.Edge).label =
+        edge.label;
     });
   }
 }

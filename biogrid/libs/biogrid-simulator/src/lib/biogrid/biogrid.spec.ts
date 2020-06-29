@@ -18,7 +18,8 @@ describe('classes', () => {
 
   it('should ensure that the Biogrid take action works', () => {
     const action = new BiogridAction([])
-    expect(grid.takeAction(action)).toReturn();
+    // Ensure that take action returned
+    expect(grid.takeAction(action)).toEqual(undefined);
     const state = grid.getSystemState();
     // TODO add in the test to ensure that the grid action works
     expect(state).toBeTruthy();
