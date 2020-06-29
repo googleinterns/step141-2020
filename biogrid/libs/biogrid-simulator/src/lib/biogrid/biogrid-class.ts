@@ -1,15 +1,24 @@
-import { Grid, StateGraph, GridAction } from '@biogrid/grid-simulator'
+import {
+  Grid,
+  StateGraph,
+  GridAction,
+  GridOptions,
+} from '@biogrid/grid-simulator';
+import { BiogridState } from '../biogrid-state';
+
+export interface BiogridOptions extends GridOptions {
+  numberOfSmallBatteryCells?: number;
+  numberOfLargeBatteryCells?: number;
+}
 
 export class BioGrid implements Grid {
-  setupGrid(town: unknown) {
-    return;
+  private state: BiogridState;
+  constructor(town: unknown, opts?: BiogridOptions) {
+    this.state = new BiogridState(10, []);
   }
 
-  getSystemState(): StateGraph {
-    const state: StateGraph = {
-      adjList: new Map()
-    }
-    return state
+  getSystemState(): BiogridState {
+    return this.state;
   }
 
   takeAction(action: GridAction) {
