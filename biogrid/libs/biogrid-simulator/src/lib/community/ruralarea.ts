@@ -3,23 +3,28 @@ import { Building } from '../building';
 
 export class RuralArea implements Towns{
 
-   private town: Building[];
+  private town: Building[];
 
-    constructor(town: Building[]) {
-      this.town = town;
-    }
+  constructor(town: Building[]) {
+    this.town = town;
+  }
 
-    getTown(){
-      return this.town;
-    }
-    getBuilding(building: Building){
-      for (let i=0; i<this.town.length; i++){
-        if (this.town[i] === building){
-          return this.town[i];
-        }
+  getTown(){
+    return this.town;
+  }
+
+  getBuilding(building: Building){
+    for (let i=0; i<this.town.length; i++){
+      if (this.town[i] === building){
+        return this.town[i];
       }
-      return null;
     }
+    return null;
+  }
+
+  addBuilding(newBuilding: Building){
+    this.town.push(newBuilding);
+  }
 
 
 }
