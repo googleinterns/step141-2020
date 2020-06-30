@@ -29,10 +29,6 @@ export class BioEnergySource implements EnergySource {
     return tempEnergy;
   }
 
-  get SourceCapacity() {
-    return this.sourceCapacity;
-  }
-
   set SourceCapacity(inputEnergy: Energy) {
     if (!this.validateInputs(inputEnergy)){
       throw `Cannot set inputEnergy to ${inputEnergy}`;
