@@ -1,53 +1,43 @@
-import { EnergyUsers } from '@biogrid/grid-simulator';
+import { EnergyUser } from '@biogrid/grid-simulator';
 
 /**
  * A structure such as a building or house which uses energy to operate.
  */
-export class Building implements EnergyUsers {
+export class Building implements EnergyUser {
 
-  /** The amount of energy the building has. */
-  private energyCount: number;
-  /** The name identifier of the building. */
+  private energyInJoules: number;
   private buildingName: string;
-  /** The battery for the building. */
+  /** The battery storage for the building. */
   battery: unknown;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.
-   * @param {string} name The name the building is assigned. 
    */
-  constructor(energy: number, name: string){
-    this.energyCount = energy;
+  constructor(energy: number, name: string) {
+    this.energyInJoules = energy;
     this.buildingName = name;
   }
 
-  /**
-   * @return {string} The name of the building.
-   */
-  getBuildingName(){
+  getBuildingName() : string {
     return this.buildingName;
   }
-  /**
-   * @return {number} The current amount of energy the building has.
-   */
-  getAmountEnergyUsed(){
-    return this.energyCount;
+
+  getEnergyInJoules() : number {
+    return this.energyInJoules;
   }
 
   /**
    * This method adds energy to the current building's power.
-   * @param energy The energy received.
    */
-  energyReceived(energy: number){
-    this.energyCount+=energy;
+  addEnergy(energy: number) {
+    this.energyInJoules+=energy;
   }
 
   /**
    * This method uses energy from the current building's power.
-   * @param energy The amount of energy used.
    */
-  depleteEnergy(energy: number){
-    this.energyCount-=energy;
+  depleteEnergy(energy: number) {
+    this.energyInJoules-=energy;
   }
 
 }

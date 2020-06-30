@@ -1,12 +1,11 @@
-import { Towns } from '@biogrid/grid-simulator';
+import { Town } from '@biogrid/grid-simulator';
 import { Building } from '../building';
 
 /**
  * A rural area that represents a community where a microgrid can function.
  */
-export class RuralArea implements Towns{
+export class RuralArea implements Town {
 
-  /** A town of buildings that use energy. */
   private town: Building[];
 
   /**
@@ -16,11 +15,7 @@ export class RuralArea implements Towns{
     this.town = town;
   }
 
-  /**
-   * Gets our current town.
-   * @return {Building[]} Returns our town.
-   */
-  getTown(){
+  getTown() : Building[] {
     return this.town;
   }
 
@@ -29,7 +24,7 @@ export class RuralArea implements Towns{
    * @param {Building} building The building we're looking for.
    * @return {Building} Returns the building if found in the list, null if not.
    */
-  getBuildingByName(building: Building){
+  getBuildingByName(building: Building) {
     for (let i=0; i<this.town.length; i++){
       if (this.town[i].getBuildingName() === building.getBuildingName()){
         return this.town[i];
@@ -42,7 +37,7 @@ export class RuralArea implements Towns{
    * This method adds a building to our town.
    * @param {Building} newBuilding The building to be added. 
    */
-  addBuilding(newBuilding: Building){
+  addBuilding(newBuilding: Building) {
     this.town.push(newBuilding);
   }
 
