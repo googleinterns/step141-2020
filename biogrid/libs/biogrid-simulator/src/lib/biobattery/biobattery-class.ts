@@ -15,7 +15,7 @@ export class BioBattery implements Battery {
 
   startCharging(inputPower: Energy): void {
     if (this.currentBatteryPower + inputPower > this.maxCapacity) {
-
+      this.currentBatteryPower = this.maxCapacity;
     }
     this.currentBatteryPower += inputPower;
   }
