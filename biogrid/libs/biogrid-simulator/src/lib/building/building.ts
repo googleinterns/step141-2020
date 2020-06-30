@@ -7,16 +7,26 @@ export class Building implements EnergyUsers {
 
   /** The amount of energy the building has. */
   private energyCount: number;
+  /** The name identifier of the building. */
+  private buildingName: string;
   /** The battery for the building. */
   battery: unknown;
 
   /**
-   * @param {number} energy The given amount of energy. 
+   * @param {number} energy Amount of energy the building will have in joules.
+   * @param {string} name The name the building is assigned. 
    */
-  constructor(energy: number){
+  constructor(energy: number, name: string){
     this.energyCount = energy;
+    this.buildingName = name;
   }
 
+  /**
+   * @return {string} The name of the building.
+   */
+  getBuildingName(){
+    return this.buildingName;
+  }
   /**
    * @return {number} The current amount of energy the building has.
    */

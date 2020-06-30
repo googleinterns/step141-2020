@@ -10,7 +10,7 @@ export class RuralArea implements Towns{
   private town: Building[];
 
   /**
-   * @param {Building[]} town A given town.
+   * @param {Building[]} town A list of buildings which make up a town.
    */
   constructor(town: Building[]) {
     this.town = town;
@@ -25,12 +25,13 @@ export class RuralArea implements Towns{
   }
 
   /**
-   * This method gets a building in a town.
+   * This method gets a building in a town by its name identifier.
+   * @param {Building} building The building we're looking for.
    * @return {Building} Returns the building if found in the list, null if not.
    */
-  getBuilding(building: Building){
+  getBuildingByName(building: Building){
     for (let i=0; i<this.town.length; i++){
-      if (this.town[i] === building){
+      if (this.town[i].getBuildingName() === building.getBuildingName()){
         return this.town[i];
       }
     }
