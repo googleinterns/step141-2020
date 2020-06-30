@@ -4,9 +4,8 @@ export class BioBattery implements Battery {
   private currentBatteryPower: Energy;
   private readonly maxCapacity: Energy;
 
-  constructor(currentBatteryPower: Energy = 0,maxCapacity: Energy = 10) {
-    
-    if(!this.validateInputs(currentBatteryPower, maxCapacity)) {
+  constructor(currentBatteryPower: Energy = 0, maxCapacity: Energy = 10) {
+    if (!this.validateInputs(currentBatteryPower, maxCapacity)) {
       throw new Error('Cannot create a battery with these values');
     }
     this.currentBatteryPower = currentBatteryPower;
@@ -57,6 +56,4 @@ export class BioBattery implements Battery {
   isFull(): boolean {
     return this.currentBatteryPower === this.maxCapacity;
   }
-
-  
 }
