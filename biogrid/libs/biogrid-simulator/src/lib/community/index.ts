@@ -1,1 +1,1 @@
-export * from '/.ruralarea'
+export * from './ruralarea'
