@@ -8,7 +8,7 @@ export class BioEnergySource implements EnergySource {
   constructor(sourceCapacity: Energy = 10, minCapcity: Energy = 0) {
     
     if (!this.validateInputs(sourceCapacity, minCapcity)) {
-      throw new Error('Cannot create an Energy source object with these values');
+      throw 'Cannot create an Energy source object with these values';
     }
     this.sourceCapacity = sourceCapacity;
     this.minCapacity = minCapcity;
@@ -18,9 +18,7 @@ export class BioEnergySource implements EnergySource {
     this.energySourceValidator = {
       value: sourceCapacity,
       min: minCapcity,
-      isInt() {
-        return sourceCapacity >= 0;
-      }
+      isPositive: sourceCapacity >= 0 && minCapcity >= 0
     };
     return validate(this.energySourceValidator);
   }
@@ -37,7 +35,7 @@ export class BioEnergySource implements EnergySource {
 
   set SourceCapacity(inputEnergy: Energy) {
     if (!this.validateInputs(inputEnergy)){
-      throw new Error(`Cannot set inputEnergy to ${inputEnergy}`);
+      throw `Cannot set inputEnergy to ${inputEnergy}`;
     }
     this.sourceCapacity = inputEnergy;
   }
