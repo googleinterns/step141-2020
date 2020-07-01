@@ -2,21 +2,27 @@ import { BioBattery } from "./";
 
 describe('test for BioBattery class', () => {
   test('battery object throws an error if passed negative Energy', () => {
-    expect(() => new BioBattery(-1, 5)).toThrow(
-      'Cannot create a battery with these values'
+    const currentpower = -1;
+    const maxCapacity = 5;
+    expect(() => new BioBattery(currentpower, maxCapacity)).toThrow(
+      `Cannot create a battery with values: (${currentpower}, ${maxCapacity})`
     );
   });
 
   test('battery object throws an error if passed energy more than its capacity', () => {
-    expect(() => new BioBattery(10, 1)).toThrow(
-      'Cannot create a battery with these values'
+    const currentpower = 10;
+    const maxCapacity = 1;
+    expect(() => new BioBattery(currentpower, maxCapacity)).toThrow(
+      `Cannot create a battery with values: (${currentpower}, ${maxCapacity})`
     );
   });
 
   test('battery cannot supply the baterry energy more energy than it has', () => {
-    const battery = new BioBattery(20, 30);
+    const currentpower = 20;
+    const maxCapacity = 30; 
+    const battery = new BioBattery(currentpower, maxCapacity);
     const outputenergy = 25;
-    const expected = `Battery has less than ${outputenergy} units`;
+    const expected = `Requested to supply ${outputenergy} power. Battery only has ${currentpower} units.`;
     expect(() => battery.supplyPower(outputenergy)).toThrow(expected);
   });
 

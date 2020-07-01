@@ -6,7 +6,8 @@ export class BioBattery implements Battery {
 
   constructor(currentBatteryPower: Energy = 0, maxCapacity: Energy = 10) {
     if (!this.validateInputs(currentBatteryPower, maxCapacity)) {
-      throw 'Cannot create a battery with these values';
+      // TODO return a tuple of from validate to with the boolean and unpassed validations
+      throw new Error(`Cannot create a battery with values: (${currentBatteryPower}, ${maxCapacity})`);
     }
     this.currentBatteryPower = currentBatteryPower;
     this.maxCapacity = maxCapacity;
@@ -24,7 +25,8 @@ export class BioBattery implements Battery {
 
   supplyPower(outputenergy: Energy): Energy {
     if (this.currentBatteryPower - outputenergy < 0) {
-      throw `Battery has less than ${outputenergy} units`;
+      //TODO implement the function to send power that it has and not throw an error
+      throw new Error(`Requested to supply ${outputenergy} power. Battery only has ${this.currentBatteryPower} units.`);
     }
     this.currentBatteryPower -= outputenergy;
     return outputenergy;

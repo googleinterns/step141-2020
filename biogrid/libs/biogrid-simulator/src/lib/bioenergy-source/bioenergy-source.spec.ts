@@ -2,13 +2,17 @@ import { BioEnergySource } from "./";
 
 describe('tests for the BioEnergySource', () => {
   test('Cannot create an energySource when passed negative values', () => {
-    const expected = 'Cannot create an Energy source object with these values';
-    expect(() => new BioEnergySource(-1, 0)).toThrow(expected);
+    const sourceEnergy = -1;
+    const minCapacity = 0;
+    const expected = `Cannot create an Energy source object with values: (${sourceEnergy}, ${minCapacity})`;
+    expect(() => new BioEnergySource(sourceEnergy, minCapacity)).toThrow(expected);
   });
 
   test('Cannot create an energySource when its energy is lower than the minimum', () => {
-    const expected = 'Cannot create an Energy source object with these values';
-    expect(() => new BioEnergySource(1, 10)).toThrow(expected);
+    const sourceEnergy = 1;
+    const minCapacity = 10;
+    const expected = `Cannot create an Energy source object with values: (${sourceEnergy}, ${minCapacity})`;
+    expect(() => new BioEnergySource(sourceEnergy, minCapacity)).toThrow(expected);
   });
 
   test('Cannot set the source capacity to less than minCapacity or negative', () => {
