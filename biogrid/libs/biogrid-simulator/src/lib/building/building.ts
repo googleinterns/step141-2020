@@ -14,9 +14,18 @@ export class Building implements EnergyUser {
    * @param {number} energy Amount of energy the building will have in joules.
    */
   constructor(energy: number) {
-    this.energyInJoules = energy;
+    if (this.isPositive(energy)) {
+      this.energyInJoules = energy;
+    } else {
+      throw new Error(`Can't create a building with negative energy!`);
+    }
+    
     // Initial id value, will be changed by rural area.
     this.buildingId = -1;
+  }
+
+  isPositive(energy: number) : boolean {
+    return energy >= 0;
   }
 
   getBuildingId() : number {
@@ -35,14 +44,27 @@ export class Building implements EnergyUser {
    * This method adds energy to the current building's power.
    */
   increaseEnergy(energy: number) {
-    this.energyInJoules+=energy;
+    if (this.isPositive(energy)) {
+      this.energyInJoules+=energy;
+    } else {
+      throw new Error(`Can't add negative energy!`);
+    }
   }
 
   /**
    * This method uses energy from the current building's power.
    */
   decreaseEnergy(energy: number) {
-    this.energyInJoules-=energy;
+    if (this.isPositive(energy)) {
+      // Building can't have a negative amount of energy in store.
+      if (energy >= this.energyInJoules) {
+        this.energyInJoules = 0;
+      } else {
+        this.energyInJoules-=energy;
+      }
+    } else {
+      throw new Error(`Can't use a negative amount of energy!`);
+    }
   }
 
 }
