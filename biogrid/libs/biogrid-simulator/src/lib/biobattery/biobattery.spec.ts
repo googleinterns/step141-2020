@@ -37,6 +37,4 @@ describe('test for BioBattery class', () => {
     const expected = false;
     expect(battery.isEmpty()).toEqual(expected);
   });
-
-  // Did not implement getEnergyAmount and getMaxcapacity because they are called by the tests in the class
 });
