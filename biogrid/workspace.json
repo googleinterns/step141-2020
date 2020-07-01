@@ -19,9 +19,7 @@
               "apps/biogrid-mvp/src/favicon.ico",
               "apps/biogrid-mvp/src/assets"
             ],
-            "styles": [
-              "apps/biogrid-mvp/src/styles.css"
-            ],
+            "styles": ["apps/biogrid-mvp/src/styles.css"],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
           },
@@ -62,6 +60,20 @@
             }
           }
         },
+        "serve-with-api": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "nx serve api"
+              },
+              {
+                "command": "nx serve biogrid-mvp"
+              }
+            ],
+            "parallel": true
+          }
+        },
         "lint": {
           "builder": "@nrwl/linter:lint",
           "options": {
@@ -70,10 +82,7 @@
               "apps/biogrid-mvp/tsconfig.app.json",
               "apps/biogrid-mvp/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/biogrid-mvp/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/biogrid-mvp/**/*"]
           }
         },
         "test": {
@@ -108,13 +117,8 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": [
-              "apps/biogrid-mvp-e2e/tsconfig.e2e.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/biogrid-mvp-e2e/**/*"
-            ]
+            "tsConfig": ["apps/biogrid-mvp-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/biogrid-mvp-e2e/**/*"]
           }
         }
       }
@@ -132,9 +136,7 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": [
-              "apps/api/src/assets"
-            ]
+            "assets": ["apps/api/src/assets"]
           },
           "configurations": {
             "production": {
@@ -164,10 +166,7 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/api/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/api/**/*"]
           }
         },
         "test": {
@@ -194,10 +193,7 @@
               "libs/components/tsconfig.lib.json",
               "libs/components/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/components/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/components/**/*"]
           }
         },
         "test": {
@@ -224,10 +220,7 @@
               "libs/grid-simulator/tsconfig.lib.json",
               "libs/grid-simulator/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/grid-simulator/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/grid-simulator/**/*"]
           }
         },
         "test": {
@@ -254,10 +247,7 @@
               "libs/biogrid-simulator/tsconfig.lib.json",
               "libs/biogrid-simulator/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/biogrid-simulator/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/biogrid-simulator/**/*"]
           }
         },
         "test": {

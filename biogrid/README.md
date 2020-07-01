@@ -17,7 +17,8 @@
 
 - Then you have to install the libraries for and build the client api
   ```
-  sudo npm i -g swagger-ts-client
+  sudo apt install default-jdk
+  sudo npm install @openapitools/openapi-generator-cli -g
   npm run build-api-client:dev
   ```
 

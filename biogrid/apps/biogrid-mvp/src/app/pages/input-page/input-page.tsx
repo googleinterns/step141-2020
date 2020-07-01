@@ -1,31 +1,43 @@
 import React, { useState } from 'react';
 import './input-page.css';
-import { useForm } from 'react-hook-form';
-// import { NewBiogridBody } from '@biogrid/api-interfaces';
-import DatePicker from 'react-datepicker'
+import DatePicker from 'react-datepicker';
+import { Client } from '../../client';
+import { NewBiogridBody } from '../../build';
+
+function useInput(opts: { type: string }) {
+  const [value, setValue] = useState('');
+  const input = (
+    <input
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      type={opts.type}
+    />
+  );
+  return [value, input];
+}
 
 export const InputPage = () => {
-  const { register, handleSubmit, errors } = useForm();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [smallBatteryCells, smallBatteryCellInput] = useInput({
+    type: 'number',
+  });
+  const [largeBatteryCells, largeBatteryCellInput] = useInput({
+    type: 'number',
+  });
 
-  const onSubmit = async (data: {
-    smallBatteryCells: number;
-    largeBatteryCells: number;
-  }) => {
-    const body  = {
+  const onSubmit = async () => {
+    const body: NewBiogridBody = {
       startDate,
       endDate,
-      smallBatteryCells: data.smallBatteryCells,
-      largeBatteryCells: data.largeBatteryCells,
+      smallBatteryCells: parseInt(smallBatteryCells as string),
+      largeBatteryCells: parseInt(largeBatteryCells as string),
     };
-    // await fetch('url/api/biogrid/', {
-    //   body: ,
-    //   method: 'POST'
-    // })
+    const client = Client.getInstance();
+    await client.api.newBiogrid({ body });
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={() => onSubmit}>
       <DatePicker
         showPopperArrow={false}
         selected={startDate}
@@ -36,23 +48,10 @@ export const InputPage = () => {
         selected={endDate}
         onChange={(date: Date) => setEndDate(date)}
       />
-
-      <input
-        name="smallBatteryCells"
-        type="number"
-        ref={register({ required: true, pattern: /\d+/ })}
-      />
-      {errors.smallBatteryCells && 'This field is required.'}
-
-      <input
-        name="largeBatteryCells"
-        type="number"
-        ref={register({ pattern: /\d+/, required: true })}
-      />
-      {errors.largeBatteryCells && 'This field is required.'}
+      {smallBatteryCellInput}
+      {largeBatteryCellInput}
 
       <input type="submit" />
-
 
       <input type="submit" />
     </form>

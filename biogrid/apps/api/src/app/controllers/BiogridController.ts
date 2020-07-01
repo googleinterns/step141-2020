@@ -2,21 +2,21 @@ import {
   Route,
   Controller,
   Get,
-  Put,
   Post,
-  Delete,
-  Security,
-  Query,
   Body,
-  Response,
-  Tags,
   SuccessResponse,
 } from 'tsoa';
 
-// import { NewBiogridBody } from '@biogrid/api-interfaces';
 import { createNewBiogrid } from '../services';
 
-@Tags('biogrid')
+interface NewBiogridBody {
+  startDate: Date
+  endDate: Date,
+  smallBatteryCells: number,
+  largeBatteryCells: number
+}
+
+
 @Route('biogrid')
 export class BiogridController extends Controller {
   constructor() {
@@ -25,7 +25,7 @@ export class BiogridController extends Controller {
 
   @SuccessResponse(204)
   @Post('/')
-  public async NewBioGrid(@Body() body: unknown): Promise<void> {
+  public async NewBiogrid(@Body() body: NewBiogridBody): Promise<void> {
     await createNewBiogrid();
   }
 }
