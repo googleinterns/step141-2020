@@ -8,9 +8,13 @@ beforeAll(() => {
 
 describe('BioBrain class', () => {
   test('It should test that there is only one instance of brain in the system', () => {
-    const expectedBrain = BioBrain.Instance;
-
-    expect(actualBrain).toEqual(expectedBrain);
+    // TODO insert the right states
+    const gridStates = ['Grid is fine', 'Source energy is flowing in', 'Battery is not full'];
+    // Change the states of the brain and see if any brain instance has the same values
+    actualBrain.gridStates = gridStates;
+    
+    const expectedBrain = BioBrain.Instance.gridStates;
+    expect(actualBrain.gridStates).toEqual(expectedBrain);
   });
 
   test('It should test that there is an action sent back', () => {
