@@ -10,7 +10,7 @@ export class RuralArea implements Town {
   private randomIdNumbers : Number[] = [];
 
   /**
-   * @param {Building[]} town A list of buildings which make up a town.
+   * @param {Building[]} buildings A list of buildings which make up a town.
    */
   constructor(buildings: Building[]) {
     for (let i=0; i<buildings.length; i++) {
