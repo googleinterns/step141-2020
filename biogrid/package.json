@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "fullstack:dev": "npm run build:tsoa && npm run build-api-client:dev && nx serve-with-api biogrid-mvp",
+    "fullstack:dev": "PORT=3333 && npm run build:tsoa && npm run build-api-client:dev && nx serve-with-api biogrid-mvp",
     "build-api-client:dev": "(mkdir apps/biogrid-mvp/src/app/build || true) && openapi-generator generate -i ./apps/api/src/app/build/swagger.json --generator-name typescript-fetch -o apps/biogrid-mvp/src/app/build/",
     "api:dev": "npm run build:tsoa && nx serve api",
     "frontend:dev": "nx serve biogrid-mvp",

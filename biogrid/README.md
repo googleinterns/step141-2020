@@ -33,15 +33,10 @@
   ```
 
 ## Getting running
-- In order to run the development instance locally
-  - Run the api
-    ```
-    npm run api:dev
-    ```
-  - Run the frontend
-    ```
-    npm run frontend:dev
-    ``` 
+- In order to run the development instance locally (frontend and backend)
+  ```
+  npm run fullstack:dev
+  ```
 
 ## Tsoa and API Background
 The backend uses [Tsoa](https://github.com/lukeautry/tsoa) and takes inspiration from a [Tsoa Api repo](https://github.com/MakingSense/tsoa-api).
