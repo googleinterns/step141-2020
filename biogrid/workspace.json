@@ -269,67 +269,6 @@
           }
         }
       }
-    },
-    "api-client-builder": {
-      "root": "apps/api-client-builder",
-      "sourceRoot": "apps/api-client-builder/src",
-      "projectType": "application",
-      "prefix": "api-client-builder",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/api-client-builder",
-            "main": "apps/api-client-builder/src/main.ts",
-            "tsConfig": "apps/api-client-builder/tsconfig.app.json",
-            "assets": [
-              "apps/api-client-builder/src/assets"
-            ]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/api-client-builder/src/environments/environment.ts",
-                  "with": "apps/api-client-builder/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api-client-builder:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:lint",
-          "options": {
-            "linter": "eslint",
-            "tsConfig": [
-              "apps/api-client-builder/tsconfig.app.json",
-              "apps/api-client-builder/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/api-client-builder/**/*"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/api-client-builder/jest.config.js",
-            "tsConfig": "apps/api-client-builder/tsconfig.spec.json",
-            "passWithNoTests": true
-          }
-        }
-      }
     }
   },
   "cli": {

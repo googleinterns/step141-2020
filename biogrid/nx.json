@@ -44,9 +44,6 @@
     },
     "biogrid-simulator": {
       "tags": []
-    },
-    "api-client-builder": {
-      "tags": []
     }
   }
 }

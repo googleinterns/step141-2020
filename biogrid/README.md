@@ -17,7 +17,7 @@
 
 - Then you have to install the libraries for and build the client api
   ```
-  npm i swagger-ts-generator
+  sudo npm i -g swagger-ts-client
   npm run build-api-client:dev
   ```
 

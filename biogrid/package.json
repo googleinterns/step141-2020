@@ -8,7 +8,7 @@
   "scripts": {
     "nx": "nx",
     "fullstack:dev": "npm run build:tsoa && npm run build-api-client:dev",
-    "build-api-client:dev": "nx build api-client-builder --dev && cp apps/api/src/app/build/swagger.json dist/apps/api-client-builder/ && node dist/apps/api-client-builder/main.js",
+    "build-api-client:dev": "swagger-ts-client -s ./apps/api/src/app/build/swagger.json -t ./apps/biogrid-mvp/src/app/build/types.ts -o ./apps/biogrid-mvp/src/app/build/",
     "api:dev": "npm run build:tsoa && nx serve api",
     "frontend:dev": "nx serve biogrid-mvp",
     "build:routes": "(cd apps/api && tsoa routes)",
@@ -106,7 +106,6 @@
     "prettier": "2.0.4",
     "randomstring": "^1.1.5",
     "supertest": "^3.0.0",
-    "swagger-ts-generator": "^1.2.11",
     "ts-jest": "25.2.1",
     "ts-node": "~7.0.0",
     "ts-node-dev": "^1.0.0-pre.18",
