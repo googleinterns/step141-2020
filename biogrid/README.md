@@ -12,7 +12,13 @@
 - Then you have to install tsoa and run the tsoa script so that you can run `npm i` without any errors
   ```
   npm i tsoa
-  npm build:tsoa
+  npm run build:tsoa
+  ```
+
+- Then you have to install the libraries for and build the client api
+  ```
+  npm i swagger-ts-generator
+  npm run build-api-client:dev
   ```
 
 - Then install all npm modules for this workspace

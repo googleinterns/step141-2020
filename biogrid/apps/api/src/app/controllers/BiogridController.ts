@@ -13,7 +13,7 @@ import {
   SuccessResponse,
 } from 'tsoa';
 
-import { NewBiogridBody } from '@biogrid/api-interfaces';
+// import { NewBiogridBody } from '@biogrid/api-interfaces';
 import { createNewBiogrid } from '../services';
 
 @Tags('biogrid')

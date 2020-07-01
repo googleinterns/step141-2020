@@ -8,8 +8,8 @@ export function buildSwagger() {
   generateTSFiles(
     config.file, // This can be either a file containing the Swagger json or the Swagger object itself
     {
-      modelFolder: './',
-      enumTSFile: './enums.ts',
+      modelFolder: './apps/biogrid-mvp/src/app/build/models',
+      enumTSFile: './apps/biogrid-mvp/src/app/build/models/enums.ts',
       // + optionally more configuration
     }
   );

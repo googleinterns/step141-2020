@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './input-page.css';
 import { useForm } from 'react-hook-form';
-import { NewBiogridBody } from '@biogrid/api-interfaces';
+// import { NewBiogridBody } from '@biogrid/api-interfaces';
 import DatePicker from 'react-datepicker'
 
 export const InputPage = () => {
@@ -13,16 +13,16 @@ export const InputPage = () => {
     smallBatteryCells: number;
     largeBatteryCells: number;
   }) => {
-    const body: NewBiogridBody = {
+    const body  = {
       startDate,
       endDate,
       smallBatteryCells: data.smallBatteryCells,
       largeBatteryCells: data.largeBatteryCells,
     };
-    await fetch('url/api/biogrid/', {
-      body,
-      method: 'POST'
-    })
+    // await fetch('url/api/biogrid/', {
+    //   body: ,
+    //   method: 'POST'
+    // })
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

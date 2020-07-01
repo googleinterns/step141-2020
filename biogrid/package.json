@@ -1,12 +1,14 @@
 {
   "name": "biogrid",
   "version": "0.0.0",
-  "engines" : { "node" : "~13" },
+  "engines": {
+    "node": "~13"
+  },
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "fullstack:dev": "npm run build:tsoa && nx serve swagger-client-builder ",
-    "build-swagger-client:dev": "nx build swagger-client-builder --dev && cp apps/api/src/app/build/swagger.json dist/apps/swagger-client-builder/ && node dist/apps/swagger-client-builder/main.js",
+    "fullstack:dev": "npm run build:tsoa && npm run build-api-client:dev",
+    "build-api-client:dev": "nx build api-client-builder --dev && cp apps/api/src/app/build/swagger.json dist/apps/api-client-builder/ && node dist/apps/api-client-builder/main.js",
     "api:dev": "npm run build:tsoa && nx serve api",
     "frontend:dev": "nx serve biogrid-mvp",
     "build:routes": "(cd apps/api && tsoa routes)",

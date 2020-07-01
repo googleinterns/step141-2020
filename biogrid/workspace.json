@@ -270,21 +270,21 @@
         }
       }
     },
-    "swagger-client-builder": {
-      "root": "apps/swagger-client-builder",
-      "sourceRoot": "apps/swagger-client-builder/src",
+    "api-client-builder": {
+      "root": "apps/api-client-builder",
+      "sourceRoot": "apps/api-client-builder/src",
       "projectType": "application",
-      "prefix": "swagger-client-builder",
+      "prefix": "api-client-builder",
       "schematics": {},
       "architect": {
         "build": {
           "builder": "@nrwl/node:build",
           "options": {
-            "outputPath": "dist/apps/swagger-client-builder",
-            "main": "apps/swagger-client-builder/src/main.ts",
-            "tsConfig": "apps/swagger-client-builder/tsconfig.app.json",
+            "outputPath": "dist/apps/api-client-builder",
+            "main": "apps/api-client-builder/src/main.ts",
+            "tsConfig": "apps/api-client-builder/tsconfig.app.json",
             "assets": [
-              "apps/swagger-client-builder/src/assets"
+              "apps/api-client-builder/src/assets"
             ]
           },
           "configurations": {
@@ -294,8 +294,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/swagger-client-builder/src/environments/environment.ts",
-                  "with": "apps/swagger-client-builder/src/environments/environment.prod.ts"
+                  "replace": "apps/api-client-builder/src/environments/environment.ts",
+                  "with": "apps/api-client-builder/src/environments/environment.prod.ts"
                 }
               ]
             }
@@ -304,7 +304,7 @@
         "serve": {
           "builder": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "swagger-client-builder:build"
+            "buildTarget": "api-client-builder:build"
           }
         },
         "lint": {
@@ -312,20 +312,20 @@
           "options": {
             "linter": "eslint",
             "tsConfig": [
-              "apps/swagger-client-builder/tsconfig.app.json",
-              "apps/swagger-client-builder/tsconfig.spec.json"
+              "apps/api-client-builder/tsconfig.app.json",
+              "apps/api-client-builder/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**",
-              "!apps/swagger-client-builder/**/*"
+              "!apps/api-client-builder/**/*"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "apps/swagger-client-builder/jest.config.js",
-            "tsConfig": "apps/swagger-client-builder/tsconfig.spec.json",
+            "jestConfig": "apps/api-client-builder/jest.config.js",
+            "tsConfig": "apps/api-client-builder/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
