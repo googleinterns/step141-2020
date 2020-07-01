@@ -19,5 +19,5 @@ export function validate(validatableInput: Validatable): boolean {
   ) {
     isValid = isValid && validatableInput.value <= validatableInput.max;
   }
-  return isValid && validatableInput.isPositive;;
+  return isValid && validatableInput.isPositive;
 }
