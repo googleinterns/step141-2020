@@ -6,51 +6,50 @@ import { Building } from '../building';
  */
 export class RuralArea implements Town {
 
-  private town: Building[];
+  private buildings: Building[] = [];
+  private randomIdNumbers : Number[] = [];
 
   /**
    * @param {Building[]} town A list of buildings which make up a town.
    */
-  constructor(town: Building[]) {
-    this.town = town;
-    this.setCurrentBuildingIds();
+  constructor(buildings: Building[]) {
+    for (let i=0; i<buildings.length; i++) {
+      this.addBuilding(buildings[i]);
+    }
   }
 
-  getTown() : Building[] {
-    return this.town;
+  getBuildings() : Building[] {
+    return this.buildings;
   }
 
   /**
-   * This method gets a building in a town by its name identifier.
-   * @param {Building} building The building we're looking for.
+   * This method gets a building in a town by its id number.
+   * @param {number} Id The building Id we're looking for.
    * @return {Building} Returns the building if found in the list, null if not.
    */
   getBuildingById(Id: number) {
-    for (let i=0; i<this.town.length; i++) {
-      if (this.town[i].getBuildingId() === Id) {
-        return this.town[i];
+    for (let i=0; i<this.buildings.length; i++) {
+      if (this.buildings[i].getBuildingId() === Id) {
+        return this.buildings[i];
       }
     }
     return null;
   }
 
   /**
-   * This method adds a building to our town.
+   * This method adds a building to our town and assigns it a random Id.
    * @param {Building} newBuilding The building to be added. 
    */
   addBuilding(newBuilding: Building) : Building {
-    newBuilding.setBuildingId(this.town.length);
-    this.town.push(newBuilding);
+    let randomId = Math.floor((Math.random() * 1000));
+    while (this.randomIdNumbers.includes(randomId)) {
+      randomId = Math.floor((Math.random() * 1000));
+    }
+    this.randomIdNumbers.push(randomId);
+    newBuilding.setBuildingId(randomId);
+    this.buildings.push(newBuilding);
     return newBuilding;
   }
 
-  /**
-   * This method sets the id's of buildings that were not added.
-   */
-  setCurrentBuildingIds() {
-    for (let i=0; i<this.town.length; i++){
-      this.town[i].setBuildingId(i);
-    }
-  }
 
 }

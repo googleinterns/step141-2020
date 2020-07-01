@@ -15,6 +15,7 @@ export class Building implements EnergyUser {
    */
   constructor(energy: number) {
     this.energyInJoules = energy;
+    // Initial id value, will be changed by rural area.
     this.buildingId = -1;
   }
 
@@ -33,14 +34,14 @@ export class Building implements EnergyUser {
   /**
    * This method adds energy to the current building's power.
    */
-  addEnergy(energy: number) {
+  increaseEnergy(energy: number) {
     this.energyInJoules+=energy;
   }
 
   /**
    * This method uses energy from the current building's power.
    */
-  depleteEnergy(energy: number) {
+  decreaseEnergy(energy: number) {
     this.energyInJoules-=energy;
   }
 
