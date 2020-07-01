@@ -3,5 +3,5 @@
 
 export const environment = {
   production: false,
-  basePath: 'l/api',
+  basePath: 'localhost:3333/api',
 };
