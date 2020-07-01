@@ -6,20 +6,24 @@ import { EnergyUser } from '@biogrid/grid-simulator';
 export class Building implements EnergyUser {
 
   private energyInJoules: number;
-  private buildingName: string;
+  private buildingId: number;
   /** The battery storage for the building. */
   battery: unknown;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.
    */
-  constructor(energy: number, name: string) {
+  constructor(energy: number) {
     this.energyInJoules = energy;
-    this.buildingName = name;
+    this.buildingId = -1;
   }
 
-  getBuildingName() : string {
-    return this.buildingName;
+  getBuildingId() : number {
+    return this.buildingId;
+  }
+
+  setBuildingId(Id: number) {
+    this.buildingId = Id;
   }
 
   getEnergyInJoules() : number {

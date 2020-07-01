@@ -13,6 +13,7 @@ export class RuralArea implements Town {
    */
   constructor(town: Building[]) {
     this.town = town;
+    this.setCurrentBuildingIds();
   }
 
   getTown() : Building[] {
@@ -24,9 +25,9 @@ export class RuralArea implements Town {
    * @param {Building} building The building we're looking for.
    * @return {Building} Returns the building if found in the list, null if not.
    */
-  getBuildingByName(building: Building) {
-    for (let i=0; i<this.town.length; i++){
-      if (this.town[i].getBuildingName() === building.getBuildingName()){
+  getBuildingById(Id: number) {
+    for (let i=0; i<this.town.length; i++) {
+      if (this.town[i].getBuildingId() === Id) {
         return this.town[i];
       }
     }
@@ -37,8 +38,19 @@ export class RuralArea implements Town {
    * This method adds a building to our town.
    * @param {Building} newBuilding The building to be added. 
    */
-  addBuilding(newBuilding: Building) {
+  addBuilding(newBuilding: Building) : Building {
+    newBuilding.setBuildingId(this.town.length);
     this.town.push(newBuilding);
+    return newBuilding;
+  }
+
+  /**
+   * This method sets the id's of buildings that were not added.
+   */
+  setCurrentBuildingIds() {
+    for (let i=0; i<this.town.length; i++){
+      this.town[i].setBuildingId(i);
+    }
   }
 
 }
