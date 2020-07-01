@@ -1,1 +1,1 @@
-src/app/build/models
+src/app/build/*.ts
