@@ -7,7 +7,7 @@ import { Building } from '../building';
 export class RuralArea implements Town {
 
   private buildings: Building[] = [];
-  private randomIdNumbers : Number[] = [];
+  private randomIdNumbers : number[] = [];
 
   /**
    * @param {Building[]} buildings A list of buildings which make up a town.

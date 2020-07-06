@@ -7,7 +7,7 @@ export class Building implements EnergyUser {
 
   private energyInJoules: number;
   // Initial id value, will be changed by rural area.
-  private buildingId: number = -1;
+  private buildingId = -1;
   /** The battery storage for the building. */
   battery: unknown;
 
