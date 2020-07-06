@@ -25,14 +25,20 @@ export class Server {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const swaggerDocument = require('../build/swagger.json');
 
-    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    this.app.use(
+      '/api-docs',
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
+    );
   }
 
   public async listen(port: number = this.port) {
     process.on('uncaughtException', this.criticalErrorHandler);
     process.on('unhandledRejection', this.criticalErrorHandler);
     const listen = this.app.listen(this.port);
-    Logger.info(`${constants.environment} server running on port: ${this.port}`);
+    Logger.info(
+      `${constants.environment} server running on port: ${this.port}`
+    );
     return listen;
   }
 
@@ -41,7 +47,11 @@ export class Server {
     process.exit(1);
   }
 
-  private allowCors(req: express.Request, res: express.Response, next: express.NextFunction): void {
+  private allowCors(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): void {
     // TODO: in a later PR only specific sites will have access. For now, as we get setup, any site can have API access
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -50,5 +60,4 @@ export class Server {
     );
     next();
   }
-
 }

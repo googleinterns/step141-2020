@@ -26,7 +26,8 @@ export const InputPage = () => {
     type: 'number',
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault();
     const body: NewBiogridBody = {
       startDate,
       endDate,
@@ -37,7 +38,7 @@ export const InputPage = () => {
     await client.api.newBiogrid({ body });
   };
   return (
-    <form onSubmit={() => onSubmit}>
+    <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
       <DatePicker
         showPopperArrow={false}
         selected={startDate}
