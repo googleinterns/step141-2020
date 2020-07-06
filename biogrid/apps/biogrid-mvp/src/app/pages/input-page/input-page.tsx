@@ -53,8 +53,6 @@ export const InputPage = () => {
       {largeBatteryCellInput}
 
       <input type="submit" />
-
-      <input type="submit" />
     </form>
   );
 };
