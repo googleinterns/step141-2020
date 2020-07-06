@@ -16,7 +16,6 @@
     "jsx": "react",
     "baseUrl": ".",
     "paths": {
-      "@biogrid/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@biogrid/components": ["libs/components/src/index.ts"],
       "@biogrid/grid-simulator": ["libs/grid-simulator/src/index.ts"],
       "@biogrid/biogrid-simulator": ["libs/biogrid-simulator/src/index.ts"]

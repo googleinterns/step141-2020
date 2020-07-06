@@ -12,7 +12,14 @@
 - Then you have to install tsoa and run the tsoa script so that you can run `npm i` without any errors
   ```
   npm i tsoa
-  npm build:tsoa
+  npm run build:tsoa
+  ```
+
+- Then you have to install the libraries for and build the client api
+  ```
+  sudo apt install default-jdk
+  sudo npm install @openapitools/openapi-generator-cli -g
+  npm run build-api-client:dev
   ```
 
 - Then install all npm modules for this workspace
@@ -26,15 +33,10 @@
   ```
 
 ## Getting running
-- In order to run the development instance locally
-  - Run the api
-    ```
-    npm run api:dev
-    ```
-  - Run the frontend
-    ```
-    npm run frontend:dev
-    ``` 
+- In order to run the development instance locally (frontend and backend)
+  ```
+  npm run fullstack:dev
+  ```
 
 ## Tsoa and API Background
 The backend uses [Tsoa](https://github.com/lukeautry/tsoa) and takes inspiration from a [Tsoa Api repo](https://github.com/MakingSense/tsoa-api).

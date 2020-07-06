@@ -14,7 +14,12 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ]
       }
     }
   },
@@ -24,12 +29,11 @@
     },
     "biogrid-mvp-e2e": {
       "tags": [],
-      "implicitDependencies": ["biogrid-mvp"]
+      "implicitDependencies": [
+        "biogrid-mvp"
+      ]
     },
     "api": {
-      "tags": []
-    },
-    "api-interfaces": {
       "tags": []
     },
     "components": {
