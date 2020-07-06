@@ -6,7 +6,8 @@ import { EnergyUser } from '@biogrid/grid-simulator';
 export class Building implements EnergyUser {
 
   private energyInJoules: number;
-  private buildingId: number;
+  // Initial id value, will be changed by rural area.
+  private buildingId: number = -1;
   /** The battery storage for the building. */
   battery: unknown;
 
@@ -17,11 +18,8 @@ export class Building implements EnergyUser {
     if (this.isPositive(energy)) {
       this.energyInJoules = energy;
     } else {
-      throw new Error(`Can't create a building with negative energy!`);
+      throw new Error("Can't create a building with negative energy!");
     }
-    
-    // Initial id value, will be changed by rural area.
-    this.buildingId = -1;
   }
 
   private isPositive(energy: number) : boolean {
@@ -47,7 +45,7 @@ export class Building implements EnergyUser {
     if (this.isPositive(energy)) {
       this.energyInJoules+=energy;
     } else {
-      throw new Error(`Can't add negative energy!`);
+      throw new Error("Can't add negative energy!");
     }
   }
 
@@ -63,7 +61,7 @@ export class Building implements EnergyUser {
         this.energyInJoules-=energy;
       }
     } else {
-      throw new Error(`Can't use a negative amount of energy!`);
+      throw new Error("Can't use a negative amount of energy!");
     }
   }
 
