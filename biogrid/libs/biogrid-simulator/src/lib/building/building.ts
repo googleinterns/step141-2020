@@ -24,7 +24,7 @@ export class Building implements EnergyUser {
     this.buildingId = -1;
   }
 
-  isPositive(energy: number) : boolean {
+  private isPositive(energy: number) : boolean {
     return energy >= 0;
   }
 
