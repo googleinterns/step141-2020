@@ -53,15 +53,14 @@ export class Building implements EnergyUser {
    * This method uses energy from the current building's power.
    */
   decreaseEnergy(energy: number) {
-    if (this.isPositive(energy)) {
-      // Building can't have a negative amount of energy in store.
-      if (energy >= this.energyInJoules) {
-        this.energyInJoules = 0;
-      } else {
-        this.energyInJoules-=energy;
-      }
-    } else {
+    if (!this.isPositive(energy)) {
       throw new Error("Can't use a negative amount of energy!");
+    }
+    // Building can't have a negative amount of energy in store.
+    if (energy >= this.energyInJoules) {
+      this.energyInJoules = 0;
+    } else {
+      this.energyInJoules-=energy;
     }
   }
 
