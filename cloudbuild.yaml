@@ -15,7 +15,5 @@ steps:
    - 'gcr.io/step-alr-2020/api-image'
    - '--region'
    - 'us-central'
-   - '--platform'
-   - 'managed'
  images:
  - 'gcr.io/step-alr-2020/api-image'
