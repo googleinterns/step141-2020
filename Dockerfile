@@ -1,11 +1,11 @@
-FROM node:14
+FROM node:13
 
 # Install the necessary CLI packages
 RUN npm install -g @nrwl/cli
 
 WORKDIR /usr/src/repo
 
-COPY biogrid/package.json .
+COPY biogrid/package*.json .
 
 # Install all required packages for build
 RUN npm install --ignore-scripts
