@@ -1,11 +1,7 @@
-import React, { useEffect  } from 'react';
+import React from 'react';
 import { InputPage } from './pages/input-page';
 
 export const App = () => {
-  useEffect(() => {
-    fetch('/api').then((r) => r.json());
-  }, []);
-
   return (
     <>
       <div style={{ textAlign: 'center' }}>
