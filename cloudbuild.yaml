@@ -1,5 +1,21 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', 'gcr.io/step-alr-2020/api-image', '.' ]
-images:
-- 'gcr.io/step-alr-2020/api-image'
+ # build the container image
+ - name: 'gcr.io/cloud-builders/docker'
+   args: [ 'build', '-t', 'gcr.io/step-alr-2020/api-image', '.' ]
+ # push the container image to Container Registry
+ - name: 'gcr.io/cloud-builders/docker'
+   args: [ 'push', 'gcr.io/step-alr-2020/api-image' ]
+ # Deploy container image to Cloud Run
+ - name: 'gcr.io/cloud-builders/gcloud'
+   args:
+   - 'run'
+   - 'deploy'
+   - 'api-image'
+   - '--image'
+   - 'gcr.io/step-alr-2020/api-image'
+   - '--region'
+   - 'us-central'
+   - '--platform'
+   - 'managed'
+ images:
+ - 'gcr.io/step-alr-2020/api-image'
