@@ -7,7 +7,6 @@ import { Building } from '../building';
 export class RuralArea implements Town {
 
   private buildings: Building[] = [];
-  private randomIdNumbers : number[] = [];
 
   /**
    * @param {Building[]} buildings A list of buildings which make up a town.
@@ -41,11 +40,11 @@ export class RuralArea implements Town {
    * @param {Building} newBuilding The building to be added. 
    */
   addBuilding(newBuilding: Building) : Building {
+    const randomIds = this.buildings.map(building => building.getBuildingId());
     let randomId = Math.floor((Math.random() * 1000));
-    while (this.randomIdNumbers.includes(randomId)) {
+    while (randomIds.includes(randomId)) {
       randomId = Math.floor((Math.random() * 1000));
     }
-    this.randomIdNumbers.push(randomId);
     newBuilding.setBuildingId(randomId);
     this.buildings.push(newBuilding);
     return newBuilding;
