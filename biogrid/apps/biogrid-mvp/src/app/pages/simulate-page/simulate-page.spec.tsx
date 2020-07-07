@@ -1,6 +1,6 @@
 import { cleanup, getByText, render, wait } from '@testing-library/react';
 import React from 'react';
-import InputPage from './input-page';
+import InputPage from './simulate-page';
 
 describe('Info page', () => {
   afterEach(() => {
