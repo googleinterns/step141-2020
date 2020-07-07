@@ -17,19 +17,13 @@ describe('test for BioBattery class', () => {
     );
   });
 
-  test('battery cannot supply the baterry energy more energy than it has', () => {
+  test('battery returns less or equal to power requested', () => {
     const currentpower = 20;
     const maxCapacity = 30; 
     const battery = new BioBattery(currentpower, maxCapacity);
     const outputenergy = 25;
-    const expected = `Requested to supply ${outputenergy} power. Battery only has ${currentpower} units.`;
-    expect(() => battery.supplyPower(outputenergy)).toThrow(expected);
-  });
-
-  test('battery returns the requested power if it has it', () => {
-    const battery = new BioBattery(10, 20);
-    const outputenergy = 5;
-    expect(battery.supplyPower(outputenergy)).toEqual(outputenergy);
+    const expected = 25;
+    expect(battery.supplyPower(outputenergy)).toBeLessThanOrEqual(expected);
   });
 
   test('battery is full when it is at capacity', () => {
