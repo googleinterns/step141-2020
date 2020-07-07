@@ -14,9 +14,15 @@ export class BioBrain implements Brain{
     return this.instance
   }
 
-  private set gridStates(states: unknown[]) {
+
+  set gridStates(states: unknown[]) {
     // TODO add the type of states
     this.states = states;
+  }
+
+  get gridStates() {
+    // TODO add the types of the states returned
+    return this.states;
   }
 
   sendAction(states: unknown[]): unknown {
