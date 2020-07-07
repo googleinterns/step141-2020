@@ -1,6 +1,6 @@
 import { cleanup, getByText, render, wait } from '@testing-library/react';
 import React from 'react';
-import InputPage from './simulate-page';
+import SimulatePage from './simulate-page';
 
 describe('Info page', () => {
   afterEach(() => {
@@ -16,7 +16,7 @@ describe('Info page', () => {
       }),
     });
 
-    const { baseElement } = render(<InputPage />);
+    const { baseElement } = render(<SimulatePage />);
     await wait(() => getByText(baseElement, message));
   });
 });
