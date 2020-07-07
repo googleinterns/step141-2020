@@ -3,6 +3,7 @@
     "entryFile": "./src/app/controllers/index.ts",
     "outputDirectory": "./src/app/build/",
     "specMerging": "recursive",
+    "basePath": "/api/",
     "spec": {}
   },
   "routes": {

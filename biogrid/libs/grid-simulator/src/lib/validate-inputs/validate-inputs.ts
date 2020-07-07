@@ -3,7 +3,7 @@ export interface Validatable {
   value: number;
   min?: number;
   max?: number;
-  isInt(): boolean;
+  isPositive: boolean;
 }
 
 export function validate(validatableInput: Validatable): boolean {
@@ -19,8 +19,5 @@ export function validate(validatableInput: Validatable): boolean {
   ) {
     isValid = isValid && validatableInput.value <= validatableInput.max;
   }
-  if (validatableInput.isInt() && typeof validatableInput.value === 'number') {
-    isValid = isValid && validatableInput.isInt();
-  }
-  return isValid;
+  return isValid && validatableInput.isPositive;
 }
