@@ -25,8 +25,10 @@ export class BioBattery implements Battery {
 
   supplyPower(outputenergy: Energy): Energy {
     if (this.currentBatteryPower - outputenergy < 0) {
-      //TODO implement the function to send power that it has and not throw an error
-      throw new Error(`Requested to supply ${outputenergy} power. Battery only has ${this.currentBatteryPower} units.`);
+      //TODO implement the function to notify the request with amount of output left
+      const temp: Energy = this.currentBatteryPower;
+      this.currentBatteryPower = 0;
+      return temp;
     }
     this.currentBatteryPower -= outputenergy;
     return outputenergy;
