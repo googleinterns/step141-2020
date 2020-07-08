@@ -1,21 +1,12 @@
+import { Route, Controller, Get, Post, Body, SuccessResponse } from 'tsoa';
+
 import {
-  Route,
-  Controller,
-  Get,
-  Post,
-  Body,
-  SuccessResponse,
-} from 'tsoa';
-
-import { createNewBiogrid } from '../services';
-
-interface NewBiogridBody {
-  startDate: Date
-  endDate: Date,
-  smallBatteryCells: number,
-  largeBatteryCells: number
-}
-
+  createNewBiogrid,
+  runBiogridSimulation,
+  getSimulationResults,
+  BiogridSimulationResults,
+  NewBiogridOpts,
+} from '../services';
 
 @Route('biogrid')
 export class BiogridController extends Controller {
@@ -25,7 +16,21 @@ export class BiogridController extends Controller {
 
   @SuccessResponse(204)
   @Post('/')
-  public async NewBiogrid(@Body() body: NewBiogridBody): Promise<void> {
-    await createNewBiogrid();
+  public async NewBiogrid(@Body() body: NewBiogridOpts): Promise<void> {
+    await createNewBiogrid(body);
+  }
+
+  @SuccessResponse(204)
+  @Post('/run')
+  public async RunBiogridSimulation(): Promise<void> {
+    await runBiogridSimulation();
+  }
+
+  @SuccessResponse(200)
+  @Get('/simulation-results')
+  public async GetBiogridSimulationResults(): Promise<
+    BiogridSimulationResults
+  > {
+    return await getSimulationResults();
   }
 }

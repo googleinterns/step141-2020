@@ -3,6 +3,7 @@ import './input-page.css';
 import DatePicker from 'react-datepicker';
 import { Client } from '../../client';
 import { NewBiogridBody } from '../../build';
+import { useHistory } from 'react-router-dom';
 
 function useInput(opts: { type: string }) {
   const [value, setValue] = useState('');
@@ -25,8 +26,10 @@ export const InputPage = () => {
   const [largeBatteryCells, largeBatteryCellInput] = useInput({
     type: 'number',
   });
+  const history = useHistory();
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault();
     const body: NewBiogridBody = {
       startDate,
       endDate,
@@ -35,24 +38,27 @@ export const InputPage = () => {
     };
     const client = Client.getInstance();
     await client.api.newBiogrid({ body });
+    history.push('/simulate');
   };
   return (
-    <form onSubmit={() => onSubmit}>
-      <DatePicker
-        showPopperArrow={false}
-        selected={startDate}
-        onChange={(date: Date) => setStartDate(date)}
-      />
-      <DatePicker
-        showPopperArrow={false}
-        selected={endDate}
-        onChange={(date: Date) => setEndDate(date)}
-      />
-      {smallBatteryCellInput}
-      {largeBatteryCellInput}
+    <div className="input-page">
+      <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
+        <DatePicker
+          showPopperArrow={false}
+          selected={startDate}
+          onChange={(date: Date) => setStartDate(date)}
+        />
+        <DatePicker
+          showPopperArrow={false}
+          selected={endDate}
+          onChange={(date: Date) => setEndDate(date)}
+        />
+        {smallBatteryCellInput}
+        {largeBatteryCellInput}
 
-      <input type="submit" />
-    </form>
+        <input type="submit" />
+      </form>
+    </div>
   );
 };
 
