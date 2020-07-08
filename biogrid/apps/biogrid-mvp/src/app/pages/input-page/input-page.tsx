@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './input-page.css';
+import './input-page.scss';
 import DatePicker from 'react-datepicker';
 import { Client } from '../../client';
 import { NewBiogridBody } from '../../build';
