@@ -44,17 +44,21 @@ export const InputPage = () => {
   return (
     <div className="input-page">
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
+        <h3>Select a Start Date:</h3>
         <DatePicker
           showPopperArrow={false}
           selected={startDate}
           onChange={(date: Date) => setStartDate(date)}
         />
+        <h3>Select a End Date:</h3>
         <DatePicker
           showPopperArrow={false}
           selected={endDate}
           onChange={(date: Date) => setEndDate(date)}
         />
+        <h3>Enter the amount of small battery cells:</h3>
         {smallBatteryCellInput}
+        <h3>Enter the amount of large battery cells</h3>
         {largeBatteryCellInput}
 
         <input type="submit" />
