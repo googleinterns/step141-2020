@@ -4,7 +4,14 @@ export interface BiogridSimulationResults {
   timeWithoutEnoughEnergy: number;
 }
 
-export async function createNewBiogrid() {
+export interface NewBiogridOpts {
+  startDate: Date;
+  endDate: Date;
+  smallBatteryCells: number;
+  largeBatteryCells: number;
+}
+
+export async function createNewBiogrid(body: NewBiogridOpts) {
   // TODO implement
   return "Fake"
 }

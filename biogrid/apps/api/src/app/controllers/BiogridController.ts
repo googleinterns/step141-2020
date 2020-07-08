@@ -5,14 +5,8 @@ import {
   runBiogridSimulation,
   getSimulationResults,
   BiogridSimulationResults,
+  NewBiogridOpts,
 } from '../services';
-
-interface NewBiogridBody {
-  startDate: Date;
-  endDate: Date;
-  smallBatteryCells: number;
-  largeBatteryCells: number;
-}
 
 @Route('biogrid')
 export class BiogridController extends Controller {
@@ -22,8 +16,8 @@ export class BiogridController extends Controller {
 
   @SuccessResponse(204)
   @Post('/')
-  public async NewBiogrid(@Body() body: NewBiogridBody): Promise<void> {
-    await createNewBiogrid();
+  public async NewBiogrid(@Body() body: NewBiogridOpts): Promise<void> {
+    await createNewBiogrid(body);
   }
 
   @SuccessResponse(204)
