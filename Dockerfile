@@ -1,10 +1,13 @@
-FROM node:13
+FROM timbru31/java-node:11
+
+# Make a working directory
+WORKDIR /usr/src/repo
 
 # Install the necessary CLI packages
 RUN npm install -g @nrwl/cli
 
-WORKDIR /usr/src/repo
-
+# Install app dependencies
+# COPY both package.json AND package-lock.json
 COPY biogrid/package*.json ./
 
 # Install all required packages for build
