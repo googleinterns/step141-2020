@@ -45,11 +45,11 @@ export const InputPage = () => {
     <div className="input-page">
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
       <h1>Welcome to the Biogrid Simulator!</h1>
-      <p>This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X">microgrid</a> can 
-        optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/">biomimicry</a> to 
+      <p>This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 
+        optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">biomimicry</a> to 
         mimic the natural energy storage of the human body given a range of sunlight data and
         an amount of small and large battery cells.</p>  
-      <h3>Select a Start Date:</h3>
+        <h3>Select a Start Date:</h3>
         <DatePicker
           showPopperArrow={false}
           selected={startDate}
