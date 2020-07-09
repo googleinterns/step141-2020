@@ -6,3 +6,8 @@
   text-align: center;
   width: 700px;
 }
+
+.submitButton {
+  display: block;
+  margin: auto;
+}

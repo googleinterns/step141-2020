@@ -66,7 +66,7 @@ export const InputPage = () => {
         <h3>Enter the amount of large battery cells</h3>
         {largeBatteryCellInput}
 
-        <input type="submit" />
+        <input type="submit" class="submitButton"/>
       </form>
     </div>
   );
