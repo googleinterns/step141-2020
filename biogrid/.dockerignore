@@ -3,3 +3,12 @@ logs
 dist
 .vscode
 tmp
+README.md
+jest.config.js
+.editorconfig
+.eslintrc
+.eslintrc.json
+.prettierignore
+.prettierrc
+.prettierrc.js
+jest.config.js
