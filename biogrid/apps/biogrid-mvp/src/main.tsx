@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 
 import App from './app/app';
 
-// declare let GlobalFetch;
-declare module 'node-fetch' {
-    const fetch: GlobalFetch['fetch'];
-    export default fetch;
+declare global {
+  interface GlobalFetch {
+    [k: string]: any;
+  }
 }
+window.globalThis = window
 
 ReactDOM.render(<App />, document.getElementById('root'));
