@@ -2,7 +2,7 @@ const { env } = process;
 
 export default {
   environment: env.NODE_ENV,
-  port: Number(env.PORT) || 3333,
+  port: Number(env.PORT) || 8080,
   errorTypes: {
     db: { statusCode: 500, name: 'Internal Server Error', message: 'database error' },
     validation: { statusCode: 400, name: 'Bad Request', message: 'validation error' },
