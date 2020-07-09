@@ -49,21 +49,21 @@ export const InputPage = () => {
         optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">biomimicry</a> to 
         mimic the natural energy storage of the human body given a range of sunlight data and
         an amount of small and large battery cells.</p>  
-        <h3>Select a Start Date:</h3>
+        <h3>Start Date:</h3>
         <DatePicker
           showPopperArrow={false}
           selected={startDate}
           onChange={(date: Date) => setStartDate(date)}
         />
-        <h3>Select a End Date:</h3>
+        <h3>End Date:</h3>
         <DatePicker
           showPopperArrow={false}
           selected={endDate}
           onChange={(date: Date) => setEndDate(date)}
         />
-        <h3>Enter the amount of small battery cells:</h3>
+        <h3>Number of small battery cells:</h3>
         {smallBatteryCellInput}
-        <h3>Enter the amount of large battery cells</h3>
+        <h3>Number of large battery cells:</h3>
         {largeBatteryCellInput}
 
         <input type="submit" class="submitButton"/>
