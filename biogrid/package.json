@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "fullstack:dev": "PORT=3333 && npm run build:tsoa && npm run build-api-client:dev && nx serve-with-api biogrid-mvp",
-    "build-api-client:dev": "(mkdir apps/biogrid-mvp/src/app/build || true) && openapi-generator generate -i ./apps/api/src/app/build/swagger.json --generator-name typescript-fetch -o apps/biogrid-mvp/src/app/build/",
+    "fullstack:dev": "PORT=3333 && npm run build:tsoa && npm run build-api-client && nx serve-with-api biogrid-mvp",
+    "build-api-client": "(mkdir apps/biogrid-mvp/src/app/build || true) && openapi-generator generate -i ./apps/api/src/app/build/swagger.json --generator-name typescript-fetch -o apps/biogrid-mvp/src/app/build/",
     "api:dev": "npm run build:tsoa && nx serve api",
     "frontend:dev": "nx serve biogrid-mvp",
     "build:routes": "(cd apps/api && tsoa routes)",
@@ -91,7 +91,6 @@
     "colors": "^1.2.1",
     "cross-env": "^5.1.4",
     "cypress": "^4.1.0",
-    "dotenv": "6.2.0",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-cypress": "^2.10.3",
