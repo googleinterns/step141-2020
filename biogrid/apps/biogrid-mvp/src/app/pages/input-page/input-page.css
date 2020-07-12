@@ -5,10 +5,41 @@
   margin: auto;
   padding: 20px;
   text-align: center;
-  width: 700px;
+  width: 900px;
+}
+
+br {
+  clear: both;
+}
+
+label {
+  display: block;
+  text-align: left;
 }
 
 .submitButton {
-  display: block;
-  margin: auto;
+  text-align: left;
 }
+
+.startDatePicker {
+  float: left;
+  margin-top: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.endDatePicker {
+  float: left;
+  margin-top: 20px;
+}
+
+.smallBatteryCells {
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.largeBatteryCells {
+  float: left;
+}
+
