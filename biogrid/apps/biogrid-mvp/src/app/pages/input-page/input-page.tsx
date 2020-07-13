@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './input-page.css';
 import DatePicker from 'react-datepicker';
 import { Client } from '../../client';
-import { NewBiogridBody } from '../../build';
 import { useHistory } from 'react-router-dom';
 
 function useInput(opts: { type: string }) {
@@ -30,7 +29,7 @@ export const InputPage = () => {
 
   const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
-    const body: NewBiogridBody = {
+    const body = {
       startDate,
       endDate,
       smallBatteryCells: parseInt(smallBatteryCells as string),

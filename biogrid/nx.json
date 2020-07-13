@@ -6,6 +6,9 @@
       "dependencies": "*",
       "devDependencies": "*"
     },
+    "globalFile": [
+      "biogrid-mvp"
+    ],
     "tsconfig.json": "*",
     "tslint.json": "*",
     "nx.json": "*"
