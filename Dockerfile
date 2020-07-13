@@ -16,14 +16,9 @@ RUN npm install --ignore-scripts
 # Install open api for combined both back and front end
 RUN npm install @openapitools/openapi-generator-cli -g
 
-# Install open api for combined both back and front end
-# RUN npm install @openapitools/openapi-generator-cli -g
-
 # Copy in the necessary files for tsoa
 COPY biogrid/apps apps
 COPY biogrid/tsconfig.json .
-
-# ENV PORT=8080
 
 COPY biogrid/babel.config.json biogrid/nx.json biogrid/workspace.json ./
 
