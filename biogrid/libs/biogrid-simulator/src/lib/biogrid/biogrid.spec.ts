@@ -12,12 +12,12 @@ beforeAll(() => {
 });
 
 describe('classes', () => {
-  it('should create a Biogrid and make sure that the setup algorithm works', () => {
+  test('should create a Biogrid and make sure that the setup algorithm works', () => {
     // TODO add in a test which mimics the algorithm once it is implemented
     expect(grid.getSystemState()).toBeTruthy();
   });
 
-  it('should ensure that the Biogrid take action works', () => {
+  test('should ensure that the Biogrid take action works', () => {
     const action = new BiogridAction([])
     // Ensure that take action returned
     expect(grid.takeAction(action)).toEqual(undefined);
