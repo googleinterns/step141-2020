@@ -14,7 +14,7 @@ export interface BiogridOptions extends GridOptions {
 export class Biogrid implements Grid {
   private state: BiogridState;
   constructor(town: Town, opts?: BiogridOptions) {
-    this.state = new BiogridState(10, []);
+    this.state = new BiogridState([]);
   }
 
   getSystemState(): BiogridState {
@@ -25,5 +25,5 @@ export class Biogrid implements Grid {
     // TODO implement actions taken later
     return;
   }
-  
+
 }

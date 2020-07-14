@@ -10,11 +10,13 @@ export class BiogridState implements StateGraph {
   graph: jsgraphs.WeightedDiGraph;
   graphIndexToVertex: StateGraphVertex[];
 
-  constructor(numberOfVertices: number, vertices: StateGraphVertex[]) {
-    this.graph = new jsgraphs.WeightedDiGraph(numberOfVertices);
-    this.graphIndexToVertex = new Array<StateGraphVertex>(numberOfVertices);
+  constructor(vertices: StateGraphVertex[]) {
+    this.graph = new jsgraphs.WeightedDiGraph(vertices.length);
+    this.graphIndexToVertex = new Array<StateGraphVertex>(vertices.length);
     vertices.forEach((vertex, i) => {
       this.graphIndexToVertex[i] = vertex;
+    });
+    vertices.forEach((vertex, i) => {
       this.addCompletlyConnectedVertex(i, vertex);
     });
   }
@@ -32,12 +34,14 @@ export class BiogridState implements StateGraph {
     vertex: StateGraphVertex
   ) {
     const edges: StateGraphEdge[] = [];
-    for (let i = 0; i < newVertexIndex; i++) {
-      edges.push({
-        toIndex: i,
-        weight: this.calculateDistance(vertex, this.graphIndexToVertex[i]),
-        label: `${newVertexIndex}-to-${i}`,
-      });
+    for (let i = 0; i < this.graph.V; i++) {
+      if (newVertexIndex !== i) {
+        edges.push({
+          toIndex: i,
+          weight: this.calculateDistance(vertex, this.graphIndexToVertex[i]),
+          label: `${newVertexIndex}-to-${i}`,
+        });
+      }
     }
     this.addAllEdges(newVertexIndex, edges);
   }

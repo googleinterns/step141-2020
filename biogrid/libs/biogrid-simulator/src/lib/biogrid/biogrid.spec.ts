@@ -5,7 +5,7 @@ import { RuralArea } from '../community';
 let grid: Biogrid
 
 beforeAll(() => {
-  grid = new Biogrid(new RuralArea([]), {
+  grid = new Biogrid(new RuralArea([], 10, 10), {
     numberOfLargeBatteryCells: 10,
     numberOfSmallBatteryCells: 10,
   });
