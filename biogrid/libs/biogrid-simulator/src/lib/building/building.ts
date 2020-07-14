@@ -5,10 +5,10 @@ import {
   Distance,
 } from '@biogrid/grid-simulator';
 
+// TODO rename energy to power consumption
 /**
  * A structure such as a building or house which uses energy to operate.
  */
-// TODO rename energy to power consumption
 export class Building implements EnergyUser {
   private energyInJoules: number;
   // Initial id value, will be changed by rural area.
