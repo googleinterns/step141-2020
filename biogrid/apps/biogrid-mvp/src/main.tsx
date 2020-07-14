@@ -8,6 +8,5 @@ declare global {
     [k: string]: any;
   }
 }
-window.globalThis = window
 
 ReactDOM.render(<App />, document.getElementById('root'));
