@@ -1,9 +1,7 @@
 import * as jsgraphs from 'js-graph-algorithms';
-import { Battery } from '../battery';
-import { EnergyUser } from '../energyuser';
-import { EnergySource } from '../energy-source';
+import { GridItem } from '../grid-item';
 
-export type StateGraphVertex = Battery | EnergyUser | EnergySource;
+export type StateGraphVertex = GridItem;
 
 // TODO put in when Batteries, houses, and energy suppliers are put in
 export interface NewStateGraphVertex {

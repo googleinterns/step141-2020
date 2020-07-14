@@ -1,16 +1,36 @@
-import { Battery, Energy, Validatable, validate } from "@biogrid/grid-simulator";
+import {
+  Battery,
+  Energy,
+  Validatable,
+  validate,
+  Distance,
+  ItemPosition,
+} from '@biogrid/grid-simulator';
 
 export class BioBattery implements Battery {
   private currentBatteryPower: Energy;
   private readonly maxCapacity: Energy;
+  private position: ItemPosition;
 
-  constructor(currentBatteryPower: Energy = 0, maxCapacity: Energy = 10) {
+  constructor(
+    x: Distance,
+    y: Distance,
+    currentBatteryPower: Energy = 0,
+    maxCapacity: Energy = 10
+  ) {
+    this.position = { x, y };
     if (!this.validateInputs(currentBatteryPower, maxCapacity)) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
-      throw new Error(`Cannot create a battery with values: (${currentBatteryPower}, ${maxCapacity})`);
+      throw new Error(
+        `Cannot create a battery with values: (${currentBatteryPower}, ${maxCapacity})`
+      );
     }
     this.currentBatteryPower = currentBatteryPower;
     this.maxCapacity = maxCapacity;
+  }
+
+  getPosition() {
+    return this.position;
   }
 
   startCharging(inputPower: Energy): void {
@@ -21,7 +41,7 @@ export class BioBattery implements Battery {
   }
 
   // TODO implement when you use a formula for charging a battery
-  stopCharging(): void { }
+  stopCharging(): void {}
 
   supplyPower(outputenergy: Energy): Energy {
     if (this.currentBatteryPower - outputenergy < 0) {
@@ -34,11 +54,14 @@ export class BioBattery implements Battery {
     return outputenergy;
   }
 
-  private validateInputs(currentBatteryPower: Energy, maxCapacity: Energy=this.maxCapacity) {
+  private validateInputs(
+    currentBatteryPower: Energy,
+    maxCapacity: Energy = this.maxCapacity
+  ) {
     const batteryValidator: Validatable = {
       value: currentBatteryPower,
       max: maxCapacity,
-      isPositive: currentBatteryPower >= 0 && maxCapacity >= 0
+      isPositive: currentBatteryPower >= 0 && maxCapacity >= 0,
     };
     return validate(batteryValidator);
   }

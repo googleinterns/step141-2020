@@ -4,8 +4,9 @@
 
 import { Energy } from '../measurements';
 import { StateGraphEdge } from '../state';
+import { GridItem } from '../grid-item';
 
-export interface Battery {
+export interface Battery extends GridItem {
   getEnergyAmount(): Energy;
   getMaxcapacity(): Energy;
   isEmpty(): boolean;
