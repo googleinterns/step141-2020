@@ -1,11 +1,11 @@
 .input-page {
   background-color: #f2f2f2;
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   font-family: sans-serif;
   margin: auto;
-  padding: 20px;
+  padding: 1.25rem;
   text-align: center;
-  width: 900px;
+  width: 56.25rem;
 }
 
 body {
@@ -27,20 +27,20 @@ label {
 
 .startDatePicker {
   float: left;
-  margin-top: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
+  margin-top: 1.25rem;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .endDatePicker {
   float: left;
-  margin-top: 20px;
+  margin-top: 1.25rem;
 }
 
 .smallBatteryCells {
   float: left;
-  margin-right: 20px;
-  margin-bottom: 20px;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .largeBatteryCells {
