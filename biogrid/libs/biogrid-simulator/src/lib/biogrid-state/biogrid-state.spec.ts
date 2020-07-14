@@ -1,11 +1,12 @@
 import { BiogridState } from './';
 import { NewStateGraphVertex } from '@biogrid/grid-simulator';
+import { Building } from '../building';
 
 describe('classes', () => {
   it('should work to create a BiogridState', () => {
     const newVertices: NewStateGraphVertex[] = [
       {
-        vertex: 'v 1',
+        vertex: new Building(12),
         edges: [
           {
             toIndex: 1,
@@ -15,7 +16,7 @@ describe('classes', () => {
         ],
       },
       {
-        vertex: 'v 2',
+        vertex: new Building(32),
         edges: [
           {
             toIndex: 0,

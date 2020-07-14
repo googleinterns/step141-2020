@@ -1,8 +1,6 @@
-import { Building } from '@biogrid/biogrid-simulator';
+import { EnergyUser } from '../energyuser';
 
 export interface Town {
-
-  getBuildings(): Building[];
-  addBuilding(newBuilding: Building): Building;
-  
+  getEnergyUsers(): EnergyUser[];
+  addEnergyUser(newUser: EnergyUser): void;
 }

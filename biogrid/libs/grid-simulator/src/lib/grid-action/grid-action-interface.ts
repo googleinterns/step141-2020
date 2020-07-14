@@ -1,9 +1,10 @@
+import { Battery, BatteryState } from '../battery';
 
 
 //TODO add proper interfaces for batteries once created
 export interface SwitchedOnBatteryAction {
-  battery: unknown,
-  batteryState: unknown
+  battery: Battery,
+  batteryState: BatteryState
 }
 
 export interface GridAction {

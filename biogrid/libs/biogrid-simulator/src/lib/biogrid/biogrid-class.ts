@@ -2,6 +2,7 @@ import {
   Grid,
   GridAction,
   GridOptions,
+  Town,
 } from '@biogrid/grid-simulator';
 import { BiogridState } from '../biogrid-state';
 
@@ -12,7 +13,7 @@ export interface BiogridOptions extends GridOptions {
 
 export class Biogrid implements Grid {
   private state: BiogridState;
-  constructor(town: unknown, opts?: BiogridOptions) {
+  constructor(town: Town, opts?: BiogridOptions) {
     this.state = new BiogridState(10, []);
   }
 

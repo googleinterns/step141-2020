@@ -1,10 +1,11 @@
 import { Biogrid } from './';
 import { BiogridAction } from '../biogrid-action';
+import { RuralArea } from '../community';
 
 let grid: Biogrid
 
 beforeAll(() => {
-  grid = new Biogrid('Fake town', {
+  grid = new Biogrid(new RuralArea([]), {
     numberOfLargeBatteryCells: 10,
     numberOfSmallBatteryCells: 10,
   });
