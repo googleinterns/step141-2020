@@ -1,4 +1,9 @@
-import { EnergyUser, Battery } from '@biogrid/grid-simulator';
+import {
+  EnergyUser,
+  Battery,
+  ItemPosition,
+  Distance,
+} from '@biogrid/grid-simulator';
 
 /**
  * A structure such as a building or house which uses energy to operate.
@@ -8,18 +13,24 @@ export class Building implements EnergyUser {
   private energyInJoules: number;
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
+  private position: ItemPosition;
   // /** The battery storage for the building. */
   // battery: Battery;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.
    */
-  constructor(energy: number) {
+  constructor(energy: number, x: Distance, y: Distance) {
+    this.position = { x, y };
     if (this.isPositive(energy)) {
       this.energyInJoules = energy;
     } else {
       throw new Error("Can't create a building with negative energy!");
     }
+  }
+
+  getPosition(): ItemPosition {
+    return this.position;
   }
 
   private isPositive(energy: number): boolean {

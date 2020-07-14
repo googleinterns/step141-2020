@@ -1,4 +1,4 @@
-import { Town } from '@biogrid/grid-simulator';
+import { Town, TownSize, Distance } from '@biogrid/grid-simulator';
 import { Building } from '../building';
 
 /**
@@ -6,11 +6,17 @@ import { Building } from '../building';
  */
 export class RuralArea implements Town {
   private buildings: Building[] = [];
+  private townSize: TownSize;
 
   /**
    * @param {Building[]} buildings A list of buildings which make up a town.
    */
-  constructor(buildings: Building[]) {
+  constructor(
+    buildings: Building[],
+    townWidth: Distance,
+    townHeight: Distance
+  ) {
+    this.townSize = { width: townWidth, height: townHeight };
     for (let i = 0; i < buildings.length; i++) {
       this.addEnergyUser(buildings[i]);
     }
@@ -18,6 +24,10 @@ export class RuralArea implements Town {
 
   getEnergyUsers(): Building[] {
     return this.buildings;
+  }
+
+  getTownSize() {
+    return this.townSize;
   }
 
   /**
@@ -39,6 +49,12 @@ export class RuralArea implements Town {
    * @param {Building} newBuilding The building to be added.
    */
   addEnergyUser(newBuilding: Building): Building {
+    const pos = newBuilding.getPosition();
+    if (pos.x > this.townSize.width || pos.y > this.townSize.height) {
+      throw new Error(
+        "Building position must be within the town's size constraints"
+      );
+    }
     const randomIds = this.buildings.map((building) =>
       building.getBuildingId()
     );
