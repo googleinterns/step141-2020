@@ -5,6 +5,9 @@ steps:
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/step-alr-2020/api-image']
-# TODO: run and deploy the image from GCP
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google/com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'biogrid-api', '--image', 'gcr.io/step-alr-2020/api-image', '--region', 'us-central1', '--platform', 'managed']
 images:
 - 'gcr.io/step-alr-2020/api-image'
