@@ -31,7 +31,10 @@ export class BiogridState implements StateGraph {
     this.graph = this.getMinimumSpanningTree(this.graph);
   }
 
-  private addCompletlyConnectedVertex(
+  /**
+   * Take in a vertex and connect it to every other vertex currently present in the grid
+   */
+  private addCompletelyConnectedVertex(
     newVertexIndex: number,
     vertex: StateGraphVertex
   ) {
