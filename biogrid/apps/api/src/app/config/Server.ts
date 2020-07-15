@@ -48,7 +48,6 @@ export class Server {
    */
   private serveStaticFiles() {
     const staticDir = __dirname + '/build/public';
-    console.log(staticDir)
     this.app.use(express.static(staticDir));
   }
 
