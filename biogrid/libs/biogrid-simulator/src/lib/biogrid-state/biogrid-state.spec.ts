@@ -46,11 +46,11 @@ describe('classes', () => {
     ];
     const state = new BiogridState(newVertices);
     state.convertStateGraphToMST();
-    expect(state.getGraph().V).toEqual(newVertices.length);
     let totalEdges = 0;
     for (let i = 0; i < newVertices.length; i++) {
       totalEdges += state.getGraph().adj(i).length;
     }
+    expect(state.getGraph().V).toEqual(newVertices.length);
     expect(totalEdges).toEqual(newVertices.length - 1);
   });
 

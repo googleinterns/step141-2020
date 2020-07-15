@@ -19,7 +19,7 @@ export class BiogridState implements StateGraph {
       this.graphIndexToVertex[i] = vertex;
     });
     vertices.forEach((vertex, i) => {
-      this.addCompletlyConnectedVertex(i, vertex);
+      this.addCompletelyConnectedVertex(i, vertex);
     });
   }
 
@@ -42,7 +42,10 @@ export class BiogridState implements StateGraph {
     return this.graphIndexToVertex.map((vertex) => vertex.getPosition());
   }
 
-  private addCompletlyConnectedVertex(
+  /**
+   * Take in a vertex and connect it to every other vertex currently present in the grid
+   */
+  private addCompletelyConnectedVertex(
     newVertexIndex: number,
     vertex: StateGraphVertex
   ) {

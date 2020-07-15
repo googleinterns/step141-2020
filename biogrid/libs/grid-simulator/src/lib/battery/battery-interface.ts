@@ -3,7 +3,7 @@ import { StateGraphEdge } from '../state';
 import { GridItem } from '../grid-item';
 
 export interface Battery extends GridItem {
-  getEnergyAmount(): Energy;
+  getCurrentBatteryEnergy(): Energy;
   getMaxcapacity(): Energy;
   isEmpty(): boolean;
   isFull(): boolean;

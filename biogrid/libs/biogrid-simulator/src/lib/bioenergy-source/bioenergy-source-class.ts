@@ -9,7 +9,7 @@ import {
 
 export class BioEnergySource implements EnergySource {
   private sourceCapacity: Energy;
-  private minCapacity: Energy;
+  private readonly minCapacity: Energy;
   private energySourceValidator?: Validatable;
   private position: ItemPosition;
 
@@ -34,6 +34,10 @@ export class BioEnergySource implements EnergySource {
   public getPosition() {
     return this.position;
   }
+  
+  get MinCapacity(): Energy {
+    return this.minCapacity;
+  }
 
   private validateInputs(
     sourceCapacity: Energy,
@@ -48,8 +52,8 @@ export class BioEnergySource implements EnergySource {
   }
 
   getpowerAmount(): Energy {
-    const tempEnergy = this.sourceCapacity;
-    this.sourceCapacity = 0;
+    const tempEnergy = this.sourceCapacity - this.minCapacity;
+    this.sourceCapacity = this.minCapacity;
     return tempEnergy;
   }
 

@@ -8,8 +8,8 @@ beforeAll(() => {
   grid = new Biogrid(
     new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
     {
-      numberOfLargeBatteryCells: 5,
-      numberOfSmallBatteryCells: 20,
+      numberOfLargeBatteryCells: 2,
+      numberOfSmallBatteryCells: 6,
     }
   );
 });
@@ -21,53 +21,36 @@ describe('classes', () => {
   });
 
   /**
-   * The small batteries are the x. THe larger are the *
+   * The small batteries are the s. THe larger are the L
    * _____________
-   * |  x  *  x  |
-   * |  x     x  |
-   * |  x  *  x  |
-   * |  x     x  |
-   * |  x  *  x  |
-   * |  x     x  |
-   * |  x  *  x  |
-   * |  x     x  |
-   * |  x  *  x  |
-   * |  x     x  |
+   * |  s  L  s  |
+   * |  s     s  |
+   * |  s  L  s  |
+   * |  s     s  |
+   * |  s  L  s  |
+   * |  s     s  |
+   * |  s  L  s  |
+   * |  s     s  |
+   * |  s  L  s  |
+   * |  s     s  |
    * ------------
    */
   test('Space out the batteries of a new biogrid evenly', () => {
     const positions = grid.getSystemState().getAllPositionsByIndex();
     expect(positions).toEqual([
-      { x: 2.5, y: 0.5 },
-      { x: 7.5, y: 0.5 },
-      { x: 2.5, y: 1.5 },
-      { x: 7.5, y: 1.5 },
-      { x: 2.5, y: 2.5 },
-      { x: 7.5, y: 2.5 },
-      { x: 2.5, y: 3.5 },
-      { x: 7.5, y: 3.5 },
-      { x: 2.5, y: 4.5 },
-      { x: 7.5, y: 4.5 },
-      { x: 2.5, y: 5.5 },
-      { x: 7.5, y: 5.5 },
-      { x: 2.5, y: 6.5 },
-      { x: 7.5, y: 6.5 },
-      { x: 2.5, y: 7.5 },
-      { x: 7.5, y: 7.5 },
-      { x: 2.5, y: 8.5 },
-      { x: 7.5, y: 8.5 },
-      { x: 2.5, y: 9.5 },
-      { x: 7.5, y: 9.5 },
-      { x: 5, y: 1 },
-      { x: 5, y: 3 },
-      { x: 5, y: 5 },
-      { x: 5, y: 7 },
-      { x: 5, y: 9 },
+      { x: 5, y: 0.8333333333333333 },
+      { x: 5, y: 2.5 },
+      { x: 5, y: 4.166666666666667 },
+      { x: 5, y: 5.833333333333334 },
+      { x: 5, y: 7.5 },
+      { x: 5, y: 9.166666666666666 },
+      { x: 5, y: 2.5 },
+      { x: 5, y: 7.5 },
     ]);
   });
 
-  test('should ensure that the Biogrid take action works', () => {
-    const action = new BiogridAction([])
+  test('biogrid takeaction updates state', () => {
+    const action = new BiogridAction([]);
     // Ensure that take action returned
     expect(grid.takeAction(action)).toEqual(undefined);
     const state = grid.getSystemState();

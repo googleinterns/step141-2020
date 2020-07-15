@@ -51,13 +51,14 @@ export class Biogrid implements Grid {
   /**
    * A simplified algorithm to (mostly) evenly space out batteries throughout the square town
    * Split the town into rows and columns and then place a battery in the center of each cell
+   * TODO: have a smart algorithm for placement, see https://github.com/googleinterns/step141-2020/issues/42
    */
   private createBatteryPositions(
     townSize: TownSize,
     numberOfBatteries: number
   ): ItemPosition[] {
     const cols = Math.ceil(numberOfBatteries / townSize.width);
-    const rows = numberOfBatteries / cols;
+    const rows = Math.ceil(numberOfBatteries / cols);
     const positions: ItemPosition[] = [];
     for (let i = 0; i < numberOfBatteries; i++) {
       positions.push({
