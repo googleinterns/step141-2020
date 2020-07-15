@@ -7,7 +7,6 @@ steps:
   args: ['push', 'gcr.io/step-alr-2020/api-image']
 # Deploy container image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: gcloud
-  args: ['run', 'biogrid-api', '--image', 'gcr.io/step-alr-2020/api-image', '--region', 'us-central1', '--platform', 'managed']
+  args: ['run', 'biogrid-api', '--image', 'gcr.io/step-alr-2020/api-image', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
 images:
 - 'gcr.io/step-alr-2020/api-image'
