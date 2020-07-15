@@ -36,6 +36,7 @@ export class Biogrid implements Grid {
       ...largeBatteries,
       ...town.getEnergyUsers(),
     ]);
+    this.state.convertStateGraphToMST();
   }
 
   getSystemState(): BiogridState {
@@ -60,7 +61,7 @@ export class Biogrid implements Grid {
     const positions: ItemPosition[] = [];
     for (let i = 0; i < numberOfBatteries; i++) {
       positions.push({
-        x: (((numberOfBatteries % cols) + 0.5) / cols) * townSize.width,
+        x: (((i % cols) + 0.5) / cols) * townSize.width,
         y: ((Math.floor(i / cols) + 0.5) / rows) * townSize.height,
       });
     }

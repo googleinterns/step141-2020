@@ -4,7 +4,6 @@ import {
   StateGraph,
   StateGraphEdge,
 } from '@biogrid/grid-simulator';
-import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
 
 export class BiogridState implements StateGraph {
   graph: jsgraphs.WeightedDiGraph;
@@ -27,6 +26,17 @@ export class BiogridState implements StateGraph {
 
   public convertStateGraphToMST() {
     this.graph = this.getMinimumSpanningTree(this.graph);
+  }
+
+  public getGridItem(ind: number) {
+    return this.graphIndexToVertex[ind];
+  }
+
+  /**
+   * Get all GridItem positions by their index in the graph
+   */
+  public getAllPositionsByIndex() {
+    return this.graphIndexToVertex.map((vertex) => vertex.getPosition());
   }
 
   private addCompletlyConnectedVertex(
