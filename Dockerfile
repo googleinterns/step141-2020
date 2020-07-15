@@ -41,7 +41,7 @@ RUN nx build api --prod || echo 'continuing'
 RUN nx build biogrid-mvp --prod || echo 'continuing'
 
 # Copy the contents of the frontend into the static serving file
-RUN mkdir dist/apps/api/build/public
+RUN mkdir -p /usr/src/repo/dist/apps/api/build/public
 RUN cp dist/apps/biogrid-mvp/* dist/apps/api/build/public
 
 # Remove dev deps
