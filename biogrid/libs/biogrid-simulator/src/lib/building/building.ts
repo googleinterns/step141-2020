@@ -14,8 +14,6 @@ export class Building implements EnergyUser {
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
   private position: ItemPosition;
-  // /** The battery storage for the building. */
-  // battery: Battery;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.

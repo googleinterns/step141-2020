@@ -6,9 +6,9 @@ describe('tests for RuralArea class', () => {
     y = 10;
   test('getBuildingById()', () => {
     const buildings: Building[] = [
-      new Building(5, 2, 3),
-      new Building(10, 3, 4),
-      new Building(20, 1, 2),
+      new Building(/* energy = */ 5, /* x = */ 2, /* y = */ 3),
+      new Building(/* energy = */ 10, /* x = */ 3, /* y = */ 4),
+      new Building(/* energy = */ 20, /* x = */ 1, /* y = */ 2),
     ];
     const ruralarea = new RuralArea(buildings, x, y);
     const aBuildingId = buildings[1].getBuildingId();
@@ -17,7 +17,7 @@ describe('tests for RuralArea class', () => {
 
   test('addBuilding()', () => {
     const buildings: Building[] = [
-      new Building(5, 2, 3),
+      new Building(/* energy = */ 5, /* x = */ 2, /* y = */ 3),
       new Building(10, 3, 4),
       new Building(20, 1, 2),
     ];
@@ -29,19 +29,24 @@ describe('tests for RuralArea class', () => {
 
   test('addEnergyUser() unique Id', () => {
     const buildings: Building[] = [
-      new Building(5, 2, 2),
-      new Building(8, 1, 1),
+      new Building(/* energy = */ 5, /* x = */ 2, /* y = */ 3),
+      new Building(10, 3, 4),
     ];
     const ruralarea = new RuralArea(buildings, x, y);
     const newBuilding = new Building(40, 9, 9);
     ruralarea.addEnergyUser(newBuilding);
-    expect(ruralarea.getEnergyUsers()[1].getBuildingId()).toEqual(
-      buildings[1].getBuildingId()
-    );
+    const isArrayUnique = (arr: number[]) => new Set(arr).size === arr.length;
+    expect(
+      isArrayUnique(
+        ruralarea.getEnergyUsers().map((building) => building.getBuildingId())
+      )
+    ).toBeTruthy;
   });
 
   test('add an energy user out of bounds', () => {
-    const buildings: Building[] = [new Building(5, 22, 10)];
+    const buildings: Building[] = [
+      new Building(/* energy = */ 22, /* x = */ 113, /* y = */ 1114),
+    ];
     expect(() => {
       const ruralarea = new RuralArea(buildings, x, y);
     }).toThrow("Building position must be within the town's size constraints");

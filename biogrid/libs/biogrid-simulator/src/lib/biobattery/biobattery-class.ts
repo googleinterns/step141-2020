@@ -1,18 +1,23 @@
 import {
   Battery,
+  Distance,
   Energy,
+  ItemPosition,
   Validatable,
   validate,
-  Distance,
-  ItemPosition,
 } from '@biogrid/grid-simulator';
 import { SMALL_BATTERY } from '../config';
 
 export class BioBattery implements Battery {
   private currentBatteryEnergy: Energy;
   private readonly maxCapacity: Energy;
-  private position: ItemPosition;
+  private readonly position: ItemPosition;
 
+  /**
+   *
+   * @param x Distance from the left side
+   * @param y Distance from the top
+   */
   constructor(
     x: Distance,
     y: Distance,

@@ -6,7 +6,10 @@ import {
 } from '@biogrid/grid-simulator';
 
 export class BiogridState implements StateGraph {
+  // Stores the wires which connect each grid item to each other and the distance between them
   graph: jsgraphs.WeightedDiGraph;
+  // Because the graph stores numbers as vertices, graphIndexToVertex is needed to
+  // convert between a vertex in the graph and the datastructure it represents
   graphIndexToVertex: StateGraphVertex[];
 
   constructor(vertices: StateGraphVertex[]) {

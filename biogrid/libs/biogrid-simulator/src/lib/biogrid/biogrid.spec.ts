@@ -15,7 +15,7 @@ beforeAll(() => {
 });
 
 describe('classes', () => {
-  it('should create a Biogrid and make sure that the setup algorithm works', () => {
+  test('should create a Biogrid and make sure that the setup algorithm works', () => {
     // TODO add in a test which mimics the algorithm once it is implemented
     expect(grid.getSystemState()).toBeTruthy();
   });
@@ -35,7 +35,7 @@ describe('classes', () => {
    * |  x     x  |
    * ------------
    */
-  it('Space out the batteries of a new biogrid evenly', () => {
+  test('Space out the batteries of a new biogrid evenly', () => {
     const positions = grid.getSystemState().getAllPositionsByIndex();
     expect(positions).toEqual([
       { x: 2.5, y: 0.5 },
@@ -66,8 +66,8 @@ describe('classes', () => {
     ]);
   });
 
-  it('should ensure that the Biogrid take action works', () => {
-    const action = new BiogridAction([]);
+  test('should ensure that the Biogrid take action works', () => {
+    const action = new BiogridAction([])
     // Ensure that take action returned
     expect(grid.takeAction(action)).toEqual(undefined);
     const state = grid.getSystemState();

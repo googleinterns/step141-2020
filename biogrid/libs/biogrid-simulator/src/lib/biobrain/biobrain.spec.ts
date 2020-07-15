@@ -8,10 +8,9 @@ beforeAll(() => {
 });
 
 describe('BioBrain class', () => {
-  test('It should test that there is an action sent back', () => {
+  test('computeAction return biogridstate', () => {
     // TODO add assertions for acions
     const action = actualBrain.computeAction(new BiogridState([]))
     expect(action.getSwitchedOnBatteries().length).toBeGreaterThanOrEqual(0);
   });
-
 });
