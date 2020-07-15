@@ -41,6 +41,7 @@ export class Biogrid implements Grid {
 
   
   constructor(town: Town, opts: BiogridOptions) {
+
     // Batteries
     const smallBatteryPositions = this.createBatteryPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
     const largeBatteryPositions = this.createBatteryPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
@@ -57,15 +58,16 @@ export class Biogrid implements Grid {
     this.solarPanels = [];
     
     this.state = new BiogridState(this.createGridItems());
+
+    this.state.convertStateGraphToMST();
   }
 
   private createGridItems(): GridItem[] {
-    let gridItems: GridItem[] = [];
-    this.smallBatteries.map(battery => gridItems.push(battery));
-    this.largeBatteries.map(battery => gridItems.push(battery));
-    this.town.getEnergyUsers().map(energyUser => gridItems.push(energyUser));
-
-    return gridItems;
+    return [
+      ...this.smallBatteries,
+      ...this.largeBatteries,
+      ...this.town.getEnergyUsers(),
+    ]
   }
 
   getSystemState(): BiogridState {
@@ -89,16 +91,19 @@ export class Biogrid implements Grid {
    * A simplified algorithm to (mostly) evenly space out batteries throughout the square town
    * Split the town into rows and columns and then place a battery in the center of each cell
    */
-  private createBatteryPositions(townSize: TownSize, numberOfBatteries: number): ItemPosition[] {
+  private createBatteryPositions(
+    townSize: TownSize,
+    numberOfBatteries: number
+  ): ItemPosition[] {
     const cols = Math.ceil(numberOfBatteries / townSize.width);
     const rows = numberOfBatteries / cols;
     const positions: ItemPosition[] = [];
     for (let i = 0; i < numberOfBatteries; i++) {
       positions.push({
-        x: ((numberOfBatteries % cols + 0.5) / cols) * townSize.width,
-        y: ((Math.floor(i / cols) + 0.5) / rows) * townSize.height
-      })
+        x: (((i % cols) + 0.5) / cols) * townSize.width,
+        y: ((Math.floor(i / cols) + 0.5) / rows) * townSize.height,
+      });
     }
-    return positions
+    return positions;
   }
 }
