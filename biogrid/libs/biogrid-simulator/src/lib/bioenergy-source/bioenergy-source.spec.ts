@@ -35,6 +35,6 @@ describe('tests for the BioEnergySource', () => {
     } catch (error) {
       console.log(`Error thrown while setting the energy Source: ${error}`);
     }
-    expect(energySource.getpowerAmount()).toEqual(expected);
+    expect(energySource.getEnergyAmount()).toEqual(expected);
   });
 });

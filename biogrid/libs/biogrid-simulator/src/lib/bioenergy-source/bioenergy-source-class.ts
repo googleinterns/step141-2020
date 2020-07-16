@@ -6,18 +6,20 @@ import {
   ItemPosition,
   Distance,
 } from '@biogrid/grid-simulator';
+import { GRID_ITEM_NAMES, SOLAR_PANEL } from '../config';
 
 export class BioEnergySource implements EnergySource {
   private sourceCapacity: Energy;
-  private minCapacity: Energy;
+  private readonly minCapacity: Energy;
   private energySourceValidator?: Validatable;
   private position: ItemPosition;
+  name = GRID_ITEM_NAMES.SOLAR_PANEL;
 
   constructor(
     x: Distance,
     y: Distance,
-    sourceCapacity: Energy = 10,
-    minCapacity: Energy = 0
+    sourceCapacity: Energy = SOLAR_PANEL.DEFAULT_INITIAL_ENERGY,
+    minCapacity: Energy = SOLAR_PANEL.MIN_CAPACITY
   ) {
     this.position = { x, y };
 
@@ -47,10 +49,21 @@ export class BioEnergySource implements EnergySource {
     return validate(this.energySourceValidator);
   }
 
-  getpowerAmount(): Energy {
-    const tempEnergy = this.sourceCapacity;
-    this.sourceCapacity = 0;
-    return tempEnergy;
+  supplyPower(requiredEnergy: Energy): Energy {
+    this.sourceCapacity = this.sourceCapacity - requiredEnergy;
+    return requiredEnergy;
+  }
+
+  getEnergyAmount() {
+    return this.sourceCapacity;
+  }
+
+  get MinCapacity(): Energy {
+    return this.minCapacity;
+  }
+
+  isEmpty(): boolean {
+    return this.sourceCapacity === this.minCapacity;
   }
 
   set SourceCapacity(inputEnergy: Energy) {
