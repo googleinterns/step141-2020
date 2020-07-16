@@ -10,6 +10,7 @@ beforeAll(() => {
     {
       numberOfLargeBatteryCells: 5,
       numberOfSmallBatteryCells: 20,
+      numberOfSolarPanels: 30,
     }
   );
 });
