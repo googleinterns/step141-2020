@@ -1,4 +1,4 @@
 import { Power } from "../measurements";
-export interface EnergySource {
+export interface EnergySourceInterface {
   getPowerAmount(date: Date): Power;
 }
