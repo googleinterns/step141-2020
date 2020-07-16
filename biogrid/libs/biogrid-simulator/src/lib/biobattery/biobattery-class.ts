@@ -70,11 +70,11 @@ export class BioBattery implements Battery {
     return validate(batteryValidator);
   }
 
-  getEnergyAmount(): Energy {
+  getEnergyInJoules(): Energy {
     return this.currentBatteryEnergy;
   }
 
-  getMaxcapacity(): Energy {
+  get MaxCapacity(): Energy {
     return this.maxCapacity;
   }
 

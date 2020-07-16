@@ -54,7 +54,7 @@ export class BioEnergySource implements EnergySource {
     return requiredEnergy;
   }
 
-  getEnergyAmount() {
+  getEnergyInJoules() {
     return this.sourceCapacity;
   }
 

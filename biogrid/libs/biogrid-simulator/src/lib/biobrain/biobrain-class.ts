@@ -1,6 +1,6 @@
-import { Brain, GridAction, GridItem, StateGraph } from '@biogrid/grid-simulator';
-import { BiogridAction, Building, BioBattery, BioEnergySource, BiogridState } from '@biogrid/biogrid-simulator';
-import { GRID_ITEM_NAMES, ReturnedAction } from '../config';
+import { Brain, GridAction, GridItem, StateGraph, SupplyingPath } from '@biogrid/grid-simulator';
+import { BiogridAction, Building, BioBattery, BioEnergySource } from '@biogrid/biogrid-simulator';
+import { GRID_ITEM_NAMES, SupplyToAgent, SupplyFromAgent, ShortestDistances } from '../config';
 import { Path } from 'graphlib';
 
 
@@ -22,7 +22,6 @@ export class BioBrain implements Brain {
     let smallBatteries: BioBattery[] = [];
     let largeBatteries: BioBattery[] = [];
     let solarPanels: BioEnergySource[] = [];
-    let grid: GridItem
 
     let shortestDistances = state.getShortestDistances();
 
@@ -47,7 +46,7 @@ export class BioBrain implements Brain {
 
     // Create an object of buildings with the energyProviders which supplied
     // TODO assign the building as Building not the names
-    let buildingSuppliers: ReturnedAction = this.buildingCharging(
+    let buildingSuppliers: SupplyingPath = this.buildingCharging(
       buildings,
       smallBatteries,
       largeBatteries,
@@ -55,60 +54,39 @@ export class BioBrain implements Brain {
       shortestDistances
     );
     
-    let smallBatterySupplier: ReturnedAction = this.chargeSmallBatteries(
+    let smallBatterySupplier: SupplyingPath = this.chargeSmallBatteries(
       smallBatteries,
       largeBatteries,
       solarPanels,
       shortestDistances
     );
     
-    let largeBatterySupplier: ReturnedAction = this.chargeLargebatteries(
+    let largeBatterySupplier: SupplyingPath = this.chargeLargebatteries(
       largeBatteries,
       solarPanels,
       shortestDistances
     );
     
 
-    return new BiogridAction([]);
+    return new BiogridAction({
+      ...buildingSuppliers,
+      ...smallBatterySupplier,
+      ...largeBatterySupplier
+    });
   }
 
   private chargeLargebatteries(
     largeBatteries: BioBattery[],
     solarPanels: BioEnergySource[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
-  ): ReturnedAction {
-      // Assuming the large battery is not fully charged
-      largeBatteries = largeBatteries.filter((battery) => !battery.isFull());
+  ): SupplyingPath {
+    // Assuming the large battery is not fully charged
+    largeBatteries = largeBatteries.filter((battery) => !battery.isFull());
 
-      // Create an object of buildings with the energyProviders which supplied
-      // TODO assign the battery itself not the names
-      let largeBatterySuppliers: ReturnedAction = {};
-
-      // Create an array of the possible energy givers
-      const allEnergyProviders = [...solarPanels];
-      for (const largeBattery of largeBatteries) {
-      const energyReq = largeBattery.getMaxcapacity() - largeBattery.getEnergyAmount();
-      let shortestDistance = Number.POSITIVE_INFINITY;
-      // Keep track of the batteryPosition
-      let indexOfProvider = -1;
-      for (let index = 0; index < allEnergyProviders.length; index++) {
-        const newShortestDistance =
-          shortestDistances[largeBattery.name][allEnergyProviders[index].name]
-            .distance;
-        const energyProvided = allEnergyProviders[index].getEnergyAmount();
-        if (
-          newShortestDistance < shortestDistance &&
-          energyProvided >= energyReq
-        ) {
-          shortestDistance = newShortestDistance;
-          indexOfProvider = index;
-        }
-      }
-      allEnergyProviders[indexOfProvider].supplyPower(energyReq);
-      largeBatterySuppliers[largeBattery.name] =
-        allEnergyProviders[indexOfProvider].name;
-    }
-    return largeBatterySuppliers;
+    // Create an array of the possible energy givers
+    const allEnergyProviders = [...solarPanels];
+    
+    return this.determineSupplyingPath(largeBatteries, allEnergyProviders, shortestDistances);
   }
 
 
@@ -118,16 +96,12 @@ export class BioBrain implements Brain {
     largeBatteries: BioBattery[],
     solarPanels: BioEnergySource[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
-  ): ReturnedAction {
+  ): SupplyingPath {
     // Assuming the small batteries are not fully charged
     smallBatteries = smallBatteries.filter((battery) => !battery.isFull());
     
     // Filter the large batteries and remove the ones which do not have power in them
     largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
-
-    // Create an object of buildings with the energyProviders which supplied
-    // TODO assign the battery itself not the names
-    let smallBatterySuppliers: ReturnedAction = {};
 
     // Create an array of the possible energy givers
     const allEnergyProviders = [
@@ -135,30 +109,7 @@ export class BioBrain implements Brain {
       ...largeBatteries,
     ];
 
-    for (const smallBattery of smallBatteries) {
-      const energyReq = smallBattery.getMaxcapacity() - smallBattery.getEnergyAmount();
-      let shortestDistance = Number.POSITIVE_INFINITY;
-      // Keep track of the batteryPosition
-      let indexOfProvider = -1;
-      for (let index = 0; index < allEnergyProviders.length; index++) {
-        const newShortestDistance =
-          shortestDistances[smallBattery.name][allEnergyProviders[index].name]
-            .distance;
-        const energyProvided = allEnergyProviders[index].getEnergyAmount();
-        if (
-          newShortestDistance < shortestDistance &&
-          energyProvided >= energyReq
-        ) {
-          shortestDistance = newShortestDistance;
-          indexOfProvider = index;
-        }
-      }
-      allEnergyProviders[indexOfProvider].supplyPower(energyReq);
-      smallBatterySuppliers[smallBattery.name] =
-        allEnergyProviders[indexOfProvider].name;
-    }
-
-    return smallBatterySuppliers;
+    return this.determineSupplyingPath(smallBatteries, allEnergyProviders, shortestDistances);
   }
 
   private buildingCharging(
@@ -167,7 +118,7 @@ export class BioBrain implements Brain {
     largeBatteries: BioBattery[],
     solarPanels: BioEnergySource[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
-  ): ReturnedAction {
+  ): SupplyingPath {
     // Assuming that the houses asking for power will not have power in them.
     // Do not consider building with full power capacity
     buildings = buildings.filter((building) => {
@@ -179,10 +130,6 @@ export class BioBrain implements Brain {
     smallBatteries = smallBatteries.filter((battery) => !battery.isEmpty());
     largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
 
-    // Create an object of buildings with the energyProviders which supplied
-    // TODO assign the building itself not the names
-    let buildingSuppliers: ReturnedAction = {};
-
     // Create an array of the possible energy givers
     const allEnergyProviders = [
       ...smallBatteries,
@@ -190,16 +137,27 @@ export class BioBrain implements Brain {
       ...largeBatteries,
     ];
 
-    for (const building of buildings) {
-      const energyReq = building.MaxCapcaity - building.getEnergyInJoules();
+    return this.determineSupplyingPath(buildings, allEnergyProviders, shortestDistances);
+  }
+
+  private determineSupplyingPath(
+    supplyToAgents: SupplyToAgent,
+    supplyFromAgents: SupplyFromAgent[],
+    shortestDistances: ShortestDistances
+  ): SupplyingPath {
+    // Create an object of buildings with the energyProviders which supplied
+    // TODO: advancement: assign the supplyToAgent itself not the names
+    let supplyToSupplyFromAgents: SupplyingPath = {};
+    for (const supplyToAgent of supplyToAgents) {
+      const energyReq = supplyToAgent.MaxCapacity - supplyToAgent.getEnergyInJoules();
       let shortestDistance = Number.POSITIVE_INFINITY;
       // Keep track of the batteryPosition
       let indexOfProvider = -1;
-      for (let index = 0; index < allEnergyProviders.length; index++) {
+      for (let index = 0; index < supplyFromAgents.length; index++) {
         const newShortestDistance =
-          shortestDistances[building.name][allEnergyProviders[index].name]
+          shortestDistances[supplyToAgent.name][supplyFromAgents[index].name]
             .distance;
-        const energyProvided = allEnergyProviders[index].getEnergyAmount();
+        const energyProvided = supplyFromAgents[index].getEnergyInJoules();
         if (
           newShortestDistance < shortestDistance &&
           energyProvided >= energyReq
@@ -208,10 +166,10 @@ export class BioBrain implements Brain {
           indexOfProvider = index;
         }
       }
-      allEnergyProviders[indexOfProvider].supplyPower(energyReq);
-      buildingSuppliers[building.name] =
-        allEnergyProviders[indexOfProvider].name;
+      supplyFromAgents[indexOfProvider].supplyPower(energyReq);
+      supplyToSupplyFromAgents[supplyToAgent.name] =
+        supplyFromAgents[indexOfProvider].name;
     }
-    return buildingSuppliers;
+    return supplyToSupplyFromAgents;
   }
 }

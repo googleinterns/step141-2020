@@ -12,7 +12,7 @@ export class BiogridState implements StateGraph {
   private graph: Graph;
 
   constructor(vertices: StateGraphVertex[]) {
-    // Directed implies that I can have two edges between A and B, but in opposite directions
+    // Directed so as to have two edges between A and B, but in opposite directions
     this.graph = new Graph({directed: true});
 
     // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
@@ -31,9 +31,11 @@ export class BiogridState implements StateGraph {
 
     // Add all the edges that can be formed into the graph, read the add method for how it is done
     vertices.map(vertex => this.addEdge(vertex));
-    this.graph.edge
   }
 
+  /**
+   * Method to return the graph for the states of the grid
+   */
   public getGraph() {
     return this.graph;
   }
@@ -75,7 +77,7 @@ export class BiogridState implements StateGraph {
    * Get all GridItem positions by their index in the graph
    */
   public getAllPositions() {
-    return this.graph.nodes().map(vertex => this.graph.node(vertex).getPosition());
+    return this.graph.nodes().map(vertex => this.getGridItem(vertex).getPosition());
   }
 
   /**
@@ -119,9 +121,9 @@ export class BiogridState implements StateGraph {
         if (newVertexName.includes(GRID_ITEM_NAMES.GRID) || newVertexName.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
           edge = {  edge: {v: newVertexName, w: vertex, name: `${vertex}-to-${newVertex}`}, weight: distance }
         } else if (vertex.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
-            edge = { edge: {v: newVertexName, w: vertex, name: `${newVertexName}-to-${vertex}`}, weight: distance };
-            // Add the reverse edge from the new energy user/ building to the other building
-            this.graph.setEdge(vertex, newVertexName, distance, `${vertex}-to-${newVertexName}`);
+          edge = { edge: {v: newVertexName, w: vertex, name: `${newVertexName}-to-${vertex}`}, weight: distance };
+          // Add the reverse edge from the new energy user/ building to the other building
+          this.graph.setEdge(vertex, newVertexName, distance, `${vertex}-to-${newVertexName}`);
         } else {
           continue;
         }

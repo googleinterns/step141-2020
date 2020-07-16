@@ -1,3 +1,6 @@
+import { BioBattery, BioEnergySource, Building } from '@biogrid/biogrid-simulator';
+import { Path } from 'graphlib';
+
 export const SMALL_BATTERY = {
   DEFAULT_START_ENERGY: 13500,
   MAX_CAPACITY: 13500,
@@ -31,7 +34,10 @@ export const BUILDING = {
   MAX_CAPACITY: 4545000,
 };
 
+export type SupplyFromAgent = BioBattery | BioEnergySource;
 
-export interface ReturnedAction {
-  [string: string]: string
+export type SupplyToAgent = BioBattery[] | Building[];
+
+export interface ShortestDistances {
+  [source: string]: { [node: string]: Path };
 }

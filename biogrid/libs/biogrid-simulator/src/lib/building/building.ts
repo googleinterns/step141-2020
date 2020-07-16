@@ -17,7 +17,7 @@ export class Building implements EnergyUser {
   private buildingId = -1;
   private position: ItemPosition;
   // Label to be used in the graph
-  name = GRID_ITEM_NAMES.ENERGY_USER;
+  name: string;
   // /** The battery storage for the building. */
   // battery: Battery;
 
@@ -25,10 +25,12 @@ export class Building implements EnergyUser {
    * @param {number} energy Amount of energy the building will have in joules.
    */
   constructor(energy: number, x: Distance, y: Distance,
+      name: string = GRID_ITEM_NAMES.ENERGY_USER,
       private readonly minCapacity: Energy = BUILDING.MIN_CAPACITY,
-      private readonly maxCapacity:Energy = BUILDING.MAX_CAPACITY
+      private readonly maxCapacity:Energy = BUILDING.MAX_CAPACITY,
   ) {
     this.position = { x, y };
+    this.name = name;
     if (this.isPositive(energy)) {
       this.energyInJoules = energy;
     } else {
@@ -40,7 +42,7 @@ export class Building implements EnergyUser {
     return this.minCapacity;
   }
 
-  get MaxCapcaity(): Energy {
+  get MaxCapacity(): Energy {
     return this.maxCapacity;
   }
 
