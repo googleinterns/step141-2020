@@ -20,6 +20,7 @@ export class Server {
     this.app.use(morgan('dev', { skip: () => !Logger.shouldLog }));
     RegisterRoutes(this.app);
     this.app.use(ErrorHandler.handleError);
+    this.serveStaticFiles();
 
     // Disable linter as require statement is necessary for swagger files
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -40,6 +41,14 @@ export class Server {
       `${constants.environment} server running on port: ${this.port}`
     );
     return listen;
+  }
+
+  /**
+   * Serve the built, static frontend files for production
+   */
+  private serveStaticFiles() {
+    const staticDir = __dirname + '/build/public';
+    this.app.use(express.static(staticDir));
   }
 
   private criticalErrorHandler(...args: unknown[]) {
