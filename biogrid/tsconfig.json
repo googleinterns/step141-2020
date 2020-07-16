@@ -18,7 +18,8 @@
     "paths": {
       "@biogrid/components": ["libs/components/src/index.ts"],
       "@biogrid/grid-simulator": ["libs/grid-simulator/src/index.ts"],
-      "@biogrid/biogrid-simulator": ["libs/biogrid-simulator/src/index.ts"]
+      "@biogrid/biogrid-simulator": ["libs/biogrid-simulator/src/index.ts"],
+      "@biogrid/weather": ["libs/weather/src/index.ts"]
     },
     "types": ["cypress", "jest"]
   },
