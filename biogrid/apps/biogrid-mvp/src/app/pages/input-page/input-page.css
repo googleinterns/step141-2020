@@ -16,6 +16,10 @@ br {
   clear: both;
 }
 
+img {
+  width: 28.125rem;
+}
+
 label {
   display: block;
   text-align: left;
