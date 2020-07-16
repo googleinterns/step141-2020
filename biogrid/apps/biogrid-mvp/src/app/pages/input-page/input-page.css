@@ -26,28 +26,28 @@ label {
 }
 
 .submitButton {
-  text-align: left;
+  text-align: center;
 }
 
 .startDatePicker {
-  float: left;
+  display: inline-block;
   margin-top: 1.25rem;
   margin-right: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
 .endDatePicker {
-  float: left;
+  display: inline-block;
   margin-top: 1.25rem;
 }
 
 .smallBatteryCells {
-  float: left;
+  display: inline-block;
   margin-right: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
 .largeBatteryCells {
-  float: left;
+  display: inline-block;
 }
 

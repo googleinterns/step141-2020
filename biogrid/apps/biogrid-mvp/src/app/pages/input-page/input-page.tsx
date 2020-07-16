@@ -83,7 +83,7 @@ export const InputPage = () => {
           </div>
           <br></br>
         <div className="submitButton">
-          <input type="submit" className="submitButton"/>
+          <input type="submit" className="submitButton" value="Run the Simulation!"/>
         </div>
       </form>
     </div>
