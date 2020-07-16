@@ -30,3 +30,8 @@ export const BUILDING = {
   MIN_CAPACITY: 0,
   MAX_CAPACITY: 4545000,
 };
+
+
+export interface ReturnedAction {
+  [string: string]: string
+}
