@@ -18,9 +18,6 @@ export class BiogridState implements StateGraph {
     vertices.forEach((vertex, i) => {
       this.graphIndexToVertex[i] = vertex;
     });
-    vertices.forEach((vertex, i) => {
-      this.addCompletlyConnectedVertex(i, vertex);
-    });
   }
 
   public getGraph() {
@@ -28,11 +25,15 @@ export class BiogridState implements StateGraph {
   }
 
   public convertStateGraphToMST() {
-    this.graph = this.getMinimumSpanningTree(this.graph);
+    this.graphIndexToVertex.forEach((vertex, i) => {
+      this.addCompletelyConnectedVertex(i, vertex);
+    });
+    this.graph = this.getMinimumSpanningTree( this.graph);
   }
 
   /**
    * Take in a vertex and connect it to every other vertex currently present in the grid
+   * This is used in the creation of the MST
    */
   private addCompletelyConnectedVertex(
     newVertexIndex: number,

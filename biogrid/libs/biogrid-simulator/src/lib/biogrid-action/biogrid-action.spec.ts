@@ -1,7 +1,7 @@
 import { BiogridAction } from './';
 
 describe('classes', () => {
-  test('should work to create a BiogridAction', () => {
+  test('Create empty BiogridAction', () => {
     const action = new BiogridAction([]);
     expect(action.getSwitchedOnBatteries()).toEqual([]);
   });

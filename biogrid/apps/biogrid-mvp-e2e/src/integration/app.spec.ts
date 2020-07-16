@@ -3,7 +3,7 @@ import { getGreeting } from '../support/app.po';
 describe('biogrid-mvp', () => {
   beforeEach(() => cy.visit('/'));
 
-  test('should display welcome message', () => {
+  test('biogrid-mvp display welcome message', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.login('my-email@something.com', 'myPassword');
 

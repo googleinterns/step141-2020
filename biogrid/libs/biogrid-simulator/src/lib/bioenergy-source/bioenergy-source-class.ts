@@ -34,8 +34,8 @@ export class BioEnergySource implements EnergySource {
   public getPosition() {
     return this.position;
   }
-  
-  get MinCapacity(): Energy {
+
+  public getMinCapacity(): Energy {
     return this.minCapacity;
   }
 

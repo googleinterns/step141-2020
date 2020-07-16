@@ -12,7 +12,7 @@ beforeAll(() => {
 });
 
 describe('classes', () => {
-  test('should create a Biogrid and make sure that the setup algorithm works', () => {
+  test('create a Biogrid and make sure that the setup algorithm works', () => {
     // TODO add in a test which mimics the algorithm once it is implemented
     expect(grid.getSystemState()).toBeTruthy();
   });
