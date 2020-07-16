@@ -3,7 +3,9 @@ import {
   Battery,
   ItemPosition,
   Distance,
+  Energy,
 } from '@biogrid/grid-simulator';
+import { GRID_ITEM_NAMES, BUILDING } from '../config';
 
 // TODO rename energy to power consumption
 /**
@@ -14,19 +16,32 @@ export class Building implements EnergyUser {
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
   private position: ItemPosition;
+  // Label to be used in the graph
+  name = GRID_ITEM_NAMES.ENERGY_USER;
   // /** The battery storage for the building. */
   // battery: Battery;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.
    */
-  constructor(energy: number, x: Distance, y: Distance) {
+  constructor(energy: number, x: Distance, y: Distance,
+      private readonly minCapacity: Energy = BUILDING.MIN_CAPACITY,
+      private readonly maxCapacity:Energy = BUILDING.MAX_CAPACITY
+  ) {
     this.position = { x, y };
     if (this.isPositive(energy)) {
       this.energyInJoules = energy;
     } else {
       throw new Error("Can't create a building with negative energy!");
     }
+  }
+
+  get MinCapacity(): Energy {
+    return this.minCapacity;
+  }
+
+  get MaxCapcaity(): Energy {
+    return this.maxCapacity;
   }
 
   getPosition(): ItemPosition {

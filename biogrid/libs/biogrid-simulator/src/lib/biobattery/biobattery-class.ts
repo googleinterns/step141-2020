@@ -12,10 +12,12 @@ export class BioBattery implements Battery {
   private currentBatteryEnergy: Energy;
   private readonly maxCapacity: Energy;
   private position: ItemPosition;
+  name: string;
 
   constructor(
     x: Distance,
     y: Distance,
+    typeOfBattery: string,
     currentBatteryEnergy: Energy = SMALL_BATTERY.DEFAULT_START_ENERGY,
     maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY
   ) {
@@ -28,6 +30,7 @@ export class BioBattery implements Battery {
     }
     this.currentBatteryEnergy = currentBatteryEnergy;
     this.maxCapacity = maxCapacity;
+    this.name = typeOfBattery;
   }
 
   getPosition() {
