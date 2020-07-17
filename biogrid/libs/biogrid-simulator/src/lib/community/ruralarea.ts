@@ -49,10 +49,10 @@ export class RuralArea implements Town {
    * @param {Building} newBuilding The building to be added.
    */
   addEnergyUser(newBuilding: Building): Building {
-    const pos = newBuilding.getPosition();
+    const pos = newBuilding.getRelativePosition();
     if (pos.x > this.townSize.width || pos.y > this.townSize.height) {
       throw new Error(
-        "Building position must be within the town's size constraints"
+        "Building relativePosition must be within the town's size constraints"
       );
     }
     const randomIds = this.buildings.map((building) =>

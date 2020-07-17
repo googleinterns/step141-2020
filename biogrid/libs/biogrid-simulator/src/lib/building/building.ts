@@ -13,13 +13,13 @@ export class Building implements EnergyUser {
   private energyInJoules: number;
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
-  private position: ItemPosition;
+  private relativePosition: ItemPosition;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.
    */
   constructor(energy: number, x: Distance, y: Distance) {
-    this.position = { x, y };
+    this.relativePosition = { x, y };
     if (this.isPositive(energy)) {
       this.energyInJoules = energy;
     } else {
@@ -27,8 +27,8 @@ export class Building implements EnergyUser {
     }
   }
 
-  getPosition(): ItemPosition {
-    return this.position;
+  getRelativePosition(): ItemPosition {
+    return this.relativePosition;
   }
 
   private isPositive(energy: number): boolean {

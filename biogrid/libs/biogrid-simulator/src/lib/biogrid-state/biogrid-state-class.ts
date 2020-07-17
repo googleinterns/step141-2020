@@ -57,8 +57,8 @@ export class BiogridState implements StateGraph {
    */
   private calculateDistance(v1: StateGraphVertex, v2: StateGraphVertex) {
     return Math.sqrt(
-      Math.pow(v1.getPosition().x - v2.getPosition().x, 2) +
-        Math.pow(v1.getPosition().y - v2.getPosition().y, 2)
+      Math.pow(v1.getRelativePosition().x - v2.getRelativePosition().x, 2) +
+        Math.pow(v1.getRelativePosition().y - v2.getRelativePosition().y, 2)
     );
   }
 
