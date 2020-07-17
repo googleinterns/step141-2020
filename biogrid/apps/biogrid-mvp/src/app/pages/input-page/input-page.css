@@ -1,0 +1,53 @@
+#biogridVisual {
+  width: 28.125rem;
+}
+
+body {
+  background-color: #3b6d6d;
+}
+
+br {
+  clear: both;
+}
+
+.endDatePicker {
+  display: inline-block;
+  margin-top: 1.25rem;
+}
+
+.input-page {
+  background-color: #f2f2f2;
+  border-radius: 0.3125rem;
+  font-family: sans-serif;
+  margin: auto;
+  padding: 1.25rem;
+  text-align: center;
+  width: 56.25rem;
+}
+
+label {
+  display: block;
+  text-align: left;
+}
+
+.largeBatteryCells {
+  display: inline-block;
+}
+
+.smallBatteryCells {
+  display: inline-block;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.startDatePicker {
+  display: inline-block;
+  margin-top: 1.25rem;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.submitButton {
+  text-align: center;
+}
+

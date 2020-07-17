@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './input-page.css';
+import './input-page.scss';
 import DatePicker from 'react-datepicker';
 import { Client } from '../../client';
 import { useHistory } from 'react-router-dom';
+import Visual from "./BioGridVisual.jpg";
 
 function useInput(opts: { type: string }) {
   const [value, setValue] = useState('');
@@ -42,20 +44,45 @@ export const InputPage = () => {
   return (
     <div className="input-page">
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
-        <DatePicker
-          showPopperArrow={false}
-          selected={startDate}
-          onChange={(date: Date) => setStartDate(date)}
-        />
-        <DatePicker
-          showPopperArrow={false}
-          selected={endDate}
-          onChange={(date: Date) => setEndDate(date)}
-        />
-        {smallBatteryCellInput}
-        {largeBatteryCellInput}
-
-        <input type="submit" />
+      <h1>Welcome to the Biogrid Simulator!</h1>
+      <img src={Visual} id="biogridVisual"></img>
+      <p>This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 
+        optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">biomimicry</a> to 
+        mimic the natural energy storage of the human body given a range of sunlight data and
+        an amount of small and large battery cells. In the <b>visual</b> above, the <b>large battery cells</b> are 
+        centered in the <b>middle of the town</b> so our grid can take energy from it in the event that
+        no energy is coming from our renewable sources. Outside of our large battery cells, we have <b>small 
+        battery cells</b> spread <b>throughout the town</b> so that our buildings can have an
+        immediate energy source when they have a spike in energy consumption.</p>
+          <div className="startDatePicker">
+            <label>Start Date</label>
+            <DatePicker
+              showPopperArrow={false}
+              selected={startDate}
+              onChange={(date: Date) => setStartDate(date)}
+            />
+          </div>
+          <div className="endDatePicker">
+            <label>End Date</label>
+            <DatePicker
+              showPopperArrow={false}
+              selected={endDate}
+              onChange={(date: Date) => setEndDate(date)}
+            />
+          </div>
+          <br></br>
+          <div className="smallBatteryCells">
+            <label>Small Battery Cells</label>
+            {smallBatteryCellInput}
+          </div>
+          <div className="largeBatteryCells">
+            <label>Large Battery Cells</label>
+            {largeBatteryCellInput}
+          </div>
+          <br></br>
+        <div className="submitButton">
+          <input type="submit" className="submitButton" value="Run the Simulation!"/>
+        </div>
       </form>
     </div>
   );
