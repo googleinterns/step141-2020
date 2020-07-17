@@ -4,7 +4,7 @@ export interface BiogridSimulationResults {
   energyWastedFromSource?: number;
   energyWastedInTransportation?: number;
   timeWithoutEnoughEnergy?: number;
-  states: Graph[];
+  states: any[];
 }
 
 export interface NewBiogridOpts {

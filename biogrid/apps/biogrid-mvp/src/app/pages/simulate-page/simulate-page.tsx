@@ -7,9 +7,9 @@ export const SimulatePage = () => {
   const [simulationResults, setSimulationResults] = useState<
     BiogridSimulationResults
   >();
-  
+
   const client = Client.getInstance();
-  
+
   async function getSimulationResults() {
     await client.api.runBiogridSimulation();
     const results = await client.api.getBiogridSimulationResults();
@@ -34,6 +34,7 @@ export const SimulatePage = () => {
               <td>Energy wasted in transport</td>
               <td>{simulationResults.energyWastedInTransportation}</td>
             </tr>
+            
           </table>
         </div>
       )}
