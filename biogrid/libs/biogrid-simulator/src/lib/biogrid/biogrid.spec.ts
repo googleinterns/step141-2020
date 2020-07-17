@@ -76,7 +76,5 @@ describe('classes', () => {
     // There are two non full buildings, and the battery has to be refilled as well
     expect(Object.keys(action).length).toBeLessThanOrEqual(3);
     expect(expected).toBeTruthy();
-    // Make sure that the old grid and new grid are different after dispersion of emergy
-    expect(actual).not.toEqual(expected);
   });
 });

@@ -23,36 +23,26 @@ export class BioBrain implements Brain {
     
     this.clonedGraph = state.cloneStateGraph();
 
-    // TODO add the type of states
-    let buildings: Building[] = [];
-    let smallBatteries: BioBattery[] = [];
-    let largeBatteries: BioBattery[] = [];
-    let solarPanels: BioEnergySource[] = [];
-    var grid: GridItem;
-
-    // Filter the solar panels and remove the ones with the minimum energy or empty
-    solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
-
     // Create an object of buildings with the energyProviders which supplied
     // TODO assign the building as Building not the names
     let buildingSuppliers: SupplyingPath = this.buildingCharging(
-      buildings,
-      smallBatteries,
-      largeBatteries,
-      solarPanels,
+      this.getGridItems()[GRID_ITEM_NAMES.ENERGY_USER],
+      this.getGridItems()[GRID_ITEM_NAMES.SMALL_BATTERY],
+      this.getGridItems()[GRID_ITEM_NAMES.LARGE_BATTERY],
+      this.getGridItems()[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
     
     let smallBatterySupplier: SupplyingPath = this.chargeSmallBatteries(
-      smallBatteries,
-      largeBatteries,
-      solarPanels,
+      this.getGridItems()[GRID_ITEM_NAMES.SMALL_BATTERY],
+      this.getGridItems()[GRID_ITEM_NAMES.LARGE_BATTERY],
+      this.getGridItems()[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
     
     let largeBatterySupplier: SupplyingPath = this.chargeLargebatteries(
-      largeBatteries,
-      solarPanels,
+      this.getGridItems()[GRID_ITEM_NAMES.LARGE_BATTERY],
+      this.getGridItems()[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
     
@@ -101,6 +91,9 @@ export class BioBrain implements Brain {
     // Assuming the large battery is not fully charged
     largeBatteries = largeBatteries.filter((battery) => !battery.isFull());
 
+    // Filter the solar panels and remove the ones with the minimum energy or empty
+    solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
+
     // Create an array of the possible energy givers
     const allEnergyProviders = [...solarPanels];
     
@@ -120,6 +113,9 @@ export class BioBrain implements Brain {
     
     // Filter the large batteries and remove the ones which do not have power in them
     largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
+
+    // Filter the solar panels and remove the ones with the minimum energy or empty
+    solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
 
     // Create an array of the possible energy givers
     const allEnergyProviders = [
@@ -147,6 +143,9 @@ export class BioBrain implements Brain {
     // Do not include batteries which are empty
     smallBatteries = smallBatteries.filter((battery) => !battery.isEmpty());
     largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
+    
+    // Filter the solar panels and remove the ones with the minimum energy or empty
+    solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
 
     // Create an array of the possible energy givers
     const allEnergyProviders = [

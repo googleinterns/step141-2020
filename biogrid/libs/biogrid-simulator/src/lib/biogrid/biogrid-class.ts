@@ -141,7 +141,8 @@ export class Biogrid implements Grid {
         clonedGraph.setNode(energyUser.name, energyUser);
       }
     }
-    return this.state.setnewStateGraph(clonedGraph);
+    this.state.setnewStateGraph(clonedGraph);
+    return this.state;
   }
 
   private getGridItemType(gridItem: GridItem): string {
