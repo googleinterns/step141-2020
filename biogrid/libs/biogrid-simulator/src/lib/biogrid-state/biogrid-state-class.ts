@@ -20,12 +20,12 @@ export class BiogridState implements StateGraph {
     // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
     const grid: GridItem = {
       name: GRID_ITEM_NAMES.GRID,
-      getPosition() {
+      getRelativePosition() {
         return {x: 0, y: 0};
       }
     }
     this.graph.setNode(grid.name, (grid as GridItem));
-    
+
     // Add all the vertices as nodes/vertices of the graph, with a name for
     // the particular grid item and label which is data for the particular vertex as the GridItem itself
     vertices.map(vertex => this.graph.setNode(vertex.name, (vertex as GridItem)));
@@ -46,7 +46,7 @@ export class BiogridState implements StateGraph {
    * cloneStateGraph is used to clone the graph for use in the brain.
    */
   public cloneStateGraph(): graphlib.Graph {
-    return graphlib.json.read(graphlib.json.write(this.graph));  
+    return graphlib.json.read(graphlib.json.write(this.graph));
   }
 
   /**
@@ -113,7 +113,7 @@ export class BiogridState implements StateGraph {
    * Get all GridItem positions in the graph
    */
   public getAllPositions(): ItemPosition[] {
-    return this.graph.nodes().map(vertex => this.getGridItem(vertex).getPosition());
+    return (this.graph.nodes() as string[]).map(vertex => this.getGridItem(vertex).getRelativePosition());
   }
 
   /**
@@ -122,11 +122,11 @@ export class BiogridState implements StateGraph {
    * Add reverse edges from the batteries to the grid
    * Add edge from solar panels to the grid, not the reverse
    *                                     FROM GRID----->building<----------------------------------->building<---FROM GRID
-   *                                                     ^--|                                   |------^         
-   *                                                        |----------S.SMALL_BATTERY----------| 
-   *                                                                               ^-----|                     
-   *                  L.LARGE_BATTERY<------------------------------------>GRID<---------| 
-   *                                                FROM SOLAR PANEL^-------| |---^FROM SOLAR PANEL                        
+   *                                                     ^--|                                   |------^
+   *                                                        |----------S.SMALL_BATTERY----------|
+   *                                                                               ^-----|
+   *                  L.LARGE_BATTERY<------------------------------------>GRID<---------|
+   *                                                FROM SOLAR PANEL^-------| |---^FROM SOLAR PANEL
    *                                                  SOLAR_PANEL---------->| |<--------------SOLAR_PANEL
    * @param newVertex is the new item of the Grid to add to @param this.graph as displayed above
    */
@@ -176,8 +176,8 @@ export class BiogridState implements StateGraph {
    */
   private calculateDistance(v1: StateGraphVertex, v2: StateGraphVertex) {
     return Math.sqrt(
-      Math.pow(v1.getPosition().x - v2.getPosition().x, 2) +
-        Math.pow(v1.getPosition().y - v2.getPosition().y, 2)
+      Math.pow(v1.getRelativePosition().x - v2.getRelativePosition().x, 2) +
+        Math.pow(v1.getRelativePosition().y - v2.getRelativePosition().y, 2)
     );
   }
 }

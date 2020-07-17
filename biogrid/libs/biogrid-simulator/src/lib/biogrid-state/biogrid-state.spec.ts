@@ -24,11 +24,11 @@ describe('classes', () => {
 
   const grid: GridItem = {
     name: GRID_ITEM_NAMES.GRID,
-    getPosition() {
+    getRelativePosition() {
       return { x: 0, y: 0 };
     },
   };
-  
+
   test('to create a BiogridState', () => {
     const newVertices: StateGraphVertex[] = [
       new Building(32, x1, y1, name1),
@@ -65,7 +65,7 @@ describe('classes', () => {
       }
     }
     const expectedShortestdistances = alg.dijkstraAll(expectedGraph, getWeights(expectedGraph));
-    
+
     // Create a graph from the system
     const state = new BiogridState(newVertices);
     const actualShortestDistances = state.getShortestDistances();
@@ -110,8 +110,8 @@ describe('classes', () => {
 
 function calculateDistance(v1: StateGraphVertex, v2: StateGraphVertex) {
   return Math.sqrt(
-    Math.pow(v1.getPosition().x - v2.getPosition().x, 2) +
-      Math.pow(v1.getPosition().y - v2.getPosition().y, 2)
+    Math.pow(v1.getRelativePosition().x - v2.getRelativePosition().x, 2) +
+      Math.pow(v1.getRelativePosition().y - v2.getRelativePosition().y, 2)
   );
 }
 

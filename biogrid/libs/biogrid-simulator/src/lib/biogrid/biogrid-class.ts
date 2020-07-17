@@ -38,7 +38,7 @@ export class Biogrid implements Grid {
   // All details for the source of energy
   private solarPanels: EnergySource[];
 
-  
+
   constructor(town: Town, opts: BiogridOptions) {
 
     // Batteries
@@ -56,7 +56,7 @@ export class Biogrid implements Grid {
     // TODO implement the solar panels
     const solarPanelPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSolarPanels);
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
-    
+
     this.state = new BiogridState(this.createGridItems());
 
   }
@@ -158,20 +158,21 @@ export class Biogrid implements Grid {
       return GRID_ITEM_NAMES.LARGE_BATTERY;
     } else if (gridItem.name.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
       return GRID_ITEM_NAMES.SOLAR_PANEL;
-    } 
+    }
     return GRID_ITEM_NAMES.GRID;
   }
 
   /**
-   * A simplified algorithm to (mostly) evenly space out gridItems throughout the square town
-   * Split the town into rows and columns and then place a gridItem in the center of each cell
+   * A simplified algorithm to (mostly) evenly space out batteries throughout the square town
+   * Split the town into rows and columns and then place a battery in the center of each cell
+   * TODO: have a smart algorithm for placement, see https://github.com/googleinterns/step141-2020/issues/42
    */
   private createGridItemPositions(
     townSize: TownSize,
     numberOfGridItems: number
   ): ItemPosition[] {
     const cols = Math.ceil(numberOfGridItems / townSize.width);
-    const rows = numberOfGridItems / cols;
+    const rows = Math.ceil(numberOfGridItems / cols);
     const positions: ItemPosition[] = [];
     for (let i = 0; i < numberOfGridItems; i++) {
       positions.push({

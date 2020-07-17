@@ -41,5 +41,4 @@ describe('BioBrain class', () => {
     expect(actualPath[name2]).toEqual(expectedPath[name2]);
     expect(Object.keys(action.getSupplyingPaths()).length).toBeGreaterThanOrEqual(1);
   });
-
 });

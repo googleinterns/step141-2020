@@ -12,8 +12,8 @@ export class BioEnergySource implements EnergySource {
   private sourceCapacity: Energy;
   private readonly minCapacity: Energy;
   private energySourceValidator?: Validatable;
-  private position: ItemPosition;
   name: string;
+  private relativePosition: ItemPosition;
 
   constructor(
     x: Distance,
@@ -22,8 +22,8 @@ export class BioEnergySource implements EnergySource {
     sourceCapacity: Energy = SOLAR_PANEL.DEFAULT_INITIAL_ENERGY,
     minCapacity: Energy = SOLAR_PANEL.MIN_CAPACITY
   ) {
-    this.position = { x, y };
     this.name = name;
+    this.relativePosition = { x, y };
     if (!this.validateInputs(sourceCapacity, minCapacity)) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
       throw new Error(
@@ -34,8 +34,12 @@ export class BioEnergySource implements EnergySource {
     this.minCapacity = minCapacity;
   }
 
-  public getPosition() {
-    return this.position;
+  public getRelativePosition() {
+    return this.relativePosition;
+  }
+
+  public getMinCapacity(): Energy {
+    return this.minCapacity;
   }
 
   private validateInputs(
