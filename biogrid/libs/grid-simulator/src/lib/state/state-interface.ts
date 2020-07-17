@@ -1,7 +1,7 @@
 import * as jsgraphs from 'js-graph-algorithms';
-import { Distance } from '../measurements';
+import { GridItem } from '../grid-item';
 
-export type StateGraphVertex = unknown;
+export type StateGraphVertex = GridItem;
 
 // TODO put in when Batteries, houses, and energy suppliers are put in
 export interface NewStateGraphVertex {

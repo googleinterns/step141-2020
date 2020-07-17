@@ -1,35 +1,37 @@
 import { BiogridState } from './';
-import { NewStateGraphVertex } from '@biogrid/grid-simulator';
+import { StateGraphVertex } from '@biogrid/grid-simulator';
+import { Building } from '../building';
 
 describe('classes', () => {
-  it('should work to create a BiogridState', () => {
-    const newVertices: NewStateGraphVertex[] = [
-      {
-        vertex: 'v 1',
-        edges: [
-          {
-            toIndex: 1,
-            weight: 10,
-            label: 'v 1 label',
-          },
-        ],
-      },
-      {
-        vertex: 'v 2',
-        edges: [
-          {
-            toIndex: 0,
-            weight: 11,
-            label: 'v 2 label',
-          },
-        ],
-      },
-    ] as NewStateGraphVertex[];
-    const state = new BiogridState(2, newVertices);
+  const x1 = 10,
+    y1 = 5;
+  const x2 = 7,
+    y2 = 9;
+  test('create a BiogridState by adding in two vertices and creating the graph', () => {
+    const newVertices: StateGraphVertex[] = [
+      new Building(/* energy= */ 32, x1, y1),
+      new Building(/* energy= */ 32, x2, y2),
+    ];
+    const state = new BiogridState(newVertices);
     const graph = state.getGraph();
     expect(graph.V).toEqual(2);
-    expect(graph.adj(1)).toEqual([
-      { label: 'v 2 label', v: 1, w: 0, weight: 11 },
-    ]);
+  });
+
+  test('convertStateGraphToMST should simplify the state graph to a minimum spanning tree', () => {
+    const newVertices: StateGraphVertex[] = [
+      new Building(32, 3, 4),
+      new Building(32, 7, 9),
+      new Building(32, 7, 8),
+      new Building(32, 2, 1),
+      new Building(32, 9, 9),
+    ];
+    const state = new BiogridState(newVertices);
+    state.convertStateGraphToMST();
+    expect(state.getGraph().V).toEqual(newVertices.length);
+    let totalEdges = 0;
+    for (let i = 0; i < newVertices.length; i++) {
+      totalEdges += state.getGraph().adj(i).length;
+    }
+    expect(totalEdges).toEqual(newVertices.length - 1);
   });
 });
