@@ -76,7 +76,7 @@ export class Biogrid implements Grid {
   }
 
   getJsonGraphDetails() {
-    this.state.getJsonGraph();
+    return this.state.getJsonGraph();
   }
 
   private createBatteries(positions: ItemPosition[], initEnergy: Energy, maxCapacity: Energy, name: string): Battery[] {

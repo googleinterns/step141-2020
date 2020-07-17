@@ -1,5 +1,10 @@
-import { Biogrid, RuralArea, Building, BioBrain } from '@biogrid/biogrid-simulator'
-import { Graph } from 'graphlib'
+import {
+  Biogrid,
+  RuralArea,
+  Building,
+  BioBrain,
+} from '@biogrid/biogrid-simulator';
+import { Graph } from 'graphlib';
 export interface BiogridSimulationResults {
   energyWastedFromSource?: number;
   energyWastedInTransportation?: number;
@@ -15,9 +20,9 @@ export interface NewBiogridOpts {
 }
 
 // TODO change to a stateless solution
-let biogrid: Biogrid
-const biobrain = BioBrain.Instance
-const states: Graph[] = []
+let biogrid: Biogrid;
+const biobrain = BioBrain.Instance;
+const states: any[] = [];
 
 export async function createNewBiogrid(body: NewBiogridOpts) {
   // TODO allow user to specify number of building
@@ -27,30 +32,33 @@ export async function createNewBiogrid(body: NewBiogridOpts) {
     new Building(10, 4, 3),
     new Building(10, 1, 2),
     new Building(10, 3, 1),
-  ]
+  ];
   // TODO allow user to specify town size
   const town = new RuralArea(buildings, 10, 10);
-  biogrid  = new Biogrid(town, {
+  biogrid = new Biogrid(town, {
     numberOfLargeBatteryCells: body.largeBatteryCells,
     numberOfSmallBatteryCells: body.smallBatteryCells,
     // TODO allow user to specify
-    numberOfSolarPanels: 10
-  })
-  return "Created"
+    numberOfSolarPanels: 10,
+  });
+  return 'Created';
 }
 
 export async function runBiogridSimulation() {
-  const action = biobrain.computeAction(biogrid.getSystemState())
-  states.push(biogrid.takeAction(action).getGraph());
-  return "Fake"
+  const action = biobrain.computeAction(biogrid.getSystemState());
+  biogrid.takeAction(action);
+  states.push(biogrid.getJsonGraphDetails());
+  return 'Fake';
 }
 
-export async function getSimulationResults(): Promise<BiogridSimulationResults> {
+export async function getSimulationResults(): Promise<
+  BiogridSimulationResults
+> {
   // TODO implement
   return {
     energyWastedFromSource: 10,
     energyWastedInTransportation: 12,
     timeWithoutEnoughEnergy: 24,
-    states
-  }
+    states,
+  };
 }

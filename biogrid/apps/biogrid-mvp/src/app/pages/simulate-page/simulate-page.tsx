@@ -18,7 +18,9 @@ export const SimulatePage = () => {
 
   return (
     <div className="simulation">
-      <button onClick={() => getSimulationResults()}>Get simulation results</button>
+      <button onClick={() => getSimulationResults()}>
+        Get simulation results
+      </button>
       {simulationResults && (
         <div className="results">
           <table>
@@ -34,8 +36,20 @@ export const SimulatePage = () => {
               <td>Energy wasted in transport</td>
               <td>{simulationResults.energyWastedInTransportation}</td>
             </tr>
-            
+            {/* <ol> */}
+            {/* </ol> */}
           </table>
+      {simulationResults.states.map(stateGraph => <>{JSON.stringify(stateGraph)}</>)}
+          {/* {simulationResults.states.map((stateGraph) =>
+            <table>
+              {((stateGraph as any).nodes as any[]).map((node: any) => (
+                <tr>
+                  <td>{node.v}</td>
+                  <td>{node.value}</td>M
+                </tr>
+              ))}
+            </table>
+          )} */}
         </div>
       )}
     </div>
