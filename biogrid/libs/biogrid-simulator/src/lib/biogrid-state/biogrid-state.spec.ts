@@ -34,4 +34,36 @@ describe('classes', () => {
     }
     expect(totalEdges).toEqual(newVertices.length - 1);
   });
+
+  test('getAllPositionsByIndex returns the correct grid item positions', () => {
+    const newVertices: StateGraphVertex[] = [
+      new Building(32, 3, 4),
+      new Building(32, 7, 9),
+      new Building(32, 7, 8),
+      new Building(32, 2, 1),
+      new Building(32, 9, 9),
+    ];
+    const state = new BiogridState(newVertices);
+    state.convertStateGraphToMST();
+    let totalEdges = 0;
+    for (let i = 0; i < newVertices.length; i++) {
+      totalEdges += state.getGraph().adj(i).length;
+    }
+    expect(state.getGraph().V).toEqual(newVertices.length);
+    expect(totalEdges).toEqual(newVertices.length - 1);
+  });
+
+  test('getAllPositionsByIndex returns the correct grid item positions', () => {
+    const newVertices: StateGraphVertex[] = [
+      new Building(/* energy = */ 32, /* x = */ 3, /* y = */ 4),
+      new Building(32, 7, 9),
+    ];
+    const state = new BiogridState(newVertices);
+    const positions = state.getAllPositionsByIndex();
+    expect(positions.length).toEqual(newVertices.length);
+    expect(positions[0].x).toEqual(3);
+    expect(positions[0].y).toEqual(4);
+    expect(positions[1].x).toEqual(7);
+    expect(positions[1].y).toEqual(9);
+  });
 });

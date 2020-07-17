@@ -6,9 +6,10 @@ import {
   Validatable,
   validate,
 } from '@biogrid/grid-simulator';
+import { SMALL_BATTERY } from '../config';
 
 export class BioBattery implements Battery {
-  private currentBatteryPower: Energy;
+  private currentBatteryEnergy: Energy;
   private readonly maxCapacity: Energy;
   private readonly relativePosition: ItemPosition;
 
@@ -22,17 +23,17 @@ export class BioBattery implements Battery {
   constructor(
     x: Distance,
     y: Distance,
-    currentBatteryPower: Energy = 0,
-    maxCapacity: Energy = 10
+    currentBatteryEnergy: Energy = SMALL_BATTERY.DEFAULT_START_ENERGY,
+    maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY
   ) {
     this.relativePosition = { x, y };
     if (!this.validateInputs(currentBatteryPower, maxCapacity)) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
       throw new Error(
-        `Cannot create a battery with values: (${currentBatteryPower}, ${maxCapacity})`
+        `Cannot create a battery with values: (${currentBatteryEnergy}, ${maxCapacity})`
       );
     }
-    this.currentBatteryPower = currentBatteryPower;
+    this.currentBatteryEnergy = currentBatteryEnergy;
     this.maxCapacity = maxCapacity;
   }
 
@@ -41,23 +42,23 @@ export class BioBattery implements Battery {
   }
 
   startCharging(inputPower: Energy): void {
-    if (this.currentBatteryPower + inputPower > this.maxCapacity) {
-      this.currentBatteryPower = this.maxCapacity;
+    if (this.currentBatteryEnergy + inputPower > this.maxCapacity) {
+      this.currentBatteryEnergy = this.maxCapacity;
     }
-    this.currentBatteryPower += inputPower;
+    this.currentBatteryEnergy += inputPower;
   }
 
   // TODO implement when you use a formula for charging a battery
   stopCharging(): void {}
 
   supplyPower(outputenergy: Energy): Energy {
-    if (this.currentBatteryPower - outputenergy < 0) {
+    if (this.currentBatteryEnergy - outputenergy < 0) {
       //TODO implement the function to notify the request with amount of output left
-      const temp: Energy = this.currentBatteryPower;
-      this.currentBatteryPower = 0;
+      const temp: Energy = this.currentBatteryEnergy;
+      this.currentBatteryEnergy = 0;
       return temp;
     }
-    this.currentBatteryPower -= outputenergy;
+    this.currentBatteryEnergy -= outputenergy;
     return outputenergy;
   }
 
@@ -73,8 +74,8 @@ export class BioBattery implements Battery {
     return validate(batteryValidator);
   }
 
-  getEnergyAmount(): Energy {
-    return this.currentBatteryPower;
+  getCurrentBatteryEnergy(): Energy {
+    return this.currentBatteryEnergy;
   }
 
   getMaxcapacity(): Energy {
@@ -82,10 +83,10 @@ export class BioBattery implements Battery {
   }
 
   isEmpty(): boolean {
-    return this.currentBatteryPower === 0;
+    return this.currentBatteryEnergy === 0;
   }
 
   isFull(): boolean {
-    return this.currentBatteryPower === this.maxCapacity;
+    return this.currentBatteryEnergy === this.maxCapacity;
   }
 }

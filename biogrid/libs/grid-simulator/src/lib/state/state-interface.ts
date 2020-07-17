@@ -1,5 +1,6 @@
 import * as jsgraphs from 'js-graph-algorithms';
 import { GridItem } from '../grid-item';
+import { ItemPosition } from '../measurements';
 
 export type StateGraphVertex = GridItem;
 
@@ -17,5 +18,7 @@ export interface StateGraphEdge {
 
 export interface StateGraph {
   graphIndexToVertex: StateGraphVertex[];
-  getGraph: () => jsgraphs.WeightedDiGraph
+  getAllPositionsByIndex: () => ItemPosition[];
+  getGridItem: (ind: number) => GridItem;
+  getGraph: () => jsgraphs.WeightedDiGraph;
 }

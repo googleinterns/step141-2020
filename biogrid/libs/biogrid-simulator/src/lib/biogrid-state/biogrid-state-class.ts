@@ -31,6 +31,17 @@ export class BiogridState implements StateGraph {
     this.graph = this.getMinimumSpanningTree( this.graph);
   }
 
+  public getGridItem(ind: number) {
+    return this.graphIndexToVertex[ind];
+  }
+
+  /**
+   * Get all GridItem positions by their index in the graph
+   */
+  public getAllPositionsByIndex() {
+    return this.graphIndexToVertex.map((vertex) => vertex.getRelativePosition());
+  }
+
   /**
    * Take in a vertex and connect it to every other vertex currently present in the grid
    * This is used in the creation of the MST
