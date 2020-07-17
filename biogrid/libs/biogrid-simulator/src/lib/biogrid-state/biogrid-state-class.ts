@@ -121,12 +121,13 @@ export class BiogridState implements StateGraph {
    * Add edges from the grid, to the every other part of the grid except solar panels
    * Add reverse edges from the batteries to the grid
    * Add edge from solar panels to the grid, not the reverse
+   * | symbol means a connection either from top - down, or down - top
    *                                     FROM GRID----->building<----------------------------------->building<---FROM GRID
    *                                                     ^--|                                   |------^
    *                                                        |----------S.SMALL_BATTERY----------|
    *                                                                               ^-----|
    *                  L.LARGE_BATTERY<------------------------------------>GRID<---------|
-   *                                                FROM SOLAR PANEL^-------| |---^FROM SOLAR PANEL
+   *                            FROM SOLAR PANEL TO GRID (from down)--------| |----FROM SOLAR PANEL TO GRID (from down)
    *                                                  SOLAR_PANEL---------->| |<--------------SOLAR_PANEL
    * @param newVertex is the new item of the Grid to add to @param this.graph as displayed above
    */
