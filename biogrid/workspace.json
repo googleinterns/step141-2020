@@ -259,6 +259,33 @@
           }
         }
       }
+    },
+    "weather": {
+      "root": "libs/weather",
+      "sourceRoot": "libs/weather/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "libs/weather/tsconfig.lib.json",
+              "libs/weather/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/weather/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/weather/jest.config.js",
+            "tsConfig": "libs/weather/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -15,7 +15,6 @@ describe('classes', () => {
     const state = new BiogridState(newVertices);
     const graph = state.getGraph();
     expect(graph.V).toEqual(2);
-    expect(graph.adj(1)).toEqual([{ label: '1-to-0', v: 1, w: 0, weight: 5 }]);
   });
 
   test('convertStateGraphToMST should simplify the state graph to a minimum spanning tree', () => {

@@ -18,9 +18,6 @@ export class BiogridState implements StateGraph {
     vertices.forEach((vertex, i) => {
       this.graphIndexToVertex[i] = vertex;
     });
-    vertices.forEach((vertex, i) => {
-      this.addCompletelyConnectedVertex(i, vertex);
-    });
   }
 
   public getGraph() {
@@ -28,7 +25,10 @@ export class BiogridState implements StateGraph {
   }
 
   public convertStateGraphToMST() {
-    this.graph = this.getMinimumSpanningTree(this.graph);
+    this.graphIndexToVertex.forEach((vertex, i) => {
+      this.addCompletelyConnectedVertex(i, vertex);
+    });
+    this.graph = this.getMinimumSpanningTree( this.graph);
   }
 
   public getGridItem(ind: number) {
@@ -39,11 +39,12 @@ export class BiogridState implements StateGraph {
    * Get all GridItem positions by their index in the graph
    */
   public getAllPositionsByIndex() {
-    return this.graphIndexToVertex.map((vertex) => vertex.getPosition());
+    return this.graphIndexToVertex.map((vertex) => vertex.getRelativePosition());
   }
 
   /**
    * Take in a vertex and connect it to every other vertex currently present in the grid
+   * This is used in the creation of the MST
    */
   private addCompletelyConnectedVertex(
     newVertexIndex: number,
@@ -67,8 +68,8 @@ export class BiogridState implements StateGraph {
    */
   private calculateDistance(v1: StateGraphVertex, v2: StateGraphVertex) {
     return Math.sqrt(
-      Math.pow(v1.getPosition().x - v2.getPosition().x, 2) +
-        Math.pow(v1.getPosition().y - v2.getPosition().y, 2)
+      Math.pow(v1.getRelativePosition().x - v2.getRelativePosition().x, 2) +
+        Math.pow(v1.getRelativePosition().y - v2.getRelativePosition().y, 2)
     );
   }
 
