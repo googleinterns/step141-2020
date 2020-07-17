@@ -1,4 +1,4 @@
-import { Graph, alg, Path, Edge } from "graphlib";
+import * as graphlib from "graphlib";
 import {
   StateGraphVertex,
   StateGraph,
@@ -10,11 +10,12 @@ import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
 import { GRID_ITEM_NAMES } from '../config';
 
 export class BiogridState implements StateGraph {
-  private graph: Graph;
+  private graph: graphlib.Graph;
 
+  // TODO think about implement it StateGraphVertex[] as an object of key: name -> value: StateGraphVertex
   constructor(vertices: StateGraphVertex[]) {
     // Directed so as to have two edges between A and B, but in opposite directions
-    this.graph = new Graph({directed: true});
+    this.graph = new graphlib.Graph({directed: true});
 
     // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
     const grid: GridItem = {
@@ -42,6 +43,20 @@ export class BiogridState implements StateGraph {
   }
 
   /**
+   * cloneStateGraph is used to clone the graph for use in the brain.
+   */
+  public cloneStateGraph(): graphlib.Graph {
+    return graphlib.json.read(graphlib.json.write(this.graph));  
+  }
+
+  /**
+   * setnewStateGraph
+   */
+  public setnewStateGraph(newGraph: graphlib.Graph) {
+    this.graph = newGraph;
+  }
+
+  /**
    * Method finds all the vertices in the graph and returns tehir names
    * @returns the names of the vertices / gridItems in the grid
    */
@@ -58,15 +73,22 @@ export class BiogridState implements StateGraph {
   }
 
   /**
+   * getAllGridItems searches the graph vertices and retrives the gridItems which are stored on the vertices
+   */
+  public getAllGridItems(): GridItem[] {
+    return this.getAllVertices().map(vertexName => this.getGridItem(vertexName));
+  }
+
+  /**
    * Method returns the shortest distance from every edge to the all the other edges
    * @returns the shortest distance from any edge to the other edges
    */
-  public getShortestDistances():{ [source: string]: { [node: string]: Path } }  {
-    return alg.dijkstraAll(this.graph, this.getWeightbyGraph(this.graph));
+  public getShortestDistances():{ [source: string]: { [node: string]: graphlib.Path } }  {
+    return graphlib.alg.dijkstraAll(this.graph, this.getWeightbyGraph(this.graph));
   }
 
-  private getWeightbyGraph(graph: Graph) {
-    return function(edge: Edge): Distance {
+  private getWeightbyGraph(graph: graphlib.Graph) {
+    return function(edge: graphlib.Edge): Distance {
       return graph.edge(edge);
     }
   }
@@ -76,7 +98,7 @@ export class BiogridState implements StateGraph {
    * @param edge is the Edge of the graph which you would like to get
    * @returns the weight or the distance between the vertices of @param edge
    */
-  public getWeightEdge(edge: Edge): Distance {
+  public getWeightEdge(edge: graphlib.Edge): Distance {
     return this.graph.edge(edge);
   }
 

@@ -1,12 +1,13 @@
 import { Brain, GridAction, GridItem, StateGraph, SupplyingPath } from '@biogrid/grid-simulator';
 import { BiogridAction, Building, BioBattery, BioEnergySource } from '@biogrid/biogrid-simulator';
 import { GRID_ITEM_NAMES, SupplyToAgent, SupplyFromAgent, ShortestDistances } from '../config';
-import { Path } from 'graphlib';
+import { Path, Graph } from 'graphlib';
 
 
 // We can only have one BioBrain per grid
 export class BioBrain implements Brain {
   private static instance: BioBrain;
+  private clonedGraph: Graph = new Graph();
   private constructor() {}
 
   static get Instance(): BioBrain {
@@ -17,29 +18,17 @@ export class BioBrain implements Brain {
   }
   
   computeAction(state: StateGraph): GridAction {
+
+    let shortestDistances = state.getShortestDistances();
+    
+    this.clonedGraph = state.cloneStateGraph();
+
     // TODO add the type of states
     let buildings: Building[] = [];
     let smallBatteries: BioBattery[] = [];
     let largeBatteries: BioBattery[] = [];
     let solarPanels: BioEnergySource[] = [];
-
-    let shortestDistances = state.getShortestDistances();
-
-    const allGridItems = state.getAllVertices();
-    allGridItems.map(item => {
-      const gridItem = state.getGridItem(item);
-      if (gridItem.name.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
-        buildings.push(gridItem as Building);
-      } else if (gridItem.name.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
-        smallBatteries.push(gridItem as BioBattery);
-      } else if (gridItem.name.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
-        largeBatteries.push(gridItem as BioBattery);
-      } else if (gridItem.name.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
-        solarPanels.push(gridItem as BioEnergySource);
-      } else if (gridItem.name.includes(GRID_ITEM_NAMES.GRID)) {
-        var grid: GridItem = gridItem;
-      }
-    });
+    var grid: GridItem;
 
     // Filter the solar panels and remove the ones with the minimum energy or empty
     solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
@@ -73,6 +62,35 @@ export class BioBrain implements Brain {
       ...smallBatterySupplier,
       ...largeBatterySupplier
     });
+  }
+
+  private getGridItems() {
+    // TODO add the type of states
+    let buildings: Building[] = [];
+    let smallBatteries: BioBattery[] = [];
+    let largeBatteries: BioBattery[] = [];
+    let solarPanels: BioEnergySource[] = [];
+
+    const allGridItems = this.clonedGraph.nodes();
+    allGridItems.map(item => {
+      const gridItem = this.clonedGraph.node(item);
+      if (gridItem.name.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
+        buildings.push(gridItem as Building);
+      } else if (gridItem.name.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
+        smallBatteries.push(gridItem as BioBattery);
+      } else if (gridItem.name.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
+        largeBatteries.push(gridItem as BioBattery);
+      } else if (gridItem.name.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
+        solarPanels.push(gridItem as BioEnergySource);
+      }
+    });
+
+    return {
+      [GRID_ITEM_NAMES.ENERGY_USER]: buildings, 
+      [GRID_ITEM_NAMES.SMALL_BATTERY]: smallBatteries, 
+      [GRID_ITEM_NAMES.LARGE_BATTERY]: largeBatteries, 
+      [GRID_ITEM_NAMES.SOLAR_PANEL]: solarPanels
+    };
   }
 
   private chargeLargebatteries(
@@ -169,6 +187,18 @@ export class BioBrain implements Brain {
       if (indexOfProvider === -1) {
         continue;
       }
+      const provideFrom = supplyFromAgents[indexOfProvider];
+      const provideTo = supplyToAgent;
+      if (provideTo instanceof BioBattery) {
+        provideTo.startCharging(energyReq);
+      } else {
+        provideTo.increaseEnergy(energyReq);
+      }
+      provideFrom.supplyPower(energyReq);
+
+      this.clonedGraph.setNode(provideFrom.name, provideFrom);
+      this.clonedGraph.setNode(provideTo.name, provideTo);
+
       supplyFromAgents[indexOfProvider].supplyPower(energyReq);
       supplyToSupplyFromAgents[supplyToAgent.name] =
         supplyFromAgents[indexOfProvider].name;

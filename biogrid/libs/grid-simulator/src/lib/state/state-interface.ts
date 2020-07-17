@@ -20,6 +20,7 @@ export interface StateGraph {
   getAllPositions: () => ItemPosition[];
   getGridItem: (name: string) => GridItem;
   getGraph: () => Graph;
+  cloneStateGraph(): Graph;
   getAllVertices: () => string[];
   getShortestDistances: () => { [source: string]: { [node: string]: Path } };
   getWeightEdge: (edge: Edge) => Distance;

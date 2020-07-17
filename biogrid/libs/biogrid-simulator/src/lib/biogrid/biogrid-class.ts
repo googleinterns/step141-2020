@@ -14,6 +14,7 @@ import { BioBattery } from '../biobattery';
 import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
 import { BioEnergySource } from '../bioenergy-source';
 import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
+import { Building } from '@biogrid/biogrid-simulator';
 
 export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
@@ -82,10 +83,78 @@ export class Biogrid implements Grid {
   }
 
   takeAction(action: GridAction) {
-    // TODO implement actions taken later
     // RETURN a new BiogridState
-    
-    return;
+    const allSupplyingPaths = action.getSupplyingPaths()
+
+    const clonedGraph = this.state.cloneStateGraph();
+
+    for (const supplyPath in allSupplyingPaths) {
+      const oldGridItem = this.state.getGridItem(supplyPath);
+      const supplyingGridItem = this.state.getGridItem(allSupplyingPaths[supplyPath]);
+      const typeOldGridItem = this.getGridItemType(oldGridItem);
+      if (typeOldGridItem === GRID_ITEM_NAMES.ENERGY_USER) {
+        const energyUser = oldGridItem as Building;
+        const energyUserReq = energyUser.MaxCapacity - energyUser.getEnergyInJoules();
+        const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
+        if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY || typeSupplyingGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
+          const battery = supplyingGridItem as BioBattery;
+          battery.supplyPower(energyUserReq);
+          clonedGraph.setNode(battery.name, battery);
+        } else if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
+          const solarpanel = supplyingGridItem as BioEnergySource;
+          solarpanel.supplyPower(energyUserReq);
+          clonedGraph.setNode(solarpanel.name, solarpanel);
+        } else {
+          continue;
+        }
+        energyUser.increaseEnergy(energyUserReq);
+        clonedGraph.setNode(energyUser.name, energyUser);
+      } else if (typeOldGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
+        const energyUser = oldGridItem as BioBattery;
+        const energyUserReq = energyUser.MaxCapacity - energyUser.getEnergyInJoules();
+        const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
+        if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
+          const battery = supplyingGridItem as BioBattery;
+          battery.supplyPower(energyUserReq);
+          clonedGraph.setNode(battery.name, battery);
+        } else if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
+          const solarpanel = supplyingGridItem as BioEnergySource;
+          solarpanel.supplyPower(energyUserReq);
+          clonedGraph.setNode(solarpanel.name, solarpanel);
+        } else {
+          continue;
+        }
+        energyUser.startCharging(energyUserReq);
+        clonedGraph.setNode(energyUser.name, energyUser);
+      } else if (typeOldGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
+        const energyUser = oldGridItem as BioBattery;
+        const energyUserReq =
+          energyUser.MaxCapacity - energyUser.getEnergyInJoules();
+        const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
+        if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
+          const solarpanel = supplyingGridItem as BioEnergySource;
+          solarpanel.supplyPower(energyUserReq);
+        } else {
+          continue;
+        }
+        energyUser.startCharging(energyUserReq);
+        clonedGraph.setNode(energyUser.name, energyUser);
+      }
+    }
+    return this.state.setnewStateGraph(clonedGraph);
+  }
+
+  private getGridItemType(gridItem: GridItem): string {
+    if (gridItem.name.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
+      return GRID_ITEM_NAMES.ENERGY_USER;
+    } else if (gridItem.name.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
+      return GRID_ITEM_NAMES.SMALL_BATTERY;
+    } else if (gridItem.name.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
+      return GRID_ITEM_NAMES.LARGE_BATTERY;
+    } else if (gridItem.name.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
+      return GRID_ITEM_NAMES.SOLAR_PANEL;
+    } 
+    return GRID_ITEM_NAMES.GRID;
   }
 
   /**

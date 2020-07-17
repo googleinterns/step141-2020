@@ -64,18 +64,19 @@ describe('classes', () => {
       }
     );
     const positions = gridTemp.getSystemState().getAllPositions();
-    // +1 to the expected vertices because of the grid which is automatically added
+    // +1 to the expected positions because of the grid which is automatically added at position (0, 0)
     expect(positions.length).toEqual(5 + 20 + 30 + 1);
   });
 
   test('ensure that the Biogrid take action works', () => {
+    const expected = grid.getSystemState().getAllGridItems();
     const action = brain.computeAction(grid.getSystemState());
+    const actual = grid.takeAction(action).getAllGridItems();
     // Ensure that take action returned
     // There are two non full buildings, and the battery has to be refilled as well
     expect(Object.keys(action).length).toBeLessThanOrEqual(3);
-    
-    const state = grid.getSystemState();
-    // TODO add in the test to ensure that the grid action works
-    expect(state).toBeTruthy();
+    expect(expected).toBeTruthy();
+    // Make sure that the old grid and new grid are different after dispersion of emergy
+    expect(actual).not.toEqual(expected);
   });
 });
