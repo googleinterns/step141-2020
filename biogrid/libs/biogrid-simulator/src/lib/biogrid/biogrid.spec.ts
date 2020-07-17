@@ -6,14 +6,14 @@ import { BioBrain } from '../biobrain';
 
 let grid: Biogrid;
 let brain: BioBrain;
+const name1 = `${GRID_ITEM_NAMES.ENERGY_USER}-1`;
+const name2 = `${GRID_ITEM_NAMES.ENERGY_USER}-2`;
+const name3 = `${GRID_ITEM_NAMES.ENERGY_USER}-3`;
+const name4 = `${GRID_ITEM_NAMES.ENERGY_USER}-4`;
+const name5 = `${GRID_ITEM_NAMES.ENERGY_USER}-5`;
 
 beforeAll(() => {
   brain = BioBrain.Instance;
-  const name1 = `${GRID_ITEM_NAMES.ENERGY_USER}-1`;
-  const name2 = `${GRID_ITEM_NAMES.ENERGY_USER}-2`;
-  const name3 = `${GRID_ITEM_NAMES.ENERGY_USER}-3`;
-  const name4 = `${GRID_ITEM_NAMES.ENERGY_USER}-4`;
-  const name5 = `${GRID_ITEM_NAMES.ENERGY_USER}-5`;
   const ruralArea = [
     new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 3, 4, name1),
     new Building(0, 7, 9, name2),
@@ -85,12 +85,22 @@ describe('classes', () => {
   });
 
   test('ensure that the Biogrid take action works', () => {
-    const expected = grid.getSystemState().getAllGridItems();
+    // Expect the two buildings to be at maxCapacity
+    const expected = [BUILDING.MAX_CAPACITY, BUILDING.MAX_CAPACITY];
     const action = brain.computeAction(grid.getSystemState());
-    const actual = grid.takeAction(action).getAllGridItems();
     // Ensure that take action returned
-    // There are two non full buildings, and the battery has to be refilled as well
-    expect(Object.keys(action).length).toBeLessThanOrEqual(3);
-    expect(expected).toBeTruthy();
+    // There are two non full buildings, and the battery has to be refilled however
+    // the components are placed on the grid randomly thus we cannot guarantee the battery is refilled
+    // Energy may come from the solar panels but two buildings must be refiled
+    expect(Object.keys(action.getSupplyingPaths()).length).toBeGreaterThanOrEqual(2);
+
+    const gridTakeAction = grid.takeAction(action);
+    // Make sure that the old grid and new grid are different after dispersion of emergy
+    // Check to make sure that the houses have been refiled
+    const building2 = gridTakeAction.getGridItem(name2) as Building;
+    const building4 = gridTakeAction.getGridItem(name4) as Building;
+    
+    const actual = [building2.getEnergyInJoules(), building4.getEnergyInJoules()]
+    expect(actual).toEqual(expected);
   });
 });

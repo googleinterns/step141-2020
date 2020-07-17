@@ -51,6 +51,13 @@ export class BiogridState implements StateGraph {
   }
 
   /**
+   * getJsonGraph returns the json details of the graph
+   */
+  public getJsonGraph() {
+    return graphlib.json.write(this.graph);
+  }
+
+  /**
    * setnewStateGraph
    */
   public setnewStateGraph(newGraph: graphlib.Graph) {
