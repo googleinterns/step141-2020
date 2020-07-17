@@ -1,3 +1,7 @@
+.results {
+  font-family: sans-serif;
+}
+
 .simulation {
   background-color: #f2f2f2;
   border-radius: 0.3125rem;
@@ -6,10 +10,6 @@
   padding: 1.25rem;
   text-align: center;
   width: 56.25rem;
-}
-
-.results {
-  font-family: sans-serif;
 }
 
 table {

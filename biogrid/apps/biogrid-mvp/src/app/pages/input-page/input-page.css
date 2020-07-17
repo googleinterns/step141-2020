@@ -1,11 +1,5 @@
-.input-page {
-  background-color: #f2f2f2;
-  border-radius: 0.3125rem;
-  font-family: sans-serif;
-  margin: auto;
-  padding: 1.25rem;
-  text-align: center;
-  width: 56.25rem;
+#biogridVisual {
+  width: 28.125rem;
 }
 
 body {
@@ -16,8 +10,19 @@ br {
   clear: both;
 }
 
-img {
-  width: 28.125rem;
+.endDatePicker {
+  display: inline-block;
+  margin-top: 1.25rem;
+}
+
+.input-page {
+  background-color: #f2f2f2;
+  border-radius: 0.3125rem;
+  font-family: sans-serif;
+  margin: auto;
+  padding: 1.25rem;
+  text-align: center;
+  width: 56.25rem;
 }
 
 label {
@@ -25,8 +30,14 @@ label {
   text-align: left;
 }
 
-.submitButton {
-  text-align: center;
+.largeBatteryCells {
+  display: inline-block;
+}
+
+.smallBatteryCells {
+  display: inline-block;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .startDatePicker {
@@ -36,18 +47,7 @@ label {
   margin-bottom: 1.25rem;
 }
 
-.endDatePicker {
-  display: inline-block;
-  margin-top: 1.25rem;
-}
-
-.smallBatteryCells {
-  display: inline-block;
-  margin-right: 1.25rem;
-  margin-bottom: 1.25rem;
-}
-
-.largeBatteryCells {
-  display: inline-block;
+.submitButton {
+  text-align: center;
 }
 
