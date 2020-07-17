@@ -45,7 +45,6 @@ export class BioBrain implements Brain {
       this.getGridItems()[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
-    
 
     return new BiogridAction({
       ...buildingSuppliers,
@@ -172,7 +171,7 @@ export class BioBrain implements Brain {
       let indexOfProvider = -1;
       for (let index = 0; index < supplyFromAgents.length; index++) {
         const newShortestDistance =
-          shortestDistances[supplyToAgent.name][supplyFromAgents[index].name]
+          shortestDistances[supplyFromAgents[index].name][supplyToAgent.name]
             .distance;
         const energyProvided = supplyFromAgents[index].getEnergyInJoules();
         if (
