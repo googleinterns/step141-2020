@@ -2,7 +2,7 @@ import { Biogrid } from './';
 import { BiogridAction } from '../biogrid-action';
 import { RuralArea } from '../community';
 
-let grid: Biogrid
+let grid: Biogrid;
 
 beforeAll(() => {
   grid = new Biogrid(new RuralArea([], 10, 10), {
@@ -17,8 +17,8 @@ describe('classes', () => {
     expect(grid.getSystemState()).toBeTruthy();
   });
 
-  test('should ensure that the Biogrid take action works', () => {
-    const action = new BiogridAction([])
+  test("Biogrid take action changes the grid's state", () => {
+    const action = new BiogridAction([]);
     // Ensure that take action returned
     expect(grid.takeAction(action)).toEqual(undefined);
     const state = grid.getSystemState();
