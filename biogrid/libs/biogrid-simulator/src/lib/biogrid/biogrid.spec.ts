@@ -21,18 +21,18 @@ describe('classes', () => {
   });
 
   /**
-   * The small batteries are the s. THe larger are the L
+   * The small batteries are the s. The larger are the L
    * _____________
-   * |  s  L  s  |
    * |  s     s  |
-   * |  s  L  s  |
+   * |           |
+   * |     L     |
+   * |           |
    * |  s     s  |
-   * |  s  L  s  |
+   * |           |
+   * |           |
+   * |     L     |
    * |  s     s  |
-   * |  s  L  s  |
-   * |  s     s  |
-   * |  s  L  s  |
-   * |  s     s  |
+   * |           |
    * ------------
    */
   test('Space out the batteries of a new biogrid evenly', () => {
