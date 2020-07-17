@@ -166,6 +166,9 @@ export class BioBrain implements Brain {
           indexOfProvider = index;
         }
       }
+      if (indexOfProvider === -1) {
+        continue;
+      }
       supplyFromAgents[indexOfProvider].supplyPower(energyReq);
       supplyToSupplyFromAgents[supplyToAgent.name] =
         supplyFromAgents[indexOfProvider].name;

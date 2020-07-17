@@ -29,9 +29,9 @@ export const enum GRID_ITEM_NAMES {
 };
 
 export const BUILDING = {
-  DEFAULT_INITIAL_ENERGY: 4545000,
+  DEFAULT_INITIAL_ENERGY: 4545,
   MIN_CAPACITY: 0,
-  MAX_CAPACITY: 4545000,
+  MAX_CAPACITY: 4545,
 };
 
 export type SupplyFromAgent = BioBattery | BioEnergySource;

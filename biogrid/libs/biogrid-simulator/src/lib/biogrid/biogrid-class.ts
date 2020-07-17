@@ -69,16 +69,16 @@ export class Biogrid implements Grid {
     ]
   }
 
-  getSystemState(): BiogridState {
+  getSystemState() {
     return this.state;
   }
 
   private createBatteries(positions: ItemPosition[], initEnergy: Energy, maxCapacity: Energy, name: string): Battery[] {
-    return positions.map(position => new BioBattery(position.x, position.y, name, initEnergy, maxCapacity));
+    return positions.map((position, index) => new BioBattery(position.x, position.y, `${name}-${index}`, initEnergy, maxCapacity));
   }
 
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
-    return positions.map(position => new BioEnergySource(position.x, position.y, SOLAR_PANEL.DEFAULT_INITIAL_ENERGY, SOLAR_PANEL.MIN_CAPACITY))
+    return positions.map((position, index) => new BioEnergySource(position.x, position.y, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`, SOLAR_PANEL.DEFAULT_INITIAL_ENERGY, SOLAR_PANEL.MIN_CAPACITY))
   }
 
   takeAction(action: GridAction) {

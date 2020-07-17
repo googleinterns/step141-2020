@@ -11,7 +11,8 @@ export interface NewStateGraphVertex {
 }
 
 export interface StateGraphEdge {
-  edge: Edge;
+  v: string,
+  w: string,
   weight: number;
 }
 

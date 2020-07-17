@@ -1,23 +1,41 @@
 import { Biogrid } from './';
-import { BiogridAction } from '../biogrid-action';
 import { RuralArea } from '../community';
+import { Building } from '../building';
+import { GRID_ITEM_NAMES, BUILDING } from '../config';
+import { BioBrain } from '../biobrain';
 
 let grid: Biogrid;
+let brain: BioBrain;
 
 beforeAll(() => {
+  brain = BioBrain.Instance;
+  const name1 = `${GRID_ITEM_NAMES.ENERGY_USER}-1`;
+  const name2 = `${GRID_ITEM_NAMES.ENERGY_USER}-2`;
+  const name3 = `${GRID_ITEM_NAMES.ENERGY_USER}-3`;
+  const name4 = `${GRID_ITEM_NAMES.ENERGY_USER}-4`;
+  const name5 = `${GRID_ITEM_NAMES.ENERGY_USER}-5`;
+  const ruralArea = [
+    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 3, 4, name1),
+    new Building(0, 7, 9, name2),
+    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 7, 8, name3),
+    new Building(0, 2, 1, name4),
+    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 9, 9, name5),
+  ];
   grid = new Biogrid(
-    new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+    new RuralArea(ruralArea, /* townWidth = */ 10, /* townHeight = */ 10),
     {
-      numberOfLargeBatteryCells: 5,
-      numberOfSmallBatteryCells: 20,
-      numberOfSolarPanels: 30,
+      numberOfLargeBatteryCells: 1,
+      numberOfSmallBatteryCells: 0,
+      numberOfSolarPanels: 1,
     }
   );
 });
 
 describe('classes', () => {
-  it('should create a Biogrid and make sure that the setup algorithm works', () => {
+  test('create a Biogrid and make sure that the setup algorithm works', () => {
     // TODO add in a test which mimics the algorithm once it is implemented
+    const state = grid.getSystemState();
+
     expect(grid.getSystemState()).toBeTruthy();
   });
 
@@ -36,41 +54,26 @@ describe('classes', () => {
    * |  x     x  |
    * ------------
    */
-  it('Space out the batteries of a new biogrid evenly', () => {
-    const positions = grid.getSystemState().getAllPositionsByIndex();
-    expect(positions).toEqual([
-      { x: 2.5, y: 0.5 },
-      { x: 7.5, y: 0.5 },
-      { x: 2.5, y: 1.5 },
-      { x: 7.5, y: 1.5 },
-      { x: 2.5, y: 2.5 },
-      { x: 7.5, y: 2.5 },
-      { x: 2.5, y: 3.5 },
-      { x: 7.5, y: 3.5 },
-      { x: 2.5, y: 4.5 },
-      { x: 7.5, y: 4.5 },
-      { x: 2.5, y: 5.5 },
-      { x: 7.5, y: 5.5 },
-      { x: 2.5, y: 6.5 },
-      { x: 7.5, y: 6.5 },
-      { x: 2.5, y: 7.5 },
-      { x: 7.5, y: 7.5 },
-      { x: 2.5, y: 8.5 },
-      { x: 7.5, y: 8.5 },
-      { x: 2.5, y: 9.5 },
-      { x: 7.5, y: 9.5 },
-      { x: 5, y: 1 },
-      { x: 5, y: 3 },
-      { x: 5, y: 5 },
-      { x: 5, y: 7 },
-      { x: 5, y: 9 },
-    ]);
+  test('space out the batteries of a new biogrid evenly', () => {
+    const gridTemp = new Biogrid(
+      new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+      {
+        numberOfLargeBatteryCells: 5,
+        numberOfSmallBatteryCells: 20,
+        numberOfSolarPanels: 30,
+      }
+    );
+    const positions = gridTemp.getSystemState().getAllPositions();
+    // +1 to the expected vertices because of the grid which is automatically added
+    expect(positions.length).toEqual(5 + 20 + 30 + 1);
   });
 
-  it('should ensure that the Biogrid take action works', () => {
-    const action = new BiogridAction([]);
+  test('ensure that the Biogrid take action works', () => {
+    const action = brain.computeAction(grid.getSystemState());
     // Ensure that take action returned
-    expect(grid.takeAction(action)).toEqual(undefined);
+    // There are two non full buildings, and the battery has to be refilled as well
+    expect(Object.keys(action).length).toBeLessThanOrEqual(3);
+    
     const state = grid.getSystemState();
     // TODO add in the test to ensure that the grid action works
     expect(state).toBeTruthy();

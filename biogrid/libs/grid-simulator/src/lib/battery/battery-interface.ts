@@ -3,7 +3,6 @@
 // I want them to be private and interfaces does not implement that
 
 import { Energy } from '../measurements';
-import { StateGraphEdge } from '../state';
 import { GridItem } from '../grid-item';
 
 export interface Battery extends GridItem {

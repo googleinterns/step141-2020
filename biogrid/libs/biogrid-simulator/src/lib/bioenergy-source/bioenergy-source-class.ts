@@ -13,16 +13,17 @@ export class BioEnergySource implements EnergySource {
   private readonly minCapacity: Energy;
   private energySourceValidator?: Validatable;
   private position: ItemPosition;
-  name = GRID_ITEM_NAMES.SOLAR_PANEL;
+  name: string;
 
   constructor(
     x: Distance,
     y: Distance,
+    name: string = GRID_ITEM_NAMES.SOLAR_PANEL,
     sourceCapacity: Energy = SOLAR_PANEL.DEFAULT_INITIAL_ENERGY,
     minCapacity: Energy = SOLAR_PANEL.MIN_CAPACITY
   ) {
     this.position = { x, y };
-
+    this.name = name;
     if (!this.validateInputs(sourceCapacity, minCapacity)) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
       throw new Error(
