@@ -7,11 +7,12 @@ import {
   ItemPosition,
   Energy,
   Battery,
+  GridItem,
   EnergySource,
 } from '@biogrid/grid-simulator';
 import { BiogridState } from '../biogrid-state';
 import { BioBattery } from '../biobattery';
-import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
+
 import { BioEnergySource } from '../bioenergy-source';
 import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
 import { Building } from '@biogrid/biogrid-simulator';

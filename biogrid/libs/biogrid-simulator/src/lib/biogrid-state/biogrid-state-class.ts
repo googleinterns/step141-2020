@@ -1,12 +1,12 @@
-import * as graphlib from "graphlib";
+import * as graphlib from 'graphlib';
 import {
   StateGraphVertex,
   StateGraph,
   StateGraphEdge,
   Distance,
   ItemPosition,
+  GridItem,
 } from '@biogrid/grid-simulator';
-import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
 import { GRID_ITEM_NAMES } from '../config';
 
 export class BiogridState implements StateGraph {
@@ -15,24 +15,25 @@ export class BiogridState implements StateGraph {
   // TODO think about implement it StateGraphVertex[] as an object of key: name -> value: StateGraphVertex
   constructor(vertices: StateGraphVertex[]) {
     // Directed so as to have two edges between A and B, but in opposite directions
-    this.graph = new graphlib.Graph({directed: true});
+    this.graph = new graphlib.Graph({ directed: true });
 
     // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
     const grid: GridItem = {
       name: GRID_ITEM_NAMES.GRID,
       getRelativePosition() {
-        return {x: 0, y: 0};
-      }
-    }
-    this.graph.setNode(grid.name, (grid as GridItem));
+        return { x: 0, y: 0 };
+      },
+    };
+    this.graph.setNode(grid.name, grid as GridItem);
 
     // Add all the vertices as nodes/vertices of the graph, with a name for
     // the particular grid item and label which is data for the particular vertex as the GridItem itself
-    vertices.map(vertex => this.graph.setNode(vertex.name, (vertex as GridItem)));
-
+    vertices.map((vertex) =>
+      this.graph.setNode(vertex.name, vertex as GridItem)
+    );
 
     // Add all the edges that can be formed into the graph, read the add method for how it is done
-    vertices.map(vertex => this.addEdge(vertex));
+    vertices.map((vertex) => this.addEdge(vertex));
   }
 
   /**
@@ -76,21 +77,28 @@ export class BiogridState implements StateGraph {
    * getAllGridItems searches the graph vertices and retrives the gridItems which are stored on the vertices
    */
   public getAllGridItems(): GridItem[] {
-    return this.getAllVertices().map(vertexName => this.getGridItem(vertexName));
+    return this.getAllVertices().map((vertexName) =>
+      this.getGridItem(vertexName)
+    );
   }
 
   /**
    * Method returns the shortest distance from every edge to the all the other edges
    * @returns the shortest distance from any edge to the other edges
    */
-  public getShortestDistances():{ [source: string]: { [node: string]: graphlib.Path } }  {
-    return graphlib.alg.dijkstraAll(this.graph, this.getWeightbyGraph(this.graph));
+  public getShortestDistances(): {
+    [source: string]: { [node: string]: graphlib.Path };
+  } {
+    return graphlib.alg.dijkstraAll(
+      this.graph,
+      this.getWeightbyGraph(this.graph)
+    );
   }
 
   private getWeightbyGraph(graph: graphlib.Graph) {
-    return function(edge: graphlib.Edge): Distance {
+    return function (edge: graphlib.Edge): Distance {
       return graph.edge(edge);
-    }
+    };
   }
 
   /**
@@ -106,7 +114,9 @@ export class BiogridState implements StateGraph {
    * Get all GridItem positions in the graph
    */
   public getAllPositions(): ItemPosition[] {
-    return (this.graph.nodes() as string[]).map(vertex => this.getGridItem(vertex).getRelativePosition());
+    return (this.graph.nodes() as string[]).map((vertex) =>
+      this.getGridItem(vertex).getRelativePosition()
+    );
   }
 
   /**
@@ -126,17 +136,31 @@ export class BiogridState implements StateGraph {
   private addEdge(newVertex: GridItem) {
     const newVertexName = newVertex.name;
     for (const vertex of this.graph.nodes()) {
-      const distance = this.calculateDistance(newVertex, (this.graph.node(vertex)) as StateGraphVertex)
+      const distance = this.calculateDistance(
+        newVertex,
+        this.graph.node(vertex) as StateGraphVertex
+      );
       let edge: StateGraphEdge;
       // Solar panels to the grid only
       // searching for includes GRID so that when scaling it is easy to add multiple grids
-      if (newVertexName.includes(GRID_ITEM_NAMES.SOLAR_PANEL) && vertex.includes(GRID_ITEM_NAMES.GRID)  && vertex !== newVertexName) {
-        edge = { v: newVertexName, w: vertex, weight: distance};
-      } else if (newVertexName.includes(GRID_ITEM_NAMES.LARGE_BATTERY) && vertex.includes(GRID_ITEM_NAMES.GRID)  && vertex !== newVertexName) {
-        edge = { v: newVertexName, w: vertex, weight: distance};
+      if (
+        newVertexName.includes(GRID_ITEM_NAMES.SOLAR_PANEL) &&
+        vertex.includes(GRID_ITEM_NAMES.GRID) &&
+        vertex !== newVertexName
+      ) {
+        edge = { v: newVertexName, w: vertex, weight: distance };
+      } else if (
+        newVertexName.includes(GRID_ITEM_NAMES.LARGE_BATTERY) &&
+        vertex.includes(GRID_ITEM_NAMES.GRID) &&
+        vertex !== newVertexName
+      ) {
+        edge = { v: newVertexName, w: vertex, weight: distance };
         // Add the opposite edge from grid to battery
         this.graph.setEdge(vertex, newVertexName, distance);
-      } else if (newVertexName.includes(GRID_ITEM_NAMES.SMALL_BATTERY) && vertex !== newVertexName) {
+      } else if (
+        newVertexName.includes(GRID_ITEM_NAMES.SMALL_BATTERY) &&
+        vertex !== newVertexName
+      ) {
         if (vertex.includes(GRID_ITEM_NAMES.GRID)) {
           edge = { v: newVertexName, w: vertex, weight: distance };
           // Add the opposite edge from grid to battery
@@ -144,11 +168,17 @@ export class BiogridState implements StateGraph {
         } else if (vertex.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
           edge = { v: newVertexName, w: vertex, weight: distance };
         } else {
-          continue
+          continue;
         }
-      } else if (newVertexName.includes(GRID_ITEM_NAMES.ENERGY_USER) && vertex !== newVertexName) {
-        if (vertex.includes(GRID_ITEM_NAMES.GRID) || vertex.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
-          edge = {  v: vertex, w: newVertexName, weight: distance };
+      } else if (
+        newVertexName.includes(GRID_ITEM_NAMES.ENERGY_USER) &&
+        vertex !== newVertexName
+      ) {
+        if (
+          vertex.includes(GRID_ITEM_NAMES.GRID) ||
+          vertex.includes(GRID_ITEM_NAMES.SMALL_BATTERY)
+        ) {
+          edge = { v: vertex, w: newVertexName, weight: distance };
         } else if (vertex.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
           edge = { v: newVertexName, w: vertex, weight: distance };
           // Add the reverse edge from the new energy user/ building to the other building
