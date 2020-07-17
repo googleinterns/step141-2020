@@ -15,11 +15,11 @@ export class Building implements EnergyUser {
   private energyInJoules: number;
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
-  private position: ItemPosition;
   // Label to be used in the graph
   name: string;
   // /** The battery storage for the building. */
   // battery: Battery;
+  private relativePosition: ItemPosition;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.
@@ -29,7 +29,7 @@ export class Building implements EnergyUser {
       private readonly minCapacity: Energy = BUILDING.MIN_CAPACITY,
       private readonly maxCapacity:Energy = BUILDING.MAX_CAPACITY,
   ) {
-    this.position = { x, y };
+    this.relativePosition = { x, y };
     this.name = name;
     if (this.isPositive(energy)) {
       this.energyInJoules = energy;
@@ -46,8 +46,8 @@ export class Building implements EnergyUser {
     return this.maxCapacity;
   }
 
-  getPosition(): ItemPosition {
-    return this.position;
+  getRelativePosition(): ItemPosition {
+    return this.relativePosition;
   }
 
   private isPositive(energy: number): boolean {

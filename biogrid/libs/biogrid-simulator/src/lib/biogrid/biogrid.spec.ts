@@ -40,32 +40,48 @@ describe('classes', () => {
   });
 
   /**
-   * The small batteries are the x. THe larger are the *
+   * The small batteries are the s. The larger are the L. The energy source is E
    * _____________
-   * |  x  *  x  |
-   * |  x     x  |
-   * |  x  *  x  |
-   * |  x     x  |
-   * |  x  *  x  |
-   * |  x     x  |
-   * |  x  *  x  |
-   * |  x     x  |
-   * |  x  *  x  |
-   * |  x     x  |
+   * |  s     s  |
+   * |     E     |
+   * |     L     |
+   * |           |
+   * |  s  E  s  |
+   * |           |
+   * |     E     |
+   * |     L     |
+   * |  s     s  |
+   * |     E     |
    * ------------
    */
+
   test('space out the batteries of a new biogrid evenly', () => {
     const gridTemp = new Biogrid(
       new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
       {
-        numberOfLargeBatteryCells: 5,
-        numberOfSmallBatteryCells: 20,
-        numberOfSolarPanels: 30,
+        numberOfLargeBatteryCells: 2,
+        numberOfSmallBatteryCells: 6,
+        numberOfSolarPanels: 4,
       }
     );
     const positions = gridTemp.getSystemState().getAllPositions();
     // +1 to the expected positions because of the grid which is automatically added at position (0, 0)
-    expect(positions.length).toEqual(5 + 20 + 30 + 1);
+    expect(positions.length).toEqual(2 + 6 + 4 + 1);
+    expect(positions).toEqual([
+      { x: 0, y: 0 },
+      { x: 5, y: 0.8333333333333333 },
+      { x: 5, y: 2.5 },
+      { x: 5, y: 4.166666666666667 },
+      { x: 5, y: 5.833333333333334 },
+      { x: 5, y: 7.5 },
+      { x: 5, y: 9.166666666666666 },
+      { x: 5, y: 2.5 },
+      { x: 5, y: 7.5 },
+      { x: 5, y: 1.25 },
+      { x: 5, y: 3.75 },
+      { x: 5, y: 6.25 },
+      { x: 5, y: 8.75 },
+    ]);
   });
 
   test('ensure that the Biogrid take action works', () => {

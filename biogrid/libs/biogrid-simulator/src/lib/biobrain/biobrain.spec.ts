@@ -37,5 +37,4 @@ describe('BioBrain class', () => {
     const action = actualBrain.computeAction(grid.getSystemState());
     expect(Object.keys(action.getSupplyingPaths()).length).toBeGreaterThanOrEqual(0);
   });
-
 });

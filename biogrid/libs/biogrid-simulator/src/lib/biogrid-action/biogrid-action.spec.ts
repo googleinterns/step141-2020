@@ -1,7 +1,7 @@
 import { BiogridAction } from './';
 
 describe('classes', () => {
-  it('should work to create a BiogridAction', () => {
+  test('create a BiogridAction', () => {
     const action = new BiogridAction({
       "small-battery": "solar-panel"
     });
