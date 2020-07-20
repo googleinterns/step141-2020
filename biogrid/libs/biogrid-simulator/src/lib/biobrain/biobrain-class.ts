@@ -1,33 +1,20 @@
-import { Brain } from "@biogrid/grid-simulator";
+import { Brain, StateGraph, GridAction } from '@biogrid/grid-simulator';
+import { BiogridAction } from '../biogrid-action';
 
 // We can only have one BioBrain per grid
-export class BioBrain implements Brain{
+export class BioBrain implements Brain {
   private static instance: BioBrain;
-  // TODO add the type of states
-  private states: unknown[] = [];
-  private constructor() { }
+  private constructor() {}
 
   static get Instance(): BioBrain {
     if (!this.instance) {
       this.instance = new BioBrain();
     }
-    return this.instance
+    return this.instance;
   }
 
-
-  set gridStates(states: unknown[]) {
+  computeAction(state: StateGraph): GridAction {
     // TODO add the type of states
-    this.states = states;
-  }
-
-  get gridStates() {
-    // TODO add the types of the states returned
-    return this.states;
-  }
-
-  sendAction(states: unknown[]): unknown {
-    // TODO add the type of states
-    this.gridStates = states;
-    return 'Send power Testing';
+    return new BiogridAction([]);
   }
 }

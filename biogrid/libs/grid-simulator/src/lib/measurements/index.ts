@@ -1,10 +1,11 @@
 /**
  * In Miles
+ * Distance must be a positive number
  */
 export type Distance = number;
 
 /**
- * In KiloJoules
+ * Energy is represents KiloJoules
  */
 export type Energy = number;
 
@@ -17,3 +18,11 @@ export type Power = number;
  * In KiloLux, which equals one thousand lumin per meter squared
  */
 export type SunlightIntensity = number;
+
+/**
+ * Position from the top left corner of a town
+ */
+export interface ItemPosition {
+  readonly x: Distance;
+  readonly y: Distance;
+}

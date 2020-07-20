@@ -1,4 +1,5 @@
 import { Power } from "../measurements";
-export interface EnergySourceInterface {
-  getPowerAmount(date: Date): Power;
+import { GridItem } from '../grid-item';
+export interface EnergySource extends GridItem {
+  getpowerAmount(): Power;
 }
