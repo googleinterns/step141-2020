@@ -4,7 +4,6 @@ import {
   Building,
   BioBrain,
 } from '@biogrid/biogrid-simulator';
-import { Graph } from 'graphlib';
 export interface BiogridSimulationResults {
   energyWastedFromSource?: number;
   energyWastedInTransportation?: number;
@@ -20,12 +19,14 @@ export interface NewBiogridOpts {
 }
 
 // TODO change to a stateless solution
+// See issue: https://github.com/googleinterns/step141-2020/issues/50
 let biogrid: Biogrid;
 const biobrain = BioBrain.Instance;
 const states: any[] = [];
 
+// TODO, allow users to specify number of buildings, town size, and number of Solar Panels
+// See issue: https://github.com/googleinterns/step141-2020/issues/49
 export async function createNewBiogrid(body: NewBiogridOpts) {
-  // TODO allow user to specify number of building
   const buildings = [
     new Building(10, 2, 3),
     new Building(10, 5, 4),
@@ -33,12 +34,10 @@ export async function createNewBiogrid(body: NewBiogridOpts) {
     new Building(10, 1, 2),
     new Building(10, 3, 1),
   ];
-  // TODO allow user to specify town size
   const town = new RuralArea(buildings, 10, 10);
   biogrid = new Biogrid(town, {
     numberOfLargeBatteryCells: body.largeBatteryCells,
     numberOfSmallBatteryCells: body.smallBatteryCells,
-    // TODO allow user to specify
     numberOfSolarPanels: 10,
   });
   return 'Created';
