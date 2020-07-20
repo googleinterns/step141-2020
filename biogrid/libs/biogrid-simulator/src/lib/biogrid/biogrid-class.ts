@@ -8,13 +8,15 @@ import {
   Energy,
   Battery,
   EnergySource,
+  GridItem
 } from '@biogrid/grid-simulator';
-import { BiogridState } from '../biogrid-state';
-import { BioBattery } from '../biobattery';
-import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
-import { BioEnergySource } from '../bioenergy-source';
 import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
-import { Building } from '@biogrid/biogrid-simulator';
+import { 
+  BioBattery, 
+  BioEnergySource, 
+  BiogridState, 
+  Building 
+} from '@biogrid/biogrid-simulator';
 
 export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
@@ -42,10 +44,9 @@ export class Biogrid implements Grid {
   constructor(town: Town, opts: BiogridOptions) {
 
     // Batteries
-    // TODO implement this outside when calling the grid
     const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
     const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
-    // TODO constants
+    
     this.smallBatteries = this.createBatteries(smallBatteryPositions, SMALL_BATTERY.DEFAULT_START_ENERGY, SMALL_BATTERY.MAX_CAPACITY, GRID_ITEM_NAMES.SMALL_BATTERY);
     this.largeBatteries = this.createBatteries(largeBatteryPositions, LARGE_BATTERY.DEFAULT_START_ENERGY, LARGE_BATTERY.MAX_CAPACITY, GRID_ITEM_NAMES.LARGE_BATTERY);
 

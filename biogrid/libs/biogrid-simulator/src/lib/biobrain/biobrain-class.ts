@@ -19,7 +19,6 @@ export class BioBrain implements Brain {
   }
   
   computeAction(state: StateGraph): GridAction {
-
     // get the shortest distances between each gridItem to the rest of the gridItems
     let shortestDistances = state.getShortestDistances();
     
@@ -207,7 +206,6 @@ export class BioBrain implements Brain {
     shortestDistances: ShortestDistances
   ): SupplyingPath {
     // TODO: advancement for later implementations: assign the recievingAgent itself not the names
-
     // Create an object of buildings with the energyProviders which supplied
     let supplyToSupplyFromAgents: SupplyingPath = {};
     // Look at each gridItem requesting for energy individually and keep track of the which grid item

@@ -32,7 +32,7 @@ export class BiogridState implements StateGraph {
 
 
     // Add all the edges that can be formed into the graph, read the add method for how it is done
-    vertices.map(vertex => this.addEdge(vertex));
+    vertices.map(vertex => this.connectNewVertex(vertex));
   }
 
   /**
@@ -131,20 +131,24 @@ export class BiogridState implements StateGraph {
    *                                                  SOLAR_PANEL---------->| |<--------------SOLAR_PANEL
    * @param newVertex is the new item of the Grid to add to @param this.graph as displayed above
    */
-  private addEdge(newVertex: GridItem) {
+  private connectNewVertex(newVertex: GridItem) {
     const newVertexName = newVertex.name;
     for (const vertex of this.graph.nodes()) {
       const distance = this.calculateDistance(newVertex, (this.graph.node(vertex)) as StateGraphVertex)
       let edge: StateGraphEdge;
       // Solar panels to the grid only
-      // searching for includes GRID so that when scaling it is easy to add multiple grids
-      if (newVertexName.includes(GRID_ITEM_NAMES.SOLAR_PANEL) && vertex.includes(GRID_ITEM_NAMES.GRID)  && vertex !== newVertexName) {
+      // Searching for includes GRID so that when scaling it is easy to add multiple grids
+      if (newVertexName.includes(GRID_ITEM_NAMES.SOLAR_PANEL)
+        && vertex.includes(GRID_ITEM_NAMES.GRID)
+      ) {
         edge = { v: newVertexName, w: vertex, weight: distance};
-      } else if (newVertexName.includes(GRID_ITEM_NAMES.LARGE_BATTERY) && vertex.includes(GRID_ITEM_NAMES.GRID)  && vertex !== newVertexName) {
+      } else if (newVertexName.includes(GRID_ITEM_NAMES.LARGE_BATTERY) 
+        && vertex.includes(GRID_ITEM_NAMES.GRID)
+      ) {
         edge = { v: newVertexName, w: vertex, weight: distance};
         // Add the opposite edge from grid to battery
         this.graph.setEdge(vertex, newVertexName, distance);
-      } else if (newVertexName.includes(GRID_ITEM_NAMES.SMALL_BATTERY) && vertex !== newVertexName) {
+      } else if (newVertexName.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
         if (vertex.includes(GRID_ITEM_NAMES.GRID)) {
           edge = { v: newVertexName, w: vertex, weight: distance };
           // Add the opposite edge from grid to battery
@@ -152,9 +156,14 @@ export class BiogridState implements StateGraph {
         } else if (vertex.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
           edge = { v: newVertexName, w: vertex, weight: distance };
         } else {
+          // Continue since there is no edge to create
           continue
         }
-      } else if (newVertexName.includes(GRID_ITEM_NAMES.ENERGY_USER) && vertex !== newVertexName) {
+      } 
+      // On gridItem Energy User do not add edge (A, A)
+      else if (newVertexName.includes(GRID_ITEM_NAMES.ENERGY_USER)
+        && vertex !== newVertexName
+      ) {
         if (vertex.includes(GRID_ITEM_NAMES.GRID) || vertex.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
           edge = {  v: vertex, w: newVertexName, weight: distance };
         } else if (vertex.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
@@ -162,6 +171,7 @@ export class BiogridState implements StateGraph {
           // Add the reverse edge from the new energy user/ building to the other building
           this.graph.setEdge(vertex, newVertexName, distance);
         } else {
+          // Continue since there is no edge to create
           continue;
         }
       } else {
