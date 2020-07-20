@@ -26,28 +26,34 @@ export class BioBrain implements Brain {
     // create a clone of the graph becfore using it
     this.clonedGraph = state.cloneStateGraph();
 
+    // Get all the gridItems, this changes in the graph once the buildings are
+    // supplied energy, or the small batteries or large batteries
+    let gridItems = this.getGridItems();
+
     // Create an object of buildings with the energyProviders which supplied
     // TODO assign the building as Building not the names
     let buildingSuppliers: SupplyingPath = this.buildingCharging(
-      this.getGridItems()[GRID_ITEM_NAMES.ENERGY_USER],
-      this.getGridItems()[GRID_ITEM_NAMES.SMALL_BATTERY],
-      this.getGridItems()[GRID_ITEM_NAMES.LARGE_BATTERY],
-      this.getGridItems()[GRID_ITEM_NAMES.SOLAR_PANEL],
+      gridItems[GRID_ITEM_NAMES.ENERGY_USER],
+      gridItems[GRID_ITEM_NAMES.SMALL_BATTERY],
+      gridItems[GRID_ITEM_NAMES.LARGE_BATTERY],
+      gridItems[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
-    
+    // Update gridItems since they change in the graph after updating the buildings which required power
+    gridItems = this.getGridItems();  
     // Create an object of smallBatteries with the energyProviders which supplied
     let smallBatterySupplier: SupplyingPath = this.chargeSmallBatteries(
-      this.getGridItems()[GRID_ITEM_NAMES.SMALL_BATTERY],
-      this.getGridItems()[GRID_ITEM_NAMES.LARGE_BATTERY],
-      this.getGridItems()[GRID_ITEM_NAMES.SOLAR_PANEL],
+      gridItems[GRID_ITEM_NAMES.SMALL_BATTERY],
+      gridItems[GRID_ITEM_NAMES.LARGE_BATTERY],
+      gridItems[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
-    
+    // Update gridItems since they change in the graph after charging the non-charged batteries
+    gridItems = this.getGridItems();
     // Create an object of largeBatteries with the energyProviders which supplied
     let largeBatterySupplier: SupplyingPath = this.chargeLargebatteries(
-      this.getGridItems()[GRID_ITEM_NAMES.LARGE_BATTERY],
-      this.getGridItems()[GRID_ITEM_NAMES.SOLAR_PANEL],
+      gridItems[GRID_ITEM_NAMES.LARGE_BATTERY],
+      gridItems[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
 
