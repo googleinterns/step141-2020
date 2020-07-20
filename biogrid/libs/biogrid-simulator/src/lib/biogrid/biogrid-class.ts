@@ -7,16 +7,16 @@ import {
   ItemPosition,
   Energy,
   Battery,
-  EnergySource,
   GridItem
 } from '@biogrid/grid-simulator';
 import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
 import { 
   BioBattery, 
-  BioEnergySource, 
-  BiogridState, 
-  Building 
+  BiogridState,
+  Building, 
+  SolarPanel
 } from '@biogrid/biogrid-simulator';
+import { EnergySource } from '../bioenergy-source/bioenergy-source';
 
 export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
@@ -83,8 +83,13 @@ export class Biogrid implements Grid {
     return positions.map((position, index) => new BioBattery(position.x, position.y, `${name}-${index}`, initEnergy, maxCapacity));
   }
 
+  /**
+   * This method creates a list of solar panels placed depending on their positions
+   * @param positions holds the positions where the solar panels are going to be placed
+   */
+  // TODO pass a list of equal length to hold the area for the solar panels
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
-    return positions.map((position, index) => new BioEnergySource(position.x, position.y, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`, SOLAR_PANEL.DEFAULT_INITIAL_ENERGY, SOLAR_PANEL.MIN_CAPACITY))
+    return positions.map((position, index) => new SolarPanel(position.x, position.y, SOLAR_PANEL.AREA, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`))
   }
 
   takeAction(action: GridAction) {
@@ -106,7 +111,7 @@ export class Biogrid implements Grid {
           battery.supplyPower(energyUserReq);
           clonedGraph.setNode(battery.name, battery);
         } else if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
-          const solarpanel = supplyingGridItem as BioEnergySource;
+          const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
           clonedGraph.setNode(solarpanel.name, solarpanel);
         } else {
@@ -123,7 +128,7 @@ export class Biogrid implements Grid {
           battery.supplyPower(energyUserReq);
           clonedGraph.setNode(battery.name, battery);
         } else if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
-          const solarpanel = supplyingGridItem as BioEnergySource;
+          const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
           clonedGraph.setNode(solarpanel.name, solarpanel);
         } else {
@@ -137,7 +142,7 @@ export class Biogrid implements Grid {
           energyUser.MaxCapacity - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
-          const solarpanel = supplyingGridItem as BioEnergySource;
+          const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
         } else {
           continue;

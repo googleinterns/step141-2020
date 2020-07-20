@@ -1,7 +1,8 @@
-import { Brain, GridAction, GridItem, StateGraph, SupplyingPath } from '@biogrid/grid-simulator';
-import { BiogridAction, Building, BioBattery, BioEnergySource } from '@biogrid/biogrid-simulator';
+import { Brain, GridAction, StateGraph, SupplyingPath } from '@biogrid/grid-simulator';
+import { BiogridAction, Building, BioBattery } from '@biogrid/biogrid-simulator';
 import { GRID_ITEM_NAMES, RecievingAgents, SupplyingAgents, ShortestDistances } from '../config';
 import { Path, Graph } from 'graphlib';
+import { SolarPanel } from '../bioenergy-source';
 
 
 // We can only have one BioBrain per grid
@@ -69,7 +70,7 @@ export class BioBrain implements Brain {
     let buildings: Building[] = [];
     let smallBatteries: BioBattery[] = [];
     let largeBatteries: BioBattery[] = [];
-    let solarPanels: BioEnergySource[] = [];
+    let solarPanels: SolarPanel[] = [];
 
     const allGridItems = this.clonedGraph.nodes();
     // TODO: Implement with instanceof
@@ -82,7 +83,7 @@ export class BioBrain implements Brain {
       } else if (gridItem.name.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
         largeBatteries.push(gridItem as BioBattery);
       } else if (gridItem.name.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
-        solarPanels.push(gridItem as BioEnergySource);
+        solarPanels.push(gridItem as SolarPanel);
       }
     });
     
@@ -103,7 +104,7 @@ export class BioBrain implements Brain {
    */
   private chargeLargebatteries(
     largeBatteries: BioBattery[],
-    solarPanels: BioEnergySource[],
+    solarPanels: SolarPanel[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
   ): SupplyingPath {
     // Assuming the large battery is not fully charged
@@ -129,7 +130,7 @@ export class BioBrain implements Brain {
   private chargeSmallBatteries(
     smallBatteries: BioBattery[],
     largeBatteries: BioBattery[],
-    solarPanels: BioEnergySource[],
+    solarPanels: SolarPanel[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
   ): SupplyingPath {
     // Assuming the small batteries are not fully charged
@@ -163,7 +164,7 @@ export class BioBrain implements Brain {
     buildings: Building[],
     smallBatteries: BioBattery[],
     largeBatteries: BioBattery[],
-    solarPanels: BioEnergySource[],
+    solarPanels: SolarPanel[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
   ): SupplyingPath {
     // Assuming that the houses asking for power will not have power in them.
@@ -195,7 +196,7 @@ export class BioBrain implements Brain {
    * It determines this by considering the needs of the grid item requesting the enrgy and 
    * minimizing the distance between the supplying grid items and the receiver. It returns a key pair of receiver to supplier
    * @param recievingAgents holds a list of grid items (buildings or batteries but not both) which are requesting for energy
-   * @param supplyingAgents holds a list of grid items (@class BioBattery or @class BioEnergySource) 
+   * @param supplyingAgents holds a list of grid items (@class BioBattery or @class SolarPanel) 
    * which can supply energy to @param recievingAgents
    * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
    * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
