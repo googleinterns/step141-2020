@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './simulate-page.css';
 import { Client } from '../../client';
 import { BiogridSimulationResults } from '../../build';
@@ -23,7 +23,10 @@ export const SimulatePage = () => {
     history.goBack();
   }
 
-  getSimulationResults();
+  useEffect(() => {
+    getSimulationResults();
+  }, [null]);
+
 
   return (
     <div className="simulation">
