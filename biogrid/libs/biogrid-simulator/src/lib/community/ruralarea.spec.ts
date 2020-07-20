@@ -49,6 +49,6 @@ describe('tests for RuralArea class', () => {
     ];
     expect(() => {
       const ruralarea = new RuralArea(buildings, x, y);
-    }).toThrow("Building position must be within the town's size constraints");
+    }).toThrow("Building relativePosition must be within the town's size constraints");
   });
 });

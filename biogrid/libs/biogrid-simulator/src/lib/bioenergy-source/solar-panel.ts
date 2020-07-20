@@ -1,17 +1,29 @@
 import { getSunlight } from '@biogrid/weather';
-import {EnergySource} from './bioenergy-source'
+import { EnergySource } from './bioenergy-source';
 import {
   Validatable,
   validate,
   Power,
   SunlightIntensity,
+  Distance,
 } from '@biogrid/grid-simulator';
+import { SOLAR_PANEL } from '../config';
 
 export class SolarPanel extends EnergySource {
   private sizeSqMtr: number;
 
-  constructor(sizeSqMtr: number, efficiency = 0.175, longitude = 0, latitude = 0) {
-    super(efficiency, longitude, latitude);
+  /**
+   * @param efficiency - default to 17.5% efficiency as solar panels are often between 15% and 20% efficiency
+   */
+  constructor(
+    x: Distance,
+    y: Distance,
+    sizeSqMtr: number,
+    efficiency = 0.175,
+    longitude = 0,
+    latitude = 0
+  ) {
+    super(x, y, efficiency, longitude, latitude);
     if (!this.validateInputsSolarPanel(sizeSqMtr)) {
       throw new Error(
         `Cannot create a solar panel object with values of area ${sizeSqMtr}`
@@ -30,12 +42,12 @@ export class SolarPanel extends EnergySource {
 
   getPowerAmount(date: Date): Power {
     const intensity = getSunlight(date, this.longitude, this.latitude);
-    const powerPerArea = this.intensityToKiloWattsPerSquareMeter(intensity);
-    return powerPerArea * this.sizeSqMtr * this.efficiency;
+    const powerPerSqrMeter = this.intensityToKiloWattsPerSquareMeter(intensity);
+    return powerPerSqrMeter * this.sizeSqMtr * this.efficiency;
   }
 
   private intensityToKiloWattsPerSquareMeter(intensity: SunlightIntensity) {
     // Calculation derived from https://www.researchgate.net/post/Howto_convert_solar_intensity_in_LUX_to_watt_per_meter_square_for_sunlight
-    return 0.0079 * intensity;
+    return SOLAR_PANEL.KILOLUX_TO_KILOWATT_PER_SQUARE_METER * intensity;
   }
 }
