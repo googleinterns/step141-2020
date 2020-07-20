@@ -61,3 +61,8 @@ label {
   text-align: center;
 }
 
+.townSize {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+}
+

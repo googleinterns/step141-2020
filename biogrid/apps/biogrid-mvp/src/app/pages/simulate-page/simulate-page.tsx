@@ -25,7 +25,7 @@ export const SimulatePage = () => {
 
   useEffect(() => {
     getSimulationResults();
-  }, [null]);
+  }, []);
 
 
   return (

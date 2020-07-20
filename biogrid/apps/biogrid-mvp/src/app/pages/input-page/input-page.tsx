@@ -33,6 +33,9 @@ export const InputPage = () => {
   const [numSolarPanels, numSolarPanelsInput] = useInput({
     type: 'number',
   });
+  const [townSize, townSizeInput] = useInput({
+    type: 'number',
+  });
   const history = useHistory();
 
   const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
@@ -42,6 +45,10 @@ export const InputPage = () => {
       endDate,
       smallBatteryCells: parseInt(smallBatteryCells as string),
       largeBatteryCells: parseInt(largeBatteryCells as string),
+      numBuildings: parseInt(numBuildings as string),
+      numSolarPanels: parseInt(numSolarPanels as string),
+      townSize: parseInt(townSize as string),
+
     };
     const client = Client.getInstance();
     await client.api.newBiogrid({ body });
@@ -95,6 +102,10 @@ export const InputPage = () => {
             {numSolarPanelsInput}
           </div>
           <br></br>
+          <div className="townSize">
+            <label>Town Size (Kilometers)</label>
+            {townSizeInput}
+          </div>
         <div className="submitButton">
           <input type="submit" className="submitButton" value="Run the Simulation!"/>
         </div>
