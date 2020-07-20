@@ -34,9 +34,9 @@ export const BUILDING = {
   MAX_CAPACITY: 4545,
 };
 
-export type SupplyFromAgent = BioBattery | BioEnergySource;
+export type SupplyingAgents = BioBattery | BioEnergySource;
 
-export type SupplyToAgent = BioBattery[] | Building[];
+export type RecievingAgents = BioBattery[] | Building[];
 
 export interface ShortestDistances {
   [source: string]: { [node: string]: Path };

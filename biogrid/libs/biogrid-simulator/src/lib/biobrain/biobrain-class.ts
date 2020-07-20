@@ -1,6 +1,6 @@
 import { Brain, GridAction, GridItem, StateGraph, SupplyingPath } from '@biogrid/grid-simulator';
 import { BiogridAction, Building, BioBattery, BioEnergySource } from '@biogrid/biogrid-simulator';
-import { GRID_ITEM_NAMES, SupplyToAgent, SupplyFromAgent, ShortestDistances } from '../config';
+import { GRID_ITEM_NAMES, RecievingAgents, SupplyingAgents, ShortestDistances } from '../config';
 import { Path, Graph } from 'graphlib';
 
 
@@ -10,6 +10,7 @@ export class BioBrain implements Brain {
   private clonedGraph: Graph = new Graph();
   private constructor() {}
 
+  // Access the singleton of the Brain
   static get Instance(): BioBrain {
     if (!this.instance) {
       this.instance = new BioBrain();
@@ -19,8 +20,10 @@ export class BioBrain implements Brain {
   
   computeAction(state: StateGraph): GridAction {
 
+    // get the shortest distances between each gridItem to the rest of the gridItems
     let shortestDistances = state.getShortestDistances();
     
+    // create a clone of the graph becfore using it
     this.clonedGraph = state.cloneStateGraph();
 
     // Create an object of buildings with the energyProviders which supplied
@@ -33,6 +36,7 @@ export class BioBrain implements Brain {
       shortestDistances
     );
     
+    // Create an object of smallBatteries with the energyProviders which supplied
     let smallBatterySupplier: SupplyingPath = this.chargeSmallBatteries(
       this.getGridItems()[GRID_ITEM_NAMES.SMALL_BATTERY],
       this.getGridItems()[GRID_ITEM_NAMES.LARGE_BATTERY],
@@ -40,6 +44,7 @@ export class BioBrain implements Brain {
       shortestDistances
     );
     
+    // Create an object of largeBatteries with the energyProviders which supplied
     let largeBatterySupplier: SupplyingPath = this.chargeLargebatteries(
       this.getGridItems()[GRID_ITEM_NAMES.LARGE_BATTERY],
       this.getGridItems()[GRID_ITEM_NAMES.SOLAR_PANEL],
@@ -53,14 +58,22 @@ export class BioBrain implements Brain {
     });
   }
 
+  /**
+   * This method gets the different griditems and places them in their respective classes
+   * This is implemented from the cloned graph so that we can change the items without 
+   * changing the original state graph as well as keeping track of which supplying grid 
+   * item has given off power so that one doesn't call the same grid items and then get 
+   * an error as the item might not have energy in it
+   * @returns an object of key-value pair @enum GRID_ITEM_NAMES : respective grid items list
+   */
   private getGridItems() {
-    // TODO add the type of states
     let buildings: Building[] = [];
     let smallBatteries: BioBattery[] = [];
     let largeBatteries: BioBattery[] = [];
     let solarPanels: BioEnergySource[] = [];
 
     const allGridItems = this.clonedGraph.nodes();
+    // TODO: Implement with instanceof
     allGridItems.map(item => {
       const gridItem = this.clonedGraph.node(item);
       if (gridItem.name.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
@@ -73,7 +86,7 @@ export class BioBrain implements Brain {
         solarPanels.push(gridItem as BioEnergySource);
       }
     });
-
+    
     return {
       [GRID_ITEM_NAMES.ENERGY_USER]: buildings, 
       [GRID_ITEM_NAMES.SMALL_BATTERY]: smallBatteries, 
@@ -82,6 +95,13 @@ export class BioBrain implements Brain {
     };
   }
 
+  /**
+   * This method is used for charging individual @param largeBatteries which might not have energy energy
+   * @param largeBatteries hold the large baterries which are going to be charged in case they are not full
+   * @param solarPanels holds the solar panels which are going to be used to charge @param largeBatteries
+   * @param shortestDistances holds the shortest distances between one grid item to another
+   * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
+   */
   private chargeLargebatteries(
     largeBatteries: BioBattery[],
     solarPanels: BioEnergySource[],
@@ -99,8 +119,14 @@ export class BioBrain implements Brain {
     return this.determineSupplyingPath(largeBatteries, allEnergyProviders, shortestDistances);
   }
 
-
-
+  /**
+   * This method is used for charging individual @param smallBatteries which might not have energy energy
+   * @param smallBatteries holds the small batteries which are going to be charged in case they are not full
+   * @param largeBatteries holds the large batteries which can be used to charge @param smallBatteries
+   * @param solarPanels holds the solar panels which can be used to charge @param smallBatteries
+   * @param shortestDistances holds the shortest distances between one grid item to another
+   * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
+   */
   private chargeSmallBatteries(
     smallBatteries: BioBattery[],
     largeBatteries: BioBattery[],
@@ -125,6 +151,15 @@ export class BioBrain implements Brain {
     return this.determineSupplyingPath(smallBatteries, allEnergyProviders, shortestDistances);
   }
 
+  /**
+   * This method is used for charging the individual @param buildings which might not have energy energy
+   * @param buildings holds the buildings which you are supplying energy to
+   * @param smallBatteries holds the small baterries which can supply energy to @param buildings
+   * @param largeBatteries holds the large batteries which can supply energy to @param buildings
+   * @param solarPanels holds the solar panels which can supply energy to @param buildings
+   * @param shortestDistances holds the shortests distances from one gridItem to another
+   * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
+   */
   private buildingCharging(
     buildings: Building[],
     smallBatteries: BioBattery[],
@@ -156,24 +191,43 @@ export class BioBrain implements Brain {
     return this.determineSupplyingPath(buildings, allEnergyProviders, shortestDistances);
   }
 
+  /**
+   * This method determines which grid item can supply energy to the grid item without it.
+   * It determines this by considering the needs of the grid item requesting the enrgy and 
+   * minimizing the distance between the supplying grid items and the receiver. It returns a key pair of receiver to supplier
+   * @param recievingAgents holds a list of grid items (buildings or batteries but not both) which are requesting for energy
+   * @param supplyingAgents holds a list of grid items (@class BioBattery or @class BioEnergySource) 
+   * which can supply energy to @param recievingAgents
+   * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
+   * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+   */
   private determineSupplyingPath(
-    supplyToAgents: SupplyToAgent,
-    supplyFromAgents: SupplyFromAgent[],
+    recievingAgents: RecievingAgents,
+    supplyingAgents: SupplyingAgents[],
     shortestDistances: ShortestDistances
   ): SupplyingPath {
+    // TODO: advancement for later implementations: assign the recievingAgent itself not the names
+
     // Create an object of buildings with the energyProviders which supplied
-    // TODO: advancement: assign the supplyToAgent itself not the names
     let supplyToSupplyFromAgents: SupplyingPath = {};
-    for (const supplyToAgent of supplyToAgents) {
-      const energyReq = supplyToAgent.MaxCapacity - supplyToAgent.getEnergyInJoules();
+    // Look at each gridItem requesting for energy individually and keep track of the which grid item
+    //  supplied it energy so that it can not be requested energy when it doesn't have it
+    for (const recievingAgent of recievingAgents) {
+      // get the energy which is being requested.
+      // For now implement all or nothing. If battery doesn't have all the energy required, ignore it
+      const energyReq = recievingAgent.MaxCapacity - recievingAgent.getEnergyInJoules();
+      // set the shortest distance between the two values supplier and receiver to be +infinity
       let shortestDistance = Number.POSITIVE_INFINITY;
       // Keep track of the batteryPosition
       let indexOfProvider = -1;
-      for (let index = 0; index < supplyFromAgents.length; index++) {
+      // Check which supplier can offer the receiver energy, by the minimzing it's distances between
+      // This has to change when you consider different sources giving the receiver energy
+      for (let index = 0; index < supplyingAgents.length; index++) {
+        // check the distance between the receiver and supplier. If it is the minimal, change the supplier index
         const newShortestDistance =
-          shortestDistances[supplyFromAgents[index].name][supplyToAgent.name]
+          shortestDistances[supplyingAgents[index].name][recievingAgent.name]
             .distance;
-        const energyProvided = supplyFromAgents[index].getEnergyInJoules();
+        const energyProvided = supplyingAgents[index].getEnergyInJoules();
         if (
           newShortestDistance < shortestDistance &&
           energyProvided >= energyReq
@@ -182,11 +236,14 @@ export class BioBrain implements Brain {
           indexOfProvider = index;
         }
       }
+      // In case there is no supplier for that receiver, ignore the reciever
+      // TODO advancement, tell the grid about these cases of receiver asking for more than it can be given
       if (indexOfProvider === -1) {
         continue;
       }
-      const provideFrom = supplyFromAgents[indexOfProvider];
-      const provideTo = supplyToAgent;
+      // Update the supplier so that it cannot be asked for power again when it shouldn't be asked
+      const provideFrom = supplyingAgents[indexOfProvider];
+      const provideTo = recievingAgent;
       if (provideTo instanceof BioBattery) {
         provideTo.startCharging(energyReq);
       } else {
@@ -197,9 +254,10 @@ export class BioBrain implements Brain {
       this.clonedGraph.setNode(provideFrom.name, provideFrom);
       this.clonedGraph.setNode(provideTo.name, provideTo);
 
-      supplyFromAgents[indexOfProvider].supplyPower(energyReq);
-      supplyToSupplyFromAgents[supplyToAgent.name] =
-        supplyFromAgents[indexOfProvider].name;
+      // add the pair of receiver : supplier in supplyToSupplyFromAgents
+      supplyingAgents[indexOfProvider].supplyPower(energyReq);
+      supplyToSupplyFromAgents[recievingAgent.name] =
+        supplyingAgents[indexOfProvider].name;
     }
     return supplyToSupplyFromAgents;
   }
