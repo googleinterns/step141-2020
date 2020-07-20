@@ -39,17 +39,25 @@ export const SimulatePage = () => {
             {/* <ol> */}
             {/* </ol> */}
           </table>
-      {simulationResults.states.map(stateGraph => <>{JSON.stringify(stateGraph)}</>)}
-          {/* {simulationResults.states.map((stateGraph) =>
-            <table>
+          {simulationResults.states.map((stateGraph) => (
+            <table className="state-graph">
               {((stateGraph as any).nodes as any[]).map((node: any) => (
-                <tr>
+                <tr className="gridItem">
                   <td>{node.v}</td>
-                  <td>{node.value}</td>M
+                  <table className="grid-item-values">
+                    {Object.keys(node.value).map((key: string) => (
+                      <>
+                        <tr>
+                          <td>{key}</td>
+                          <td>{JSON.stringify(node.value[key])}</td>
+                        </tr>
+                      </>
+                    ))}
+                  </table>
                 </tr>
               ))}
             </table>
-          )} */}
+          ))}
         </div>
       )}
     </div>

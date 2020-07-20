@@ -15,4 +15,13 @@
 table {
   margin: auto;
   margin-top: 20px;
+  text-align: left;
+}
+
+table td {
+  padding: 0.2rem;
+}
+
+table.state-graph > tr  {
+  outline: thin solid;
 }
