@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router-dom';
 import React, { useState } from 'react';
 import './simulate-page.css';
 import { Client } from '../../client';
@@ -16,9 +17,16 @@ export const SimulatePage = () => {
     setSimulationResults(results);
   }
 
+  const history = useHistory();
+
+  const redirect = () => {  
+    history.goBack();
+  }
+
+  getSimulationResults();
+
   return (
     <div className="simulation">
-      <button onClick={() => getSimulationResults()}>Get simulation results</button>
       {simulationResults && (
         <div className="results">
           <table>
@@ -37,6 +45,7 @@ export const SimulatePage = () => {
           </table>
         </div>
       )}
+      <button onClick={redirect} className="redirect">Change your Inputs!</button>
     </div>
   );
 };
