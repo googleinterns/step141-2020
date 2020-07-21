@@ -43,11 +43,11 @@ export const InputPage = () => {
     const body = {
       startDate,
       endDate,
-      smallBatteryCells: parseInt(smallBatteryCells as string),
-      largeBatteryCells: parseInt(largeBatteryCells as string),
-      numBuildings: parseInt(numBuildings as string),
-      numSolarPanels: parseInt(numSolarPanels as string),
-      townSize: parseInt(townSize as string),
+      smallBatteryCells,
+      largeBatteryCells,
+      numBuildings,
+      numSolarPanels,
+      townSize,
 
     };
     const client = Client.getInstance();
