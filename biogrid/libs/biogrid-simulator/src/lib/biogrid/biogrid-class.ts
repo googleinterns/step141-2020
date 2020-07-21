@@ -47,8 +47,18 @@ export class Biogrid implements Grid {
     const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
     const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
     
-    this.smallBatteries = this.createBatteries(smallBatteryPositions, SMALL_BATTERY.DEFAULT_START_ENERGY, SMALL_BATTERY.MAX_CAPACITY, GRID_ITEM_NAMES.SMALL_BATTERY);
-    this.largeBatteries = this.createBatteries(largeBatteryPositions, LARGE_BATTERY.DEFAULT_START_ENERGY, LARGE_BATTERY.MAX_CAPACITY, GRID_ITEM_NAMES.LARGE_BATTERY);
+    this.smallBatteries = this.createBatteries(
+      smallBatteryPositions,
+      SMALL_BATTERY.DEFAULT_START_ENERGY,
+      SMALL_BATTERY.MAX_CAPACITY,
+      GRID_ITEM_NAMES.SMALL_BATTERY
+    );
+    this.largeBatteries = this.createBatteries(
+      largeBatteryPositions,
+      LARGE_BATTERY.DEFAULT_START_ENERGY,
+      LARGE_BATTERY.MAX_CAPACITY,
+      GRID_ITEM_NAMES.LARGE_BATTERY
+    );
 
     // Towns
     this.town = town;
@@ -80,7 +90,9 @@ export class Biogrid implements Grid {
   }
 
   private createBatteries(positions: ItemPosition[], initEnergy: Energy, maxCapacity: Energy, name: string): Battery[] {
-    return positions.map((position, index) => new BioBattery(position.x, position.y, `${name}-${index}`, initEnergy, maxCapacity));
+    return positions.map(
+      (position, index) => new BioBattery(position.x, position.y, `${name}-${index}`, initEnergy, maxCapacity)
+    );
   }
 
   /**
@@ -89,7 +101,9 @@ export class Biogrid implements Grid {
    */
   // TODO pass a list of equal length to hold the area for the solar panels
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
-    return positions.map((position, index) => new SolarPanel(position.x, position.y, SOLAR_PANEL.AREA, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`))
+    return positions.map(
+      (position, index) => new SolarPanel(position.x, position.y, SOLAR_PANEL.AREA, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`)
+    );
   }
   /**
    * This method takes the results of th brain and then it changes the state graph as suggested by the brain.
