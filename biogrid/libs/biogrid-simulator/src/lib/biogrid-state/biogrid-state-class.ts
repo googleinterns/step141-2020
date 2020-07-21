@@ -7,7 +7,7 @@ import {
   ItemPosition,
 } from '@biogrid/grid-simulator';
 import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
-import { GRID_ITEM_NAMES } from '../config';
+import { GRID_ITEM_NAMES, ShortestDistances } from '../config';
 
 export class BiogridState implements StateGraph {
   private graph: graphlib.Graph;
@@ -90,7 +90,7 @@ export class BiogridState implements StateGraph {
    * Method returns the shortest distance from every edge to the all the other edges
    * @returns the shortest distance from any edge to the other edges
    */
-  public getShortestDistances():{ [source: string]: { [node: string]: graphlib.Path } }  {
+  public getShortestDistances(): ShortestDistances  {
     return graphlib.alg.dijkstraAll(this.graph, this.getWeightbyGraph(this.graph));
   }
 
