@@ -32,7 +32,7 @@ export class BioBrain implements Brain {
 
     // Create an object of buildings with the energyProviders which supplied
     // TODO assign the building as Building not the names
-    let buildingSuppliers: SupplyingPath = this.buildingCharging(
+    let buildingSuppliers: SupplyingPath = this.chargeBuildings(
       gridItems[GRID_ITEM_NAMES.ENERGY_USER],
       gridItems[GRID_ITEM_NAMES.SMALL_BATTERY],
       gridItems[GRID_ITEM_NAMES.LARGE_BATTERY],
@@ -166,7 +166,7 @@ export class BioBrain implements Brain {
    * @param shortestDistances holds the shortests distances from one gridItem to another
    * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
    */
-  private buildingCharging(
+  private chargeBuildings(
     buildings: Building[],
     smallBatteries: BioBattery[],
     largeBatteries: BioBattery[],
