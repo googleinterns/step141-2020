@@ -19,7 +19,7 @@ export const SimulatePage = () => {
 
   const history = useHistory();
 
-  const redirect = () => {  
+  const redirectToHome = () => {  
     history.goBack();
   }
 
@@ -48,7 +48,7 @@ export const SimulatePage = () => {
           </table>
         </div>
       )}
-      <button onClick={redirect} className="redirect">Change your Inputs!</button>
+      <button onClick={redirectToHome} className="redirect">Change your Inputs!</button>
     </div>
   );
 };
