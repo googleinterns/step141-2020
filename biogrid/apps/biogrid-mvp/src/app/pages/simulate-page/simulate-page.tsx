@@ -20,7 +20,7 @@ export const SimulatePage = () => {
   const history = useHistory();
 
   const redirectToHome = () => {  
-    history.goBack();
+    history.push('/');
   }
 
   useEffect(() => {
