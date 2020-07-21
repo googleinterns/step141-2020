@@ -13,11 +13,12 @@ export const LARGE_BATTERY = {
 
 // Each day a solar panel is roughly charged with electricity
 // for 4hours at a rate of 250 watts ~ 1000watts ~~ 3.6Mj
-// To prolong their life time, solar panels will be expected 
+// To prolong their life time, solar panels will be expected
 // to keep a minimum of about 10000j
 export const SOLAR_PANEL = {
   DEFAULT_INITIAL_ENERGY: 3600000,
   MIN_CAPACITY: 10000,
+  KILOLUX_TO_KILOWATT_PER_SQUARE_METER: 0.0079
 };
 
 export const enum GRID_ITEM_NAMES {

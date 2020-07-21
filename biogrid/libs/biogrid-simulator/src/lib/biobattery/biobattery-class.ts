@@ -66,13 +66,13 @@ export class BioBattery implements Battery {
   }
 
   private validateInputs(
-    currentBatteryPower: Energy,
+    currentBatteryEnergy: Energy,
     maxCapacity: Energy = this.maxCapacity
   ) {
     const batteryValidator: Validatable = {
-      value: currentBatteryPower,
+      value: currentBatteryEnergy,
       max: maxCapacity,
-      isPositive: currentBatteryPower >= 0 && maxCapacity >= 0,
+      isPositive: currentBatteryEnergy >= 0 && maxCapacity >= 0,
     };
     return validate(batteryValidator);
   }

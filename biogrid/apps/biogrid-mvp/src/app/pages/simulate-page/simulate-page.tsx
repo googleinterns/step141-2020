@@ -36,8 +36,6 @@ export const SimulatePage = () => {
               <td>Energy wasted in transport</td>
               <td>{simulationResults.energyWastedInTransportation}</td>
             </tr>
-            {/* <ol> */}
-            {/* </ol> */}
           </table>
           {simulationResults.states.map((stateGraph) => (
             <table className="state-graph">

@@ -1,1 +1,1 @@
-export * from './bioenergy-source-class';
+export * from './solar-panel';

@@ -26,7 +26,7 @@ const states: any[] = [];
 
 // TODO, allow users to specify number of buildings, town size, and number of Solar Panels
 // See issue: https://github.com/googleinterns/step141-2020/issues/49
-export async function createNewBiogrid(body: NewBiogridOpts) {
+export async function createNewBiogrid(body: NewBiogridOpts): Promise<string> {
   const buildings = [
     new Building(10, 2, 3),
     new Building(10, 5, 4),
@@ -43,7 +43,7 @@ export async function createNewBiogrid(body: NewBiogridOpts) {
   return 'Created';
 }
 
-export async function runBiogridSimulation() {
+export async function runBiogridSimulation(): Promise<string> {
   const action = biobrain.computeAction(biogrid.getSystemState());
   biogrid.takeAction(action);
   states.push(biogrid.getJsonGraphDetails());

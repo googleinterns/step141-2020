@@ -9,7 +9,7 @@ export interface Validatable {
 export function validate(validatableInput: Validatable): boolean {
   let isValid = true;
   if (
-    validatableInput.min != null && 
+    validatableInput.min != null &&
     typeof validatableInput.value === 'number') {
       isValid = isValid && validatableInput.value >= validatableInput.min;
   }

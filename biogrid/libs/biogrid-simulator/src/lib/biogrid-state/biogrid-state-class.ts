@@ -27,7 +27,7 @@ export class BiogridState implements StateGraph {
     this.graph.setNode(grid.name, grid as GridItem);
 
     // Add all the vertices as nodes/vertices of the graph, with a name for
-    // the particular grid item and label which is data for the particular vertex as the GridItem itself
+    // The particular grid item and label which is data for the particular vertex as the GridItem itself
     vertices.map((vertex) =>
       this.graph.setNode(vertex.name, vertex as GridItem)
     );
@@ -149,7 +149,7 @@ export class BiogridState implements StateGraph {
       );
       let edge: StateGraphEdge;
       // Solar panels to the grid only
-      // searching for includes GRID so that when scaling it is easy to add multiple grids
+      // Searching for includes GRID so that when scaling it is easy to add multiple grids
       if (
         newVertexName.includes(GRID_ITEM_NAMES.SOLAR_PANEL) &&
         vertex.includes(GRID_ITEM_NAMES.GRID) &&
