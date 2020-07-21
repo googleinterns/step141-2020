@@ -6,8 +6,6 @@ import { RuralArea } from "../community";
 
 let actualBrain: BioBrain;
 let grid: Biogrid;
-
-
 const name1 = `${GRID_ITEM_NAMES.ENERGY_USER}-1`;
 const name2 = `${GRID_ITEM_NAMES.ENERGY_USER}-2`;
 const name3 = `${GRID_ITEM_NAMES.ENERGY_USER}-3`;
@@ -30,8 +28,7 @@ beforeAll(() => {
 });
 
 describe('BioBrain class', () => {
-  test('It should test that there is an action sent back', () => {
-    // TODO add assertions for acions
+  test('should test that there is an action sent back', () => {
     const action = actualBrain.computeAction(grid.getSystemState());
     const expectedPath = {
       [name2] : `${GRID_ITEM_NAMES.LARGE_BATTERY}-0`

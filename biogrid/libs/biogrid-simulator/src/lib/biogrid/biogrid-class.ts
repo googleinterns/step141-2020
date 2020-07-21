@@ -91,7 +91,12 @@ export class Biogrid implements Grid {
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
     return positions.map((position, index) => new SolarPanel(position.x, position.y, SOLAR_PANEL.AREA, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`))
   }
-
+  /**
+   * This method takes the results of th brain and then it changes the state graph as suggested by the brain.
+   * The results of the brain are in form of an object key:value pair, with the receiver name as key and supplier name as value
+   * @param action holds the results from the brain
+   * @returns a the current state with a new graph which includes the changes that were suggested by the brain
+   */
   takeAction(action: GridAction) {
     // RETURN a new BiogridState
     const allSupplyingPaths = action.getSupplyingPaths()
@@ -104,7 +109,7 @@ export class Biogrid implements Grid {
       const typeOldGridItem = this.getGridItemType(oldGridItem);
       if (typeOldGridItem === GRID_ITEM_NAMES.ENERGY_USER) {
         const energyUser = oldGridItem as Building;
-        const energyUserReq = energyUser.MaxCapacity - energyUser.getEnergyInJoules();
+        const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY || typeSupplyingGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
           const battery = supplyingGridItem as BioBattery;
@@ -121,7 +126,7 @@ export class Biogrid implements Grid {
         clonedGraph.setNode(energyUser.name, energyUser);
       } else if (typeOldGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
         const energyUser = oldGridItem as BioBattery;
-        const energyUserReq = energyUser.MaxCapacity - energyUser.getEnergyInJoules();
+        const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
           const battery = supplyingGridItem as BioBattery;
@@ -139,7 +144,7 @@ export class Biogrid implements Grid {
       } else if (typeOldGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
         const energyUser = oldGridItem as BioBattery;
         const energyUserReq =
-          energyUser.MaxCapacity - energyUser.getEnergyInJoules();
+          energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
           const solarpanel = supplyingGridItem as SolarPanel;

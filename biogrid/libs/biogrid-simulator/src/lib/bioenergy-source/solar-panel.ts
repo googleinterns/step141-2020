@@ -68,8 +68,7 @@ export class SolarPanel extends EnergySource {
   }
 
   isEmpty() {
-    const intensity = getSunlight(this.date, this.longitude, this.latitude);
-    return intensity == 0;
+    return this.getEnergyInJoules() === 0;
   }
 
   private intensityToKiloWattsPerSquareMeter(intensity: SunlightIntensity) {

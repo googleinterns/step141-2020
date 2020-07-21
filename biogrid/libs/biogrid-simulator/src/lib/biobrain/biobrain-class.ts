@@ -20,10 +20,10 @@ export class BioBrain implements Brain {
   }
   
   computeAction(state: StateGraph): GridAction {
-    // get the shortest distances between each gridItem to the rest of the gridItems
+    // Get the shortest distances between each gridItem to the rest of the gridItems
     let shortestDistances = state.getShortestDistances();
     
-    // create a clone of the graph becfore using it
+    // Create a clone of the graph becfore using it
     this.clonedGraph = state.cloneStateGraph();
 
     // Get all the gridItems, this changes in the graph once the buildings are
@@ -102,7 +102,7 @@ export class BioBrain implements Brain {
   }
 
   /**
-   * This method is used for charging individual @param largeBatteries which might not have energy energy
+   * This method is used for charging individual @param largeBatteries which might not have enough energy
    * @param largeBatteries hold the large baterries which are going to be charged in case they are not full
    * @param solarPanels holds the solar panels which are going to be used to charge @param largeBatteries
    * @param shortestDistances holds the shortest distances between one grid item to another
@@ -176,7 +176,7 @@ export class BioBrain implements Brain {
     // Assuming that the houses asking for power will not have power in them.
     // Do not consider building with full power capacity
     buildings = buildings.filter((building) => {
-      return building.getEnergyInJoules() === building.MinCapacity;
+      return building.getEnergyInJoules() === building.getMinCapacity();
     });
 
     // Filter the batteries and removes the ones which do not have power in them
@@ -219,8 +219,8 @@ export class BioBrain implements Brain {
     //  supplied it energy so that it can not be requested energy when it doesn't have it
     for (const recievingAgent of recievingAgents) {
       // get the energy which is being requested.
-      // For now implement all or nothing. If battery doesn't have all the energy required, ignore it
-      const energyReq = recievingAgent.MaxCapacity - recievingAgent.getEnergyInJoules();
+      // TODO: advancement For now implement all or nothing. If battery doesn't have all the energy required, ignore it
+      const energyReq = recievingAgent.getMaxCapacity() - recievingAgent.getEnergyInJoules();
       // set the shortest distance between the two values supplier and receiver to be +infinity
       let shortestDistance = Number.POSITIVE_INFINITY;
       // Keep track of the batteryPosition
