@@ -31,7 +31,6 @@ export class BioBrain implements Brain {
     let gridItems = this.getGridItems();
 
     // Create an object of buildings with the energyProviders which supplied
-    // TODO assign the building as Building not the names
     let buildingSuppliers: SupplyingPath = this.chargeBuildings(
       gridItems[GRID_ITEM_NAMES.ENERGY_USER],
       gridItems[GRID_ITEM_NAMES.SMALL_BATTERY],
@@ -80,6 +79,7 @@ export class BioBrain implements Brain {
 
     const allGridItems = this.clonedGraph.nodes();
     // TODO: Implement with instanceof
+    // @see https://github.com/googleinterns/step141-2020/issues/54
     allGridItems.map(item => {
       const gridItem = this.clonedGraph.node(item);
       if (gridItem.name.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
@@ -212,7 +212,6 @@ export class BioBrain implements Brain {
     supplyingAgents: SupplyingAgents[],
     shortestDistances: ShortestDistances
   ): SupplyingPath {
-    // TODO: advancement for later implementations: assign the recievingAgent itself not the names
     // Create an object of buildings with the energyProviders which supplied
     let supplyToSupplyFromAgents: SupplyingPath = {};
     // Look at each gridItem requesting for energy individually and keep track of the which grid item
@@ -220,6 +219,7 @@ export class BioBrain implements Brain {
     for (const recievingAgent of recievingAgents) {
       // get the energy which is being requested.
       // TODO: advancement For now implement all or nothing. If battery doesn't have all the energy required, ignore it
+      // @see https://github.com/googleinterns/step141-2020/issues/54
       const energyReq = recievingAgent.getMaxCapacity() - recievingAgent.getEnergyInJoules();
       // set the shortest distance between the two values supplier and receiver to be +infinity
       let shortestDistance = Number.POSITIVE_INFINITY;
@@ -243,6 +243,7 @@ export class BioBrain implements Brain {
       }
       // In case there is no supplier for that receiver, ignore the reciever
       // TODO advancement, tell the grid about these cases of receiver asking for more than it can be given
+      // @see https://github.com/googleinterns/step141-2020/issues/54
       if (indexOfProvider === -1) {
         continue;
       }

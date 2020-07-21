@@ -28,7 +28,7 @@ beforeAll(() => {
 });
 
 describe('BioBrain class', () => {
-  test('should test that there is an action sent back', () => {
+  test('computeAction sends the required action in form of {receiverName: supplierName}', () => {
     const action = actualBrain.computeAction(grid.getSystemState());
     const expectedPath = {
       [name2] : `${GRID_ITEM_NAMES.LARGE_BATTERY}-0`
