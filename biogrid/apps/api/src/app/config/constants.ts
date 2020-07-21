@@ -2,7 +2,7 @@ import { environment } from '../../environments/environment';
 
 export default {
   environment: environment.production ? 'production' : 'development',
-  port: environment.port || 3333,
+  port: environment.port || parseInt(process.env.PORT || '3000'),
   errorTypes: {
     db: {
       statusCode: 500,

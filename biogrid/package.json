@@ -18,7 +18,7 @@
     "build:routes": "(cd apps/api && tsoa routes)",
     "build:swagger": "(cd apps/api && tsoa swagger --basePath /service)",
     "build:tsoa": "npm run build:routes && npm run build:swagger",
-    "start": "PORT=8080 && node main.js",
+    "start": "node main.js",
     "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
