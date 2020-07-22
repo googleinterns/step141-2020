@@ -1,4 +1,4 @@
-import { Brain, GridAction, StateGraph, SupplyingPath } from '@biogrid/grid-simulator';
+import { Brain, GridAction, StateGraph, SupplyingPath, GridItem } from '@biogrid/grid-simulator';
 import { BiogridAction, Building, BioBattery } from '@biogrid/biogrid-simulator';
 import { GRID_ITEM_NAMES, RecievingAgents, SupplyingAgents, ShortestDistances } from '../config';
 import { Path, Graph } from 'graphlib';
@@ -82,13 +82,13 @@ export class BioBrain implements Brain {
     // @see https://github.com/googleinterns/step141-2020/issues/54
     allGridItems.map(item => {
       const gridItem = this.clonedGraph.node(item);
-      if (gridItem.name.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
+      if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
         buildings.push(gridItem as Building);
-      } else if (gridItem.name.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
+      } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
         smallBatteries.push(gridItem as BioBattery);
-      } else if (gridItem.name.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
+      } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
         largeBatteries.push(gridItem as BioBattery);
-      } else if (gridItem.name.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
+      } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
         solarPanels.push(gridItem as SolarPanel);
       }
     });
@@ -230,7 +230,7 @@ export class BioBrain implements Brain {
       for (let index = 0; index < supplyingAgents.length; index++) {
         // check the distance between the receiver and supplier. If it is the minimal, change the supplier index
         const newShortestDistance =
-          shortestDistances[supplyingAgents[index].name][recievingAgent.name]
+          shortestDistances[supplyingAgents[index].gridItemName][recievingAgent.gridItemName]
             .distance;
         const energyProvided = supplyingAgents[index].getEnergyInJoules();
         if (
@@ -257,13 +257,13 @@ export class BioBrain implements Brain {
       }
       provideFrom.supplyPower(energyReq);
 
-      this.clonedGraph.setNode(provideFrom.name, provideFrom);
-      this.clonedGraph.setNode(provideTo.name, provideTo);
+      this.clonedGraph.setNode(provideFrom.gridItemName, provideFrom);
+      this.clonedGraph.setNode(provideTo.gridItemName, provideTo);
 
       // add the pair of receiver : supplier in supplyToSupplyFromAgents
       supplyingAgents[indexOfProvider].supplyPower(energyReq);
-      supplyToSupplyFromAgents[recievingAgent.name] =
-        supplyingAgents[indexOfProvider].name;
+      supplyToSupplyFromAgents[recievingAgent.gridItemName] =
+        supplyingAgents[indexOfProvider].gridItemName;
     }
     return supplyToSupplyFromAgents;
   }

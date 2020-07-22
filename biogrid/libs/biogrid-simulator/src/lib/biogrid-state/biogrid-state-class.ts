@@ -19,16 +19,16 @@ export class BiogridState implements StateGraph {
 
     // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
     const grid: GridItem = {
-      name: GRID_ITEM_NAMES.GRID,
+      gridItemName: GRID_ITEM_NAMES.GRID,
       getRelativePosition() {
         return {x: 0, y: 0};
       }
     }
-    this.graph.setNode(grid.name, (grid as GridItem));
+    this.graph.setNode(grid.gridItemName, (grid as GridItem));
 
     // Add all the vertices as nodes/vertices of the graph, with a name for
     // the particular grid item and label which is data for the particular vertex as the GridItem itself
-    vertices.map(vertex => this.graph.setNode(vertex.name, (vertex as GridItem)));
+    vertices.map(vertex => this.graph.setNode(vertex.gridItemName, (vertex as GridItem)));
 
 
     // Add all the edges that can be formed into the graph, read the add method for how it is done
@@ -73,10 +73,10 @@ export class BiogridState implements StateGraph {
 
   /**
    * Method searches the graph for a specific node by its name
-   * @param name is the string that represents the GridItem you are searching for
+   * @param gridItemName is the string that represents the GridItem you are searching for
    */
-  public getGridItem(name: string): GridItem {
-    return this.graph.node(name);
+  public getGridItem(gridItemName: string): GridItem {
+    return this.graph.node(gridItemName);
   }
 
   /**
@@ -132,7 +132,7 @@ export class BiogridState implements StateGraph {
    * @param newVertex is the new item of the Grid to add to @param this.graph as displayed above
    */
   private connectNewVertex(newVertex: GridItem) {
-    const newVertexName = newVertex.name;
+    const newVertexName = newVertex.gridItemName;
     for (const vertex of this.graph.nodes()) {
       const distance = this.calculateDistance(newVertex, (this.graph.node(vertex)) as StateGraphVertex)
       let edge: StateGraphEdge;

@@ -5,6 +5,6 @@ import { ItemPosition } from '../measurements';
  * to the top left corner of the grid
  */
 export interface GridItem {
-  readonly name: string;
+  readonly gridItemName: string;
   getRelativePosition: () => ItemPosition;
 }

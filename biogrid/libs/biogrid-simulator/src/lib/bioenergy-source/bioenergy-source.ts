@@ -46,5 +46,5 @@ export abstract class EnergySource implements EnergySourceInterface {
 
   abstract getPowerAmount(date: Date): Power;
   abstract getEnergyInJoules(): Power;
-  abstract name: string;
+  abstract gridItemName: string;
 }

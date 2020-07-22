@@ -11,7 +11,7 @@ import { SMALL_BATTERY } from '../config';
 export class BioBattery implements Battery {
   private energyInJoules: Energy;
   private readonly maxCapacity: Energy;
-  name: string;
+  gridItemName: string;
   private readonly relativePosition: ItemPosition;
 
   /**
@@ -24,7 +24,7 @@ export class BioBattery implements Battery {
   constructor(
     x: Distance,
     y: Distance,
-    typeOfBattery: string,
+    gridItemName: string,
     energyInJoules: Energy = SMALL_BATTERY.DEFAULT_START_ENERGY,
     maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY
   ) {
@@ -37,7 +37,7 @@ export class BioBattery implements Battery {
     }
     this.energyInJoules = energyInJoules;
     this.maxCapacity = maxCapacity;
-    this.name = typeOfBattery;
+    this.gridItemName = gridItemName;
   }
 
   getRelativePosition() {

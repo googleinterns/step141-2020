@@ -18,7 +18,7 @@ export interface StateGraphEdge {
 
 export interface StateGraph {
   getAllPositions: () => ItemPosition[];
-  getGridItem: (name: string) => GridItem;
+  getGridItem: (gridItemName: string) => GridItem;
   getGraph: () => Graph;
   cloneStateGraph(): Graph;
   getAllVertices: () => string[];

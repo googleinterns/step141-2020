@@ -11,7 +11,7 @@ import { SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
 
 export class SolarPanel extends EnergySource {
   private sizeSqMtr: number;
-  name: string;
+  gridItemName: string;
   date: Date;
 
   /**
@@ -21,7 +21,7 @@ export class SolarPanel extends EnergySource {
     x: Distance,
     y: Distance,
     sizeSqMtr: number,
-    name: string = GRID_ITEM_NAMES.SOLAR_PANEL,
+    gridItemName: string = GRID_ITEM_NAMES.SOLAR_PANEL,
     efficiency = 0.175,
     longitude = 0,
     latitude = 0,
@@ -34,7 +34,7 @@ export class SolarPanel extends EnergySource {
       );
     }
     this.sizeSqMtr = sizeSqMtr;
-    this.name = name;
+    this.gridItemName = gridItemName;
     this.date = date;
   }
 
