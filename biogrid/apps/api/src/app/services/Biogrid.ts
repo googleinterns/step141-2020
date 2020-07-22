@@ -35,7 +35,8 @@ function createRandomBuildingPosition(
   };
 }
 
-// TODO, allow users to specify where the buildings are on the grid rather than  randomly scatter
+// TODO, allow users to specify where the buildings are on the grid rather than randomly scatter
+// The issue can be found on https://github.com/googleinterns/step141-2020/issues/59
 export async function simulateNewBiogrid(
   body: NewBiogridOpts
 ): Promise<BiogridSimulationResults> {
