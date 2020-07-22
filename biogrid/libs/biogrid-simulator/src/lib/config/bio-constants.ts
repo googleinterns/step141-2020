@@ -1,4 +1,4 @@
-import { BioBattery, BioEnergySource, Building } from '@biogrid/biogrid-simulator';
+import { BioBattery, Building, SolarPanel } from '@biogrid/biogrid-simulator';
 import { Path } from 'graphlib';
 
 export const SMALL_BATTERY = {
@@ -18,6 +18,7 @@ export const LARGE_BATTERY = {
 export const SOLAR_PANEL = {
   DEFAULT_INITIAL_ENERGY: 3600000,
   MIN_CAPACITY: 10000,
+  AREA: 10,
   KILOLUX_TO_KILOWATT_PER_SQUARE_METER: 0.0079
 };
 
@@ -35,9 +36,9 @@ export const BUILDING = {
   MAX_CAPACITY: 4545,
 };
 
-export type SupplyFromAgent = BioBattery | BioEnergySource;
+export type SupplyingAgents = BioBattery | SolarPanel;
 
-export type SupplyToAgent = BioBattery[] | Building[];
+export type RecievingAgents = BioBattery[] | Building[];
 
 export interface ShortestDistances {
   [source: string]: { [node: string]: Path };

@@ -9,7 +9,7 @@ import {
 import { SMALL_BATTERY } from '../config';
 
 export class BioBattery implements Battery {
-  private currentBatteryEnergy: Energy;
+  private energyInJoules: Energy;
   private readonly maxCapacity: Energy;
   name: string;
   private readonly relativePosition: ItemPosition;
@@ -25,17 +25,17 @@ export class BioBattery implements Battery {
     x: Distance,
     y: Distance,
     typeOfBattery: string,
-    currentBatteryEnergy: Energy = SMALL_BATTERY.DEFAULT_START_ENERGY,
+    energyInJoules: Energy = SMALL_BATTERY.DEFAULT_START_ENERGY,
     maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY
   ) {
     this.relativePosition = { x, y };
-    if (!this.validateInputs(currentBatteryEnergy, maxCapacity)) {
+    if (!this.validateInputs(energyInJoules, maxCapacity)) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
       throw new Error(
-        `Cannot create a battery with values: (${currentBatteryEnergy}, ${maxCapacity})`
+        `Cannot create a battery with values: (${energyInJoules}, ${maxCapacity})`
       );
     }
-    this.currentBatteryEnergy = currentBatteryEnergy;
+    this.energyInJoules = energyInJoules;
     this.maxCapacity = maxCapacity;
     this.name = typeOfBattery;
   }
@@ -45,51 +45,51 @@ export class BioBattery implements Battery {
   }
 
   startCharging(inputPower: Energy): void {
-    if (this.currentBatteryEnergy + inputPower > this.maxCapacity) {
-      this.currentBatteryEnergy = this.maxCapacity;
+    if (this.energyInJoules + inputPower > this.maxCapacity) {
+      this.energyInJoules = this.maxCapacity;
     }
-    this.currentBatteryEnergy += inputPower;
+    this.energyInJoules += inputPower;
   }
 
   // TODO implement when you use a formula for charging a battery
   stopCharging(): void {}
 
   supplyPower(outputenergy: Energy): Energy {
-    if (this.currentBatteryEnergy - outputenergy < 0) {
+    if (this.energyInJoules - outputenergy < 0) {
       //TODO implement the function to notify the request with amount of output left
-      const temp: Energy = this.currentBatteryEnergy;
-      this.currentBatteryEnergy = 0;
+      const temp: Energy = this.energyInJoules;
+      this.energyInJoules = 0;
       return temp;
     }
-    this.currentBatteryEnergy -= outputenergy;
+    this.energyInJoules -= outputenergy;
     return outputenergy;
   }
 
   private validateInputs(
-    currentBatteryEnergy: Energy,
+    energyInJoules: Energy,
     maxCapacity: Energy = this.maxCapacity
   ) {
     const batteryValidator: Validatable = {
-      value: currentBatteryEnergy,
+      value: energyInJoules,
       max: maxCapacity,
-      isPositive: currentBatteryEnergy >= 0 && maxCapacity >= 0,
+      isPositive: energyInJoules >= 0 && maxCapacity >= 0,
     };
     return validate(batteryValidator);
   }
 
   getEnergyInJoules(): Energy {
-    return this.currentBatteryEnergy;
+    return this.energyInJoules;
   }
 
-  get MaxCapacity(): Energy {
+  getMaxCapacity(): Energy {
     return this.maxCapacity;
   }
 
   isEmpty(): boolean {
-    return this.currentBatteryEnergy === 0;
+    return this.energyInJoules === 0;
   }
 
   isFull(): boolean {
-    return this.currentBatteryEnergy === this.maxCapacity;
+    return this.energyInJoules === this.maxCapacity;
   }
 }

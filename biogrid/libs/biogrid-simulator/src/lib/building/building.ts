@@ -38,11 +38,11 @@ export class Building implements EnergyUser {
     }
   }
 
-  get MinCapacity(): Energy {
+  getMinCapacity(): Energy {
     return this.minCapacity;
   }
 
-  get MaxCapacity(): Energy {
+  getMaxCapacity(): Energy {
     return this.maxCapacity;
   }
 

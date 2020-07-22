@@ -27,6 +27,15 @@ export const InputPage = () => {
   const [largeBatteryCells, largeBatteryCellInput] = useInput({
     type: 'number',
   });
+  const [numBuildings, numBuildingsInput] = useInput({
+    type: 'number',
+  });
+  const [numSolarPanels, numSolarPanelsInput] = useInput({
+    type: 'number',
+  });
+  const [townSize, townSizeInput] = useInput({
+    type: 'number',
+  });
   const history = useHistory();
 
   const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
@@ -34,8 +43,12 @@ export const InputPage = () => {
     const body = {
       startDate,
       endDate,
-      smallBatteryCells: parseInt(smallBatteryCells as string),
-      largeBatteryCells: parseInt(largeBatteryCells as string),
+      smallBatteryCells,
+      largeBatteryCells,
+      numBuildings,
+      numSolarPanels,
+      townSize,
+
     };
     const client = Client.getInstance();
     await client.api.newBiogrid({ body });
@@ -48,8 +61,8 @@ export const InputPage = () => {
       <img src={Visual} id="biogridVisual"></img>
       <p>This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 
         optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">biomimicry</a> to 
-        mimic the natural energy storage of the human body given a range of sunlight data and
-        an amount of small and large battery cells. In the <b>visual</b> above, the <b>large battery cells</b> are 
+        mimic the natural energy storage of the human body given a range of sunlight data, number of small and large 
+        battery cells, buildings, solar panels, and town size. In the <b>visual</b> above, the <b>large battery cells</b> are 
         centered in the <b>middle of the town</b> so our grid can take energy from it in the event that
         no energy is coming from our renewable sources. Outside of our large battery cells, we have <b>small 
         battery cells</b> spread <b>throughout the town</b> so that our buildings can have an
@@ -80,6 +93,19 @@ export const InputPage = () => {
             {largeBatteryCellInput}
           </div>
           <br></br>
+          <div className="buildings">
+            <label>Buildings</label>
+            {numBuildingsInput}
+          </div>
+          <div className="solarPanels">
+            <label>Solar Panels</label>
+            {numSolarPanelsInput}
+          </div>
+          <br></br>
+          <div className="townSize">
+            <label>Town Size (Kilometers)</label>
+            {townSizeInput}
+          </div>
         <div className="submitButton">
           <input type="submit" className="submitButton" value="Run the Simulation!"/>
         </div>
