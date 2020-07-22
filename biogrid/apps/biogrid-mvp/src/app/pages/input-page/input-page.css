@@ -10,6 +10,12 @@ br {
   clear: both;
 }
 
+.buildings {
+  display: inline-block;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
 .endDatePicker {
   display: inline-block;
   margin-top: 1.25rem;
@@ -40,6 +46,10 @@ label {
   margin-bottom: 1.25rem;
 }
 
+.solarPanels {
+  display: inline-block;
+}
+
 .startDatePicker {
   display: inline-block;
   margin-top: 1.25rem;
@@ -49,5 +59,10 @@ label {
 
 .submitButton {
   text-align: center;
+}
+
+.townSize {
+  display: inline-block;
+  margin-bottom: 1.25rem;
 }
 

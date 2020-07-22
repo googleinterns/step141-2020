@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './simulate-page.css';
 import { Client } from '../../client';
 import { BiogridSimulationResults } from '../../build';
@@ -16,9 +17,19 @@ export const SimulatePage = () => {
     setSimulationResults(results);
   }
 
+  const history = useHistory();
+
+  const redirectToHome = () => {  
+    history.push('/');
+  }
+
+  useEffect(() => {
+    getSimulationResults();
+  }, []);
+
+
   return (
     <div className="simulation">
-      <button onClick={() => getSimulationResults()}>Get simulation results</button>
       {simulationResults && (
         <div className="results">
           <table>
@@ -37,6 +48,7 @@ export const SimulatePage = () => {
           </table>
         </div>
       )}
+      <button onClick={redirectToHome} className="redirect">Change your Inputs!</button>
     </div>
   );
 };
