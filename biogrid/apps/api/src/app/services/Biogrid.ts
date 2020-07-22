@@ -4,6 +4,7 @@ import {
   Building,
   BioBrain,
 } from '@biogrid/biogrid-simulator';
+import { ItemPosition } from '@biogrid/grid-simulator';
 export interface BiogridSimulationResults {
   energyWastedFromSource?: number;
   energyWastedInTransportation?: number;
@@ -16,48 +17,51 @@ export interface NewBiogridOpts {
   endDate: Date;
   smallBatteryCells: number;
   largeBatteryCells: number;
+  numBuildings: number;
+  numSolarPanels: number;
+  townHeight: number;
+  townWidth: number;
 }
 
-// TODO change to a stateless solution
-// See issue: https://github.com/googleinterns/step141-2020/issues/50
-let biogrid: Biogrid;
-const biobrain = BioBrain.Instance;
-const states: any[] = [];
+function createRandomBuildingPosition(
+  townWidth: number,
+  townHeight: number
+): ItemPosition {
+  const x = Math.floor(Math.random() * townWidth);
+  const y = Math.floor(Math.random() * townHeight);
+  return {
+    x,
+    y,
+  };
+}
 
-// TODO, allow users to specify number of buildings, town size, and number of Solar Panels
-// See issue: https://github.com/googleinterns/step141-2020/issues/49
-export async function createNewBiogrid(body: NewBiogridOpts): Promise<string> {
-  const buildings = [
-    new Building(10, 2, 3),
-    new Building(10, 5, 4),
-    new Building(10, 4, 3),
-    new Building(10, 1, 2),
-    new Building(10, 3, 1),
-  ];
-  const town = new RuralArea(buildings, 10, 10);
-  biogrid = new Biogrid(town, {
+// TODO, allow users to specify where the buildings are on the grid rather than  randomly scatter
+export async function simulateNewBiogrid(
+  body: NewBiogridOpts
+): Promise<BiogridSimulationResults> {
+  const buildings = new Array(body.numBuildings).map((v) => {
+    const randomPos = createRandomBuildingPosition(
+      body.townWidth,
+      body.townHeight
+    );
+    return new Building(10, randomPos.x, randomPos.y);
+  });
+  const town = new RuralArea(buildings, body.townWidth, body.townHeight);
+  const biogrid = new Biogrid(town, {
     numberOfLargeBatteryCells: body.largeBatteryCells,
     numberOfSmallBatteryCells: body.smallBatteryCells,
-    numberOfSolarPanels: 10,
+    numberOfSolarPanels: body.numSolarPanels,
   });
-  return 'Created';
-}
-
-export async function runBiogridSimulation(): Promise<string> {
-  const action = biobrain.computeAction(biogrid.getSystemState());
+  const biobrain = BioBrain.Instance;
+  const initState = biogrid.getSystemState()
+  const statesJson = [biogrid.getJsonGraphDetails()];
+  const action = biobrain.computeAction(initState);
   biogrid.takeAction(action);
-  states.push(biogrid.getJsonGraphDetails());
-  return 'Fake';
-}
-
-export async function getSimulationResults(): Promise<
-  BiogridSimulationResults
-> {
-  // TODO implement
+  statesJson.push(biogrid.getJsonGraphDetails());
   return {
     energyWastedFromSource: 10,
     energyWastedInTransportation: 12,
     timeWithoutEnoughEnergy: 24,
-    states,
+    states: statesJson,
   };
 }
