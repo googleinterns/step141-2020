@@ -27,6 +27,7 @@ export class BioBrain implements Brain {
   }
   
   computeAction(state: StateGraph): GridAction {
+    // TODO calculate the efficiency for every transportation of power
     // Get the shortest distances between each gridItem to the rest of the gridItems
     let shortestDistances = state.getShortestDistances();
     

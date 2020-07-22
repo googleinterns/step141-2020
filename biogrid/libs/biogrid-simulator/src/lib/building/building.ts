@@ -5,7 +5,7 @@ import {
   Distance,
   Energy,
 } from '@biogrid/grid-simulator';
-import { GRID_ITEM_NAMES, BUILDING } from '../config';
+import { GRID_ITEM_NAMES, BUILDING, RESISTANCE } from '../config';
 
 // TODO rename energy to power consumption
 /**
@@ -20,6 +20,8 @@ export class Building implements EnergyUser {
   // /** The battery storage for the building. */
   // battery: Battery;
   private relativePosition: ItemPosition;
+  /** Defines the resistance of the building due to the wiring */
+  private readonly resistanceNumber = RESISTANCE.BUILDING;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.
