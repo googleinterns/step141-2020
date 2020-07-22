@@ -1,11 +1,11 @@
-import { GridAction, SwitchedOnBatteryAction } from '@biogrid/grid-simulator';
+import { GridAction, SupplyingPath } from '@biogrid/grid-simulator';
 
 export class BiogridAction implements GridAction {
-  private switchedOnBatteries: SwitchedOnBatteryAction[];
-  constructor(switchedOnBatteries: SwitchedOnBatteryAction[]) {
-    this.switchedOnBatteries = switchedOnBatteries;
+  private supplyPath: SupplyingPath;
+  constructor(supplyPath: SupplyingPath) {
+    this.supplyPath = supplyPath;
   }
-  public getSwitchedOnBatteries() {
-    return this.switchedOnBatteries;
+  public getSupplyingPaths() {
+    return this.supplyPath;
   }
 }

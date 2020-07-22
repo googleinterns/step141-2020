@@ -1,8 +1,10 @@
 import { BiogridAction } from './';
 
 describe('classes', () => {
-  test('Create empty BiogridAction', () => {
-    const action = new BiogridAction([]);
-    expect(action.getSwitchedOnBatteries()).toEqual([]);
+  test('create a BiogridAction', () => {
+    const action = new BiogridAction({
+      "small-battery": "solar-panel"
+    });
+    expect(action.getSupplyingPaths()).toEqual({"small-battery": "solar-panel"});
   });
 });

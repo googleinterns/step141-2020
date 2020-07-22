@@ -1,6 +1,6 @@
-import * as jsgraphs from 'js-graph-algorithms';
+import { Graph, Edge, Path } from 'graphlib';
 import { GridItem } from '../grid-item';
-import { ItemPosition } from '../measurements';
+import { ItemPosition, Distance } from '../measurements';
 
 export type StateGraphVertex = GridItem;
 
@@ -11,14 +11,17 @@ export interface NewStateGraphVertex {
 }
 
 export interface StateGraphEdge {
-  toIndex: number;
+  v: string,
+  w: string,
   weight: number;
-  label: string;
 }
 
 export interface StateGraph {
-  graphIndexToVertex: StateGraphVertex[];
-  getAllPositionsByIndex: () => ItemPosition[];
-  getGridItem: (ind: number) => GridItem;
-  getGraph: () => jsgraphs.WeightedDiGraph;
+  getAllPositions: () => ItemPosition[];
+  getGridItem: (name: string) => GridItem;
+  getGraph: () => Graph;
+  cloneStateGraph(): Graph;
+  getAllVertices: () => string[];
+  getShortestDistances: () => { [source: string]: { [node: string]: Path } };
+  getWeightEdge: (edge: Edge) => Distance;
 }
