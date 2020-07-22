@@ -57,10 +57,13 @@ export const InputPage = () => {
         str.push(
           encodeURIComponent(p) +
             '=' +
-            encodeURIComponent(JSON.stringify(obj[p]))
+            encodeURIComponent(
+              (obj[p] as { toString: () => string }).toString()
+            )
         );
       return str.join('&');
     }
+
     const params = {
       startDate,
       endDate,

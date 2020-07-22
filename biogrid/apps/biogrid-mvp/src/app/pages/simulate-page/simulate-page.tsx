@@ -14,8 +14,8 @@ export const SimulatePage = () => {
   const client = Client.getInstance();
 
   async function getSimulationResults() {
-    const params = queryString.parse(window.location.search);
-
+    const params = queryString.parse(window.location.hash.split('?')[1]);
+    console.log(window.location.hash.split('?')[1], params)
     const body = {
       startDate: new Date(params.startDate as string),
       endDate: new Date(params.endDate as string),
@@ -80,7 +80,6 @@ export const SimulatePage = () => {
           ))}
         </div>
       )}
-      <button onClick={redirectToHome} className="redirect">Change your Inputs!</button>
       <button onClick={redirectToHome} className="redirect">Change your Inputs!</button>
     </div>
   );
