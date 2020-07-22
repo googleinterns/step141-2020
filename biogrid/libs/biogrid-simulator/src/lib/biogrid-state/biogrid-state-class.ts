@@ -57,7 +57,8 @@ export class BiogridState implements StateGraph {
   }
 
   /**
-   * setnewStateGraph
+   * setnewStateGraph sets a new graph for the state of the grid after any changes
+   * @param newGraph holds the new state graph for the grid
    */
   public setnewStateGraph(newGraph: graphlib.Graph) {
     this.graph = newGraph;

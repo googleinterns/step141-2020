@@ -5,6 +5,13 @@ import { Path, Graph } from 'graphlib';
 import { SolarPanel } from '../bioenergy-source';
 
 
+interface gridItemsList {
+  [GRID_ITEM_NAMES.ENERGY_USER]: Building[], 
+  [GRID_ITEM_NAMES.SMALL_BATTERY]: BioBattery[], 
+  [GRID_ITEM_NAMES.LARGE_BATTERY]: BioBattery[], 
+  [GRID_ITEM_NAMES.SOLAR_PANEL]: SolarPanel[]
+}
+
 // We can only have one BioBrain per grid
 export class BioBrain implements Brain {
   private static instance: BioBrain;
@@ -26,33 +33,16 @@ export class BioBrain implements Brain {
     // Create a clone of the graph becfore using it
     this.clonedGraph = state.cloneStateGraph();
 
-    // Get all the gridItems, this changes in the graph once the buildings are
-    // supplied energy, or the small batteries or large batteries
-    let gridItems = this.getGridItems();
-
     // Create an object of buildings with the energyProviders which supplied
     let buildingSuppliers: SupplyingPath = this.chargeBuildings(
-      gridItems[GRID_ITEM_NAMES.ENERGY_USER],
-      gridItems[GRID_ITEM_NAMES.SMALL_BATTERY],
-      gridItems[GRID_ITEM_NAMES.LARGE_BATTERY],
-      gridItems[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
-    // Update gridItems since they change in the graph after updating the buildings which required power
-    gridItems = this.getGridItems();  
     // Create an object of smallBatteries with the energyProviders which supplied
     let smallBatterySupplier: SupplyingPath = this.chargeSmallBatteries(
-      gridItems[GRID_ITEM_NAMES.SMALL_BATTERY],
-      gridItems[GRID_ITEM_NAMES.LARGE_BATTERY],
-      gridItems[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
-    // Update gridItems since they change in the graph after charging the non-charged batteries
-    gridItems = this.getGridItems();
     // Create an object of largeBatteries with the energyProviders which supplied
     let largeBatterySupplier: SupplyingPath = this.chargeLargebatteries(
-      gridItems[GRID_ITEM_NAMES.LARGE_BATTERY],
-      gridItems[GRID_ITEM_NAMES.SOLAR_PANEL],
       shortestDistances
     );
 
@@ -71,7 +61,7 @@ export class BioBrain implements Brain {
    * an error as the item might not have energy in it
    * @returns an object of key-value pair @enum GRID_ITEM_NAMES : respective grid items list
    */
-  private getGridItems() {
+  private getGridItems(): gridItemsList {
     let buildings: Building[] = [];
     let smallBatteries: BioBattery[] = [];
     let largeBatteries: BioBattery[] = [];
@@ -102,17 +92,15 @@ export class BioBrain implements Brain {
   }
 
   /**
-   * This method is used for charging individual @param largeBatteries which might not have enough energy
-   * @param largeBatteries hold the large baterries which are going to be charged in case they are not full
-   * @param solarPanels holds the solar panels which are going to be used to charge @param largeBatteries
-   * @param shortestDistances holds the shortest distances between one grid item to another
+   * This method is used for charging individual largeBatteries which might not have enough energy
    * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
    */
   private chargeLargebatteries(
-    largeBatteries: BioBattery[],
-    solarPanels: SolarPanel[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
   ): SupplyingPath {
+    const gridItems = this.getGridItems();
+    let largeBatteries: BioBattery[] = gridItems[GRID_ITEM_NAMES.LARGE_BATTERY];
+    let solarPanels: SolarPanel[] = gridItems[GRID_ITEM_NAMES.SOLAR_PANEL];
     // Assuming the large battery is not fully charged
     largeBatteries = largeBatteries.filter((battery) => !battery.isFull());
 
@@ -126,19 +114,17 @@ export class BioBrain implements Brain {
   }
 
   /**
-   * This method is used for charging individual @param smallBatteries which might not have energy energy
-   * @param smallBatteries holds the small batteries which are going to be charged in case they are not full
-   * @param largeBatteries holds the large batteries which can be used to charge @param smallBatteries
-   * @param solarPanels holds the solar panels which can be used to charge @param smallBatteries
-   * @param shortestDistances holds the shortest distances between one grid item to another
+   * This method is used for charging individual smallBatteries which might not have energy energy
    * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
    */
   private chargeSmallBatteries(
-    smallBatteries: BioBattery[],
-    largeBatteries: BioBattery[],
-    solarPanels: SolarPanel[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
   ): SupplyingPath {
+    const gridItems = this.getGridItems();
+    let smallBatteries: BioBattery[] = gridItems[GRID_ITEM_NAMES.SMALL_BATTERY];
+    let largeBatteries: BioBattery[] = gridItems[GRID_ITEM_NAMES.LARGE_BATTERY];
+    let solarPanels: SolarPanel[] = gridItems[GRID_ITEM_NAMES.SOLAR_PANEL];
+    
     // Assuming the small batteries are not fully charged
     smallBatteries = smallBatteries.filter((battery) => !battery.isFull());
     
@@ -158,21 +144,18 @@ export class BioBrain implements Brain {
   }
 
   /**
-   * This method is used for charging the individual @param buildings which might not have energy energy
-   * @param buildings holds the buildings which you are supplying energy to
-   * @param smallBatteries holds the small baterries which can supply energy to @param buildings
-   * @param largeBatteries holds the large batteries which can supply energy to @param buildings
-   * @param solarPanels holds the solar panels which can supply energy to @param buildings
-   * @param shortestDistances holds the shortests distances from one gridItem to another
+   * This method is used for charging the individual buildings which might not have energy energy
    * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
    */
   private chargeBuildings(
-    buildings: Building[],
-    smallBatteries: BioBattery[],
-    largeBatteries: BioBattery[],
-    solarPanels: SolarPanel[],
     shortestDistances: {[source: string]: { [node: string]: Path}}
   ): SupplyingPath {
+    const gridItems = this.getGridItems();
+    let buildings: Building[] = gridItems[GRID_ITEM_NAMES.ENERGY_USER];
+    let smallBatteries: BioBattery[] = gridItems[GRID_ITEM_NAMES.SMALL_BATTERY];
+    let largeBatteries: BioBattery[] = gridItems[GRID_ITEM_NAMES.LARGE_BATTERY];
+    let solarPanels: SolarPanel[] = gridItems[GRID_ITEM_NAMES.SOLAR_PANEL];
+
     // Assuming that the houses asking for power will not have power in them.
     // Do not consider building with full power capacity
     buildings = buildings.filter((building) => {
