@@ -7,7 +7,6 @@ import {
   ItemPosition,
   GridItem,
 } from '@biogrid/grid-simulator';
-import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
 import { GRID_ITEM_NAMES, ShortestDistances } from '../config';
 
 export class BiogridState implements StateGraph {
