@@ -30,16 +30,20 @@ export const enum GRID_ITEM_NAMES {
   GRID = 'grid',
 };
 
+/**
+ * Resistance of the differents components used in the grid
+ * For transportation of power, wire 16 of awg is used for transmission lines
+ * @see https://www.cs.rochester.edu/users/faculty/nelson/courses/csc_robocon/robot_manual/wiring.html#:~:text=Gauges%20of%20AWG%2016%20and,0%2C%2000%2C%20or%20larger.
+ * The wires have a constant resistance per length
+ * @see https://en.wikipedia.org/wiki/American_wire_gauge#Tables_of_AWG_wire_sizes for these values
+ * The resistance is measured in ohms (Ω) unless specified otherwise
+ * Buildings use majorly awg wire 13
+ * @see https://homeguides.sfgate.com/estimate-amount-wire-needed-rewire-average-home-105819.html
+ * Average house requires 7.25 rolls of a 50ft-roll
+ */
 export const RESISTANCE = {
-  // @see https://www.cs.rochester.edu/users/faculty/nelson/courses/csc_robocon/robot_manual/wiring.html#:~:text=Gauges%20of%20AWG%2016%20and,0%2C%2000%2C%20or%20larger.
-  // This value is an AWG value for power transmission lines
-  // Wires used in transporting the power
-  WIRE: 16,
-  // @see https://en.wikipedia.org/wiki/American_wire_gauge#Tables_of_AWG_wire_sizes for these values
+  // Represents the resistances of awg wire 16
   RESISTANCE_16: 13.17,  // Measured in ohm/km
-  // @see https://homeguides.sfgate.com/estimate-amount-wire-needed-rewire-average-home-105819.html
-  // Average house requires 7.25 rolls of 50ft-roll
-  // BUILDING uses wire: 13 majorly
   BUILDING: 0.726,
   // TODO get the right value for the resistance of the grid
   GRID: 0.2
