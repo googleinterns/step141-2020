@@ -1,12 +1,12 @@
-import * as graphlib from "graphlib";
+import * as graphlib from 'graphlib';
 import {
   StateGraphVertex,
   StateGraph,
   StateGraphEdge,
   Distance,
   ItemPosition,
+  GridItem,
 } from '@biogrid/grid-simulator';
-import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
 import { GRID_ITEM_NAMES, ShortestDistances } from '../config';
 
 export class BiogridState implements StateGraph {
@@ -15,21 +15,22 @@ export class BiogridState implements StateGraph {
   // TODO think about implement it StateGraphVertex[] as an object of key: name -> value: StateGraphVertex
   constructor(vertices: StateGraphVertex[]) {
     // Directed so as to have two edges between A and B, but in opposite directions
-    this.graph = new graphlib.Graph({directed: true});
+    this.graph = new graphlib.Graph({ directed: true });
 
     // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
     const grid: GridItem = {
       name: GRID_ITEM_NAMES.GRID,
       getRelativePosition() {
-        return {x: 0, y: 0};
-      }
-    }
-    this.graph.setNode(grid.name, (grid as GridItem));
+        return { x: 0, y: 0 };
+      },
+    };
+    this.graph.setNode(grid.name, grid as GridItem);
 
     // Add all the vertices as nodes/vertices of the graph, with a name for
-    // the particular grid item and label which is data for the particular vertex as the GridItem itself
-    vertices.map(vertex => this.graph.setNode(vertex.name, (vertex as GridItem)));
-
+    // The particular grid item and label which is data for the particular vertex as the GridItem itself
+    vertices.map((vertex) =>
+      this.graph.setNode(vertex.name, vertex as GridItem)
+    );
 
     // Add all the edges that can be formed into the graph, read the add method for how it is done
     vertices.map(vertex => this.connectNewVertex(vertex));
@@ -83,7 +84,9 @@ export class BiogridState implements StateGraph {
    * getAllGridItems searches the graph vertices and retrives the gridItems which are stored on the vertices
    */
   public getAllGridItems(): GridItem[] {
-    return this.getAllVertices().map(vertexName => this.getGridItem(vertexName));
+    return this.getAllVertices().map((vertexName) =>
+      this.getGridItem(vertexName)
+    );
   }
 
   /**
@@ -95,9 +98,9 @@ export class BiogridState implements StateGraph {
   }
 
   private getWeightbyGraph(graph: graphlib.Graph) {
-    return function(edge: graphlib.Edge): Distance {
+    return function (edge: graphlib.Edge): Distance {
       return graph.edge(edge);
-    }
+    };
   }
 
   /**
@@ -113,7 +116,9 @@ export class BiogridState implements StateGraph {
    * Get all GridItem positions in the graph
    */
   public getAllPositions(): ItemPosition[] {
-    return (this.graph.nodes() as string[]).map(vertex => this.getGridItem(vertex).getRelativePosition());
+    return (this.graph.nodes() as string[]).map((vertex) =>
+      this.getGridItem(vertex).getRelativePosition()
+    );
   }
 
   /**
@@ -134,7 +139,10 @@ export class BiogridState implements StateGraph {
   private connectNewVertex(newVertex: GridItem) {
     const newVertexName = newVertex.name;
     for (const vertex of this.graph.nodes()) {
-      const distance = this.calculateDistance(newVertex, (this.graph.node(vertex)) as StateGraphVertex)
+      const distance = this.calculateDistance(
+        newVertex,
+        this.graph.node(vertex) as StateGraphVertex
+      );
       let edge: StateGraphEdge;
       // Solar panels to the grid only
       // Searching for includes GRID so that when scaling it is easy to add multiple grids
@@ -142,7 +150,7 @@ export class BiogridState implements StateGraph {
         && vertex.includes(GRID_ITEM_NAMES.GRID)
       ) {
         edge = { v: newVertexName, w: vertex, weight: distance};
-      } else if (newVertexName.includes(GRID_ITEM_NAMES.LARGE_BATTERY) 
+      } else if (newVertexName.includes(GRID_ITEM_NAMES.LARGE_BATTERY)
         && vertex.includes(GRID_ITEM_NAMES.GRID)
       ) {
         edge = { v: newVertexName, w: vertex, weight: distance};
@@ -159,7 +167,7 @@ export class BiogridState implements StateGraph {
           // Continue since there is no edge to create
           continue
         }
-      } 
+      }
       // On gridItem Energy User do not add edge (A, A)
       else if (newVertexName.includes(GRID_ITEM_NAMES.ENERGY_USER)
         && vertex !== newVertexName

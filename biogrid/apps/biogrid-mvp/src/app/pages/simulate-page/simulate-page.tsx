@@ -8,9 +8,9 @@ export const SimulatePage = () => {
   const [simulationResults, setSimulationResults] = useState<
     BiogridSimulationResults
   >();
-  
+
   const client = Client.getInstance();
-  
+
   async function getSimulationResults() {
     await client.api.runBiogridSimulation();
     const results = await client.api.getBiogridSimulationResults();
@@ -19,7 +19,7 @@ export const SimulatePage = () => {
 
   const history = useHistory();
 
-  const redirectToHome = () => {  
+  const redirectToHome = () => {
     history.push('/');
   }
 
@@ -46,6 +46,25 @@ export const SimulatePage = () => {
               <td>{simulationResults.energyWastedInTransportation}</td>
             </tr>
           </table>
+          {simulationResults.states.map((stateGraph) => (
+            <table className="state-graph">
+              {((stateGraph as any).nodes as any[]).map((node: any) => (
+                <tr className="gridItem">
+                  <td>{node.v}</td>
+                  <table className="grid-item-values">
+                    {Object.keys(node.value).map((key: string) => (
+                      <>
+                        <tr>
+                          <td>{key}</td>
+                          <td>{JSON.stringify(node.value[key])}</td>
+                        </tr>
+                      </>
+                    ))}
+                  </table>
+                </tr>
+              ))}
+            </table>
+          ))}
         </div>
       )}
       <button onClick={redirectToHome} className="redirect">Change your Inputs!</button>
