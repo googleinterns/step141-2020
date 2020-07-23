@@ -94,7 +94,8 @@ export class BioBrain implements Brain {
 
   /**
    * This method is used for charging individual largeBatteries which might not have enough energy
-   * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
+   * It calls the @method determineSupplyingPath which calculates which supplier can give these large batteries power
+   * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
    */
   private chargeLargebatteries(
     shortestDistances: {[source: string]: { [node: string]: Path}}
@@ -116,7 +117,8 @@ export class BioBrain implements Brain {
 
   /**
    * This method is used for charging individual smallBatteries which might not have energy energy
-   * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
+   * It calls the @method determineSupplyingPath which calculates which supplier can give these small batteries power
+   * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
    */
   private chargeSmallBatteries(
     shortestDistances: {[source: string]: { [node: string]: Path}}
@@ -146,7 +148,8 @@ export class BioBrain implements Brain {
 
   /**
    * This method is used for charging the individual buildings which might not have energy energy
-   * @return calls the @method determineSupplyingPath which returns @interface SupplyingPath
+   * It calls the @method determineSupplyingPath which calculates which supplier can give these buildings power
+   * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
    */
   private chargeBuildings(
     shortestDistances: {[source: string]: { [node: string]: Path}}
