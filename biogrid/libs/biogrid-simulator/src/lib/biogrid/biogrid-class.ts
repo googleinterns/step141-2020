@@ -13,7 +13,7 @@ import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE 
 import { 
   BioBattery, 
   BiogridState,
-  Building, 
+  Building,
   SolarPanel
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
@@ -46,7 +46,7 @@ export class Biogrid implements Grid {
     // Batteries
     const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
     const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
-    
+
     this.smallBatteries = this.createBatteries(
       smallBatteryPositions,
       GRID_ITEM_NAMES.SMALL_BATTERY
@@ -82,7 +82,7 @@ export class Biogrid implements Grid {
   }
 
   getJsonGraphDetails() {
-    this.state.getJsonGraph();
+    return this.state.getJsonGraph();
   }
 
   private createBatteries(positions: ItemPosition[], gridItemName: string): Battery[] {

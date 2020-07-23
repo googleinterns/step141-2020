@@ -25,12 +25,12 @@ export class BioBrain implements Brain {
     }
     return this.instance;
   }
-  
+
   computeAction(state: StateGraph): GridAction {
     // TODO calculate the efficiency for every transportation of power
     // Get the shortest distances between each gridItem to the rest of the gridItems
     let shortestDistances = state.getShortestDistances();
-    
+
     // Create a clone of the graph becfore using it
     this.clonedGraph = state.cloneStateGraph();
 
@@ -38,6 +38,7 @@ export class BioBrain implements Brain {
     let buildingSuppliers: SupplyingPath = this.chargeBuildings(
       shortestDistances
     );
+    
     // Create an object of smallBatteries with the energyProviders which supplied
     let smallBatterySupplier: SupplyingPath = this.chargeSmallBatteries(
       shortestDistances
@@ -56,9 +57,9 @@ export class BioBrain implements Brain {
 
   /**
    * This method gets the different griditems and places them in their respective classes
-   * This is implemented from the cloned graph so that we can change the items without 
-   * changing the original state graph as well as keeping track of which supplying grid 
-   * item has given off power so that one doesn't call the same grid items and then get 
+   * This is implemented from the cloned graph so that we can change the items without
+   * changing the original state graph as well as keeping track of which supplying grid
+   * item has given off power so that one doesn't call the same grid items and then get
    * an error as the item might not have energy in it
    * @returns an object of key-value pair @enum GRID_ITEM_NAMES : respective grid items list
    */
@@ -83,11 +84,11 @@ export class BioBrain implements Brain {
         solarPanels.push(gridItem as SolarPanel);
       }
     });
-    
+
     return {
-      [GRID_ITEM_NAMES.ENERGY_USER]: buildings, 
-      [GRID_ITEM_NAMES.SMALL_BATTERY]: smallBatteries, 
-      [GRID_ITEM_NAMES.LARGE_BATTERY]: largeBatteries, 
+      [GRID_ITEM_NAMES.ENERGY_USER]: buildings,
+      [GRID_ITEM_NAMES.SMALL_BATTERY]: smallBatteries,
+      [GRID_ITEM_NAMES.LARGE_BATTERY]: largeBatteries,
       [GRID_ITEM_NAMES.SOLAR_PANEL]: solarPanels
     };
   }
@@ -111,7 +112,7 @@ export class BioBrain implements Brain {
 
     // Create an array of the possible energy givers
     const allEnergyProviders = [...solarPanels];
-    
+
     return this.determineSupplyingPath(largeBatteries, allEnergyProviders, shortestDistances);
   }
 
@@ -130,7 +131,7 @@ export class BioBrain implements Brain {
     
     // Assuming the small batteries are not fully charged
     smallBatteries = smallBatteries.filter((battery) => !battery.isFull());
-    
+
     // Filter the large batteries and remove the ones which do not have power in them
     largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
 
@@ -170,7 +171,7 @@ export class BioBrain implements Brain {
     // Do not include batteries which are empty
     smallBatteries = smallBatteries.filter((battery) => !battery.isEmpty());
     largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
-    
+
     // Filter the solar panels and remove the ones with the minimum energy or empty
     solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
 
@@ -186,10 +187,10 @@ export class BioBrain implements Brain {
 
   /**
    * This method determines which grid item can supply energy to the grid item without it.
-   * It determines this by considering the needs of the grid item requesting the enrgy and 
+   * It determines this by considering the needs of the grid item requesting the enrgy and
    * minimizing the distance between the supplying grid items and the receiver. It returns a key pair of receiver to supplier
    * @param recievingAgents holds a list of grid items (buildings or batteries but not both) which are requesting for energy
-   * @param supplyingAgents holds a list of grid items (@class BioBattery or @class SolarPanel) 
+   * @param supplyingAgents holds a list of grid items (@class BioBattery or @class SolarPanel)
    * which can supply energy to @param recievingAgents
    * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
    * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
