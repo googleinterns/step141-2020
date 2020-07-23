@@ -19,7 +19,7 @@ describe('tests for the BioEnergySource', () => {
     expect(() => new SolarPanel(x, y, area, GRID_ITEM_NAMES.SOLAR_PANEL, efficiency)).toThrow(expected);
   });
 
-  test('Get the power output from the solar pannel', () => {
+  test('Get the power output from the solar pannel', async () => {
     const longitude = 0,
       efficiency = 0.125,
       latitude = 0,
@@ -35,8 +35,8 @@ describe('tests for the BioEnergySource', () => {
       latitude
     );
 
-    const intensity = getSunlight(date, longitude, latitude);
+    const intensity = await getSunlight(date, longitude, latitude);
     const expected = intensity * 0.0079 * efficiency * area;
-    expect(energySource.getPowerAmount(date)).toEqual(expected);
+    expect(await energySource.getPowerAmount(date)).toEqual(expected);
   });
 });

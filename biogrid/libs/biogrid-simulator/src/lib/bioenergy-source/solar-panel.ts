@@ -46,14 +46,14 @@ export class SolarPanel extends EnergySource {
     return validate(validator);
   }
 
-  getPowerAmount(date: Date): Power {
-    const intensity = getSunlight(date, this.longitude, this.latitude);
+  async getPowerAmount(date: Date): Promise<Power> {
+    const intensity = await getSunlight(date, this.longitude, this.latitude);
     const powerPerSqrMeter = this.intensityToKiloWattsPerSquareMeter(intensity);
     return powerPerSqrMeter * this.sizeSqMtr * this.efficiency;
   }
 
   supplyPower(requiredPower: Power): Power {
-    // TODO implement this when you return the amount of power 
+    // TODO implement this when you return the amount of power
     // TODO that the solar panel holds at the particular moment
     // subtract requiredPower from the current and return it, keep track of the remaining power
     return requiredPower;
