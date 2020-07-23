@@ -23,7 +23,7 @@ describe('tests for the BioEnergySource', () => {
     ).toThrow(expected);
   });
 
-  test('Get the power output from the solar pannel', async () => {
+  test('Get the power output from the solar panel', async () => {
     const longitude = 0,
       efficiency = 0.125,
       latitude = 0,
@@ -40,8 +40,8 @@ describe('tests for the BioEnergySource', () => {
     );
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
-    const intensity = weather.getSunlight();
-    const expected = intensity * 0.0079 * efficiency * area;
+    const cloudCoverage = weather.getCloudCoverage(date);
+    const expected = 990 * (1 - 0.75 * Math.pow(cloudCoverage, 3)) / 1000;
     expect(await energySource.getPowerAmount(date)).toEqual(expected);
   });
 });

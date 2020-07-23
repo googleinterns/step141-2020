@@ -6,6 +6,7 @@ import {
   Power,
   SunlightIntensity,
   Distance,
+  CloudCoverage,
 } from '@biogrid/grid-simulator';
 import { SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
 
@@ -51,8 +52,14 @@ export class SolarPanel extends EnergySource {
     if (!this.weatherLib.isSetup()) {
       await this.weatherLib.setup();
     }
-    const intensity = await this.weatherLib.getSunlight();
-    const powerPerSqrMeter = this.intensityToKiloWattsPerSquareMeter(intensity);
+    // Solar panels do not produce energy at night
+    if (!this.weatherLib.isDay(date)) {
+      return 0;
+    }
+    const cloudCoverage = this.weatherLib.getCloudCoverage(date);
+    const powerPerSqrMeter = this.cloudCoverageToKiloWattsPerSquareMeter(
+      cloudCoverage
+    );
     return powerPerSqrMeter * this.sizeSqMtr * this.efficiency;
   }
 
@@ -72,11 +79,11 @@ export class SolarPanel extends EnergySource {
   }
 
   async isEmpty() {
-    return await this.getEnergyInJoules() === 0;
+    return (await this.getEnergyInJoules()) === 0;
   }
 
-  private intensityToKiloWattsPerSquareMeter(intensity: SunlightIntensity) {
-    // Calculation derived from https://www.researchgate.net/post/Howto_convert_solar_intensity_in_LUX_to_watt_per_meter_square_for_sunlight
-    return SOLAR_PANEL.KILOLUX_TO_KILOWATT_PER_SQUARE_METER * intensity;
+  private cloudCoverageToKiloWattsPerSquareMeter(cloudCoverage: CloudCoverage) {
+    // CalculationDerived from https://scool.larc.nasa.gov/lesson_plans/CloudCoverSolarRadiation.pdf
+    return 990 * (1 - 0.75 * Math.pow(cloudCoverage, 3)) / 1000;
   }
 }
