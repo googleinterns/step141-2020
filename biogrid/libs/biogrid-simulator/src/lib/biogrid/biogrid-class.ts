@@ -9,7 +9,7 @@ import {
   Battery,
   GridItem
 } from '@biogrid/grid-simulator';
-import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
+import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
 import { 
   BioBattery, 
   BiogridState,
@@ -49,14 +49,10 @@ export class Biogrid implements Grid {
     
     this.smallBatteries = this.createBatteries(
       smallBatteryPositions,
-      SMALL_BATTERY.DEFAULT_START_ENERGY,
-      SMALL_BATTERY.MAX_CAPACITY,
       GRID_ITEM_NAMES.SMALL_BATTERY
     );
     this.largeBatteries = this.createBatteries(
       largeBatteryPositions,
-      LARGE_BATTERY.DEFAULT_START_ENERGY,
-      LARGE_BATTERY.MAX_CAPACITY,
       GRID_ITEM_NAMES.LARGE_BATTERY
     );
 
@@ -89,9 +85,18 @@ export class Biogrid implements Grid {
     this.state.getJsonGraph();
   }
 
-  private createBatteries(positions: ItemPosition[], initEnergy: Energy, maxCapacity: Energy, gridItemName: string): Battery[] {
+  private createBatteries(positions: ItemPosition[], gridItemName: string): Battery[] {
+    const batteryResistance = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+      ? RESISTANCE.LARGE_BATTERY
+      : RESISTANCE.SMALL_BATTERY;
+    const maxCapacity = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+      ? LARGE_BATTERY.MAX_CAPACITY
+      : SMALL_BATTERY.MAX_CAPACITY;
+    const initEnergy = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+      ? LARGE_BATTERY.DEFAULT_START_ENERGY
+      : SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
-      (position, index) => new BioBattery(position.x, position.y, `${gridItemName}-${index}`, initEnergy, maxCapacity)
+      (position, index) => new BioBattery(position.x, position.y, `${gridItemName}-${index}`, batteryResistance, initEnergy, maxCapacity)
     );
   }
 

@@ -1,7 +1,7 @@
 import { BiogridState } from './';
 import { StateGraphVertex, GridItem } from '@biogrid/grid-simulator';
 import { Building } from '../building';
-import { GRID_ITEM_NAMES } from '../config';
+import { GRID_ITEM_NAMES, RESISTANCE } from '../config';
 import { Edge, Graph, alg } from "graphlib";
 
 describe('classes', () => {
@@ -24,6 +24,7 @@ describe('classes', () => {
 
   const grid: GridItem = {
     gridItemName: GRID_ITEM_NAMES.GRID,
+    gridItemResistance: RESISTANCE.GRID,
     getRelativePosition() {
       return { x: 0, y: 0 };
     },

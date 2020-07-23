@@ -21,7 +21,7 @@ export class Building implements EnergyUser {
   // battery: Battery;
   private relativePosition: ItemPosition;
   /** Defines the resistance of the building due to the wiring */
-  private readonly resistanceNumber = RESISTANCE.BUILDING;
+  gridItemResistance = RESISTANCE.BUILDING;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.

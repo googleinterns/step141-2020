@@ -11,7 +11,10 @@ import { SMALL_BATTERY } from '../config';
 export class BioBattery implements Battery {
   private energyInJoules: Energy;
   private readonly maxCapacity: Energy;
+  // name of the grid item is unique to the battery type, but they have a similar prefix
   gridItemName: string;
+  // The resistance measured in ohms
+  gridItemResistance: number;
   private readonly relativePosition: ItemPosition;
 
   /**
@@ -25,6 +28,7 @@ export class BioBattery implements Battery {
     x: Distance,
     y: Distance,
     gridItemName: string,
+    gridItemResistance: number,
     energyInJoules: Energy = SMALL_BATTERY.DEFAULT_START_ENERGY,
     maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY
   ) {
@@ -38,6 +42,7 @@ export class BioBattery implements Battery {
     this.energyInJoules = energyInJoules;
     this.maxCapacity = maxCapacity;
     this.gridItemName = gridItemName;
+    this.gridItemResistance = gridItemResistance;
   }
 
   getRelativePosition() {

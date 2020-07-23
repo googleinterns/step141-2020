@@ -3,7 +3,7 @@ import {
   Validatable,
   validate,
   EnergySourceInterface,
-} from '@biogrid/grid-simulator';
+} from '@biogrid/grid-simulator'; 
 
 export abstract class EnergySource implements EnergySourceInterface {
   // Percentage between 0 and 1
@@ -47,4 +47,5 @@ export abstract class EnergySource implements EnergySourceInterface {
   abstract getPowerAmount(date: Date): Power;
   abstract getEnergyInJoules(): Power;
   abstract gridItemName: string;
+  abstract gridItemResistance: number;
 }

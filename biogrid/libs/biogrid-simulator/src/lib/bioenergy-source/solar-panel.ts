@@ -7,13 +7,14 @@ import {
   SunlightIntensity,
   Distance,
 } from '@biogrid/grid-simulator';
-import { SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
+import { SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
 
 export class SolarPanel extends EnergySource {
   private sizeSqMtr: number;
+  // This is unique to every single solar panel but all have a same prefix name
   gridItemName: string;
   date: Date;
-
+  gridItemResistance: number = RESISTANCE.SOLAR_PANEL;
   /**
    * @param efficiency - default to 17.5% efficiency as solar panels are often between 15% and 20% efficiency
    */

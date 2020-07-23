@@ -7,7 +7,7 @@ import {
   ItemPosition,
 } from '@biogrid/grid-simulator';
 import { GridItem } from 'libs/grid-simulator/src/lib/grid-item';
-import { GRID_ITEM_NAMES, ShortestDistances } from '../config';
+import { GRID_ITEM_NAMES, ShortestDistances, RESISTANCE } from '../config';
 
 export class BiogridState implements StateGraph {
   private graph: graphlib.Graph;
@@ -20,6 +20,7 @@ export class BiogridState implements StateGraph {
     // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
     const grid: GridItem = {
       gridItemName: GRID_ITEM_NAMES.GRID,
+      gridItemResistance: RESISTANCE.GRID,
       getRelativePosition() {
         return {x: 0, y: 0};
       }

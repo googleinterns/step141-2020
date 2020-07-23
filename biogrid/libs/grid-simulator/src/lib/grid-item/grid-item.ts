@@ -6,5 +6,6 @@ import { ItemPosition } from '../measurements';
  */
 export interface GridItem {
   readonly gridItemName: string;
+  readonly gridItemResistance: number;
   getRelativePosition: () => ItemPosition;
 }
