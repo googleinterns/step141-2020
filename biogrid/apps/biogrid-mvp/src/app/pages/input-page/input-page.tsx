@@ -38,6 +38,11 @@ export const InputPage = () => {
   });
   const history = useHistory();
 
+  const redirectToInfo = (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault();
+    history.push('/info');
+  }
+
   const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
     const body = {
@@ -67,6 +72,8 @@ export const InputPage = () => {
         no energy is coming from our renewable sources. Outside of our large battery cells, we have <b>small 
         battery cells</b> spread <b>throughout the town</b> so that our buildings can have an
         immediate energy source when they have a spike in energy consumption.</p>
+
+        <p> Click <a href="" onClick={redirectToInfo}>here</a> to learn more about how we constructed this project. </p>
           <div className="startDatePicker">
             <label>Start Date</label>
             <DatePicker

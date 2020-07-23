@@ -1,0 +1,13 @@
+#EnergyFlow {
+  width: 56.125rem;
+}
+
+.info-page {
+    background-color: #f2f2f2;
+    border-radius: 0.3125rem;
+    font-family: sans-serif;
+    margin: auto;
+    padding: 1.25rem;
+    text-align: center;
+    width: 56.25rem;
+  }
