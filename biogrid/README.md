@@ -32,6 +32,23 @@
   sudo apt install docker.io
   ```
 
+## Deployment
+In order to deploy you will first need access to [the biogrid heroku deploy repository](https://github.com/Lev-Stambler/biogrid-heroku-deploy).
+
+Then clone it into the folder adjacent to this repositories parent folder
+```
+📂
+
+ ┣ 📂 step141-2020
+
+ ┣ 📂 biogrid-heroku-deploy
+```
+
+Then, when ready to deploy run
+```
+npm run deploy:heroku
+```
+
 ## Getting running
 - In order to run the development instance locally (frontend and backend)
   ```
