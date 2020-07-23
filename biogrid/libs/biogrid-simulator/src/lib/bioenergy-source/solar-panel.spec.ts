@@ -23,12 +23,12 @@ describe('tests for the BioEnergySource', () => {
     ).toThrow(expected);
   });
 
-  test('Get the power output from the solar panel', async () => {
+  test('Get the power output from the solar panel at night time', async () => {
     const longitude = 0,
       efficiency = 0.125,
       latitude = 0,
       area = 10,
-      date = new Date();
+      date = new Date('07/20/2020');
     const energySource = new SolarPanel(
       x,
       y,
@@ -36,12 +36,35 @@ describe('tests for the BioEnergySource', () => {
       GRID_ITEM_NAMES.SOLAR_PANEL,
       efficiency,
       longitude,
-      latitude
+      latitude,
+      date
     );
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
     const cloudCoverage = weather.getCloudCoverage(date);
-    const expected = 990 * (1 - 0.75 * Math.pow(cloudCoverage, 3)) / 1000;
-    expect(await energySource.getPowerAmount(date)).toEqual(expected);
+    const expected = (990 * (1 - 0.75 * Math.pow(cloudCoverage, 3))) / 1000;
+    expect(await energySource.getPowerAmount(date)).toEqual(0);
+  });
+
+  test('Get the power output from the solar panel during day time', async () => {
+    const longitude = 0,
+      efficiency = 0.125,
+      latitude = 0,
+      area = 10,
+      date = new Date('07/20/2020');
+    const energySource = new SolarPanel(
+      x,
+      y,
+      area,
+      GRID_ITEM_NAMES.SOLAR_PANEL,
+      efficiency,
+      longitude,
+      latitude,
+      date
+    );
+    const weather = new WeatherLib(date, longitude, latitude);
+    await weather.setup();
+    date.setHours(date.getHours() + 10);
+    expect(await energySource.getPowerAmount(date)).toEqual(1.212440625);
   });
 });

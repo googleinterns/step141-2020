@@ -35,9 +35,9 @@ export class WeatherLib {
     const ret = await fetch(url);
     const body = await ret.json();
     this.weatherData = body.forecast.forecastday[0].hour
-      .map((period: any) => {
+      .map((period: any, ) => {
         return {
-          time: this.formatDate(new Date(period.time)),
+          time: this.formatDateWithHour(new Date(period.time)),
           cloudCoverage: period.cloud / 100,
           isDay: period.is_day === 1,
         };
@@ -50,7 +50,7 @@ export class WeatherLib {
         return map;
       }, {});
 
-    this.setupOccured = true;
+        this.setupOccured = true;
   }
 
   isSetup() {
@@ -58,7 +58,7 @@ export class WeatherLib {
   }
 
   getCloudCoverage(date: Date): CloudCoverage {
-    const dateFormatted = this.formatDate(date);
+    const dateFormatted = this.formatDateWithHour(date);
     if (!this.weatherData[dateFormatted]) {
       throw new Error('Date not found within the specified time range');
     }
@@ -66,11 +66,15 @@ export class WeatherLib {
   }
 
   isDay(date: Date): boolean {
-    const dateFormatted = this.formatDate(date);
-    if (!this.weatherData[dateFormatted]) {
+    const dateFormatted = this.formatDateWithHour(date);
+        if (!this.weatherData[dateFormatted]) {
       throw new Error('Date not found within the specified time range');
     }
     return this.weatherData[dateFormatted].isDay;
+  }
+
+  private formatDateWithHour(date: Date): string {
+    return `${this.formatDate(date)}:${date.getHours()}`;
   }
 
   private formatDate(date: Date): string {
