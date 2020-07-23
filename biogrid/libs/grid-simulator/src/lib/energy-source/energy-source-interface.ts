@@ -3,5 +3,5 @@ import { GridItem } from '../grid-item';
 
 export interface EnergySourceInterface extends GridItem {
   getPowerAmount(date: Date): Promise<Power>;
-  getEnergyInJoules(): Power;
+  getEnergyInJoules(): Promise<Power>;
 }

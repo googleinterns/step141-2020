@@ -5,17 +5,25 @@ import fetch from 'node-fetch';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const apiKey = require('./api-key.json');
 
+interface WeatherHour {
+  time: Date;
+  condition: string;
+  isDay: boolean;
+}
+
 export class WeatherLib {
   private day: Date;
   private longitude: number;
   private latitude: number;
-  private weatherDataIcons: string[];
+  private weatherData: WeatherHour[];
+  private setupOccured: boolean;
 
   constructor(day: Date, longitude: number, latitude: number) {
     this.day = day;
     this.longitude = longitude;
     this.latitude = latitude;
-    this.weatherDataIcons = [];
+    this.weatherData = [];
+    this.setupOccured = false;
   }
   async setup() {
     const url = `http://api.weatherapi.com/v1/history.json?key=${
@@ -24,16 +32,18 @@ export class WeatherLib {
 
     const ret = await fetch(url);
     const body = await ret.json();
-    console.log(JSON.stringify(body))
-    console.log(
-      body.forecast.forecastday[0].hour.map((period: any) => {
-        return {
-          time: period.time,
-          condition: period.condition.text,
-          isDay: period.is_day,
-        };
-      })
-    );
+    this.weatherData = body.forecast.forecastday[0].hour.map((period: any) => {
+      return {
+        time: new Date(period.time),
+        condition: period.condition.text,
+        isDay: period.is_day === 1,
+      };
+    });
+    this.setupOccured = true;
+  }
+
+  isSetup() {
+    return this.setupOccured;
   }
 
   getSunlight(): SunlightIntensity {
