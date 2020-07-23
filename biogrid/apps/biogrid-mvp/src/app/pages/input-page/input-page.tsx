@@ -67,12 +67,12 @@ export const InputPage = () => {
     const params = {
       startDate,
       endDate,
-      smallBatteryCells: smallBatteryCells,
-      largeBatteryCells: largeBatteryCells,
-      numBuildings: numBuildings,
-      numSolarPanels: numSolarPanels,
-      townHeight: townHeight,
-      townWidth: townWidth,
+      smallBatteryCells,
+      largeBatteryCells,
+      numBuildings,
+      numSolarPanels,
+      townHeight,
+      townWidth,
     };
     history.push(`/simulate?${serialize(params)}`);
   };

@@ -13,7 +13,7 @@ export class BiogridController extends Controller {
   }
 
   @SuccessResponse(200)
-  @Post('/')
+  @Post('/simulate')
   public async SimulateNewBiogrid(@Body() body: NewBiogridOpts): Promise<BiogridSimulationResults> {
     return await simulateNewBiogrid(body);
   }
