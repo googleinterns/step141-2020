@@ -3,20 +3,38 @@ import { Distance, ItemPosition } from '@biogrid/grid-simulator';
 import { ReactComponent as SmallBatterySvg } from '../../assets/icons/battery-small.svg';
 import { ReactComponent as LargeBatterySvg } from '../../assets/icons/battery-large.svg';
 import { ReactComponent as HouseSvg } from '../../assets/icons/house.svg';
+import { ReactComponent as GridSvg } from '../../assets/icons/grid.svg';
 import { ReactComponent as SolarPanelSvg } from '../../assets/icons/solar-panel.svg';
 import './simulate-board.css';
 
-interface GridItemRet {
+export interface GridItemRet {
   gridItemName: string;
   relativePosition: ItemPosition;
+}
+
+export interface GridItemLines {
+  fromItem: string;
+  toItem: string;
 }
 
 interface SimBoardProps {
   height: Distance;
   width: Distance;
   items: GridItemRet[];
+  lines: GridItemLines[];
 }
 
+interface ItemsByName {
+  [name: string]: ItemPosition;
+}
+
+const Grid = () => {
+  return (
+    <div className="grid-item">
+      <GridSvg />
+    </div>
+  );
+};
 const LargeBattery = () => {
   return (
     <div className="grid-item">
@@ -47,14 +65,35 @@ const SolarPanel = () => {
 };
 
 export const SimulationBoard = (props: SimBoardProps) => {
+  const itemsByName: ItemsByName = props.items.reduce(
+    (map: ItemsByName, item) => {
+      map[item.gridItemName] = item.relativePosition;
+      return map;
+    },
+    {}
+  );
+  const kilometersToCSSWidth = (distance: Distance) => {
+    return `${Math.ceil((distance / props.width) * 100)}%`;
+  };
+  const kilometersToCSSHeight = (distance: Distance) => {
+    return `${Math.ceil((distance / props.height) * 100)}%`;
+  };
+  const boardWidth = '50vw';
+  const boardHeight = `${Math.ceil((props.height / props.width) * 50)}vw`;
   return (
-    <div className="simulation-board" style={{}}>
+    <div
+      className="simulation-board"
+      style={{
+        width: boardWidth,
+        height: boardHeight,
+      }}
+    >
       {props.items.map((item, i) => (
         <div
-          className="grid-item-wrapper"
+          className={`grid-item-wrapper ${item.gridItemName}`}
           style={{
-            top: item.relativePosition.y,
-            left: item.relativePosition.x,
+            top: kilometersToCSSHeight(item.relativePosition.y),
+            left: kilometersToCSSWidth(item.relativePosition.x),
           }}
         >
           {item.gridItemName.includes('small_battery') ? (
@@ -63,11 +102,26 @@ export const SimulationBoard = (props: SimBoardProps) => {
             <LargeBattery />
           ) : item.gridItemName.includes('solar_panel') ? (
             <SolarPanel />
+          ) : item.gridItemName.includes('grid') ? (
+            <Grid />
           ) : (
             <House />
           )}
         </div>
       ))}
+      <div className="grid-line-wrapper">
+        <svg width={boardWidth} height={boardHeight}>
+          {props.lines.map((line) => (
+            <line
+              x1={`${kilometersToCSSWidth(itemsByName[line.fromItem].x)}`}
+              y1={`${kilometersToCSSHeight(itemsByName[line.fromItem].y)}`}
+              x2={`${kilometersToCSSWidth(itemsByName[line.toItem].x)}`}
+              y2={`${kilometersToCSSHeight(itemsByName[line.toItem].y)}`}
+              stroke="blue"
+            />
+          ))}
+        </svg>
+      </div>
     </div>
   );
 };
