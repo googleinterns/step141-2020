@@ -40,13 +40,14 @@ function createRandomBuildingPosition(
 export async function simulateNewBiogrid(
   body: NewBiogridOpts
 ): Promise<BiogridSimulationResults> {
-  const buildings = new Array(body.numBuildings).map((v) => {
+  const buildings: Building[] = []
+  for (let i = 0; i < body.numBuildings; i++) {
     const randomPos = createRandomBuildingPosition(
       body.townWidth,
       body.townHeight
     );
-    return new Building(10, randomPos.x, randomPos.y);
-  });
+    buildings.push(new Building(10, randomPos.x, randomPos.y));
+  }
   const town = new RuralArea(buildings, body.townWidth, body.townHeight);
   const biogrid = new Biogrid(town, {
     numberOfLargeBatteryCells: body.largeBatteryCells,
