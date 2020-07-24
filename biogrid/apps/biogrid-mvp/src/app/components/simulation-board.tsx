@@ -1,8 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import './simulate-page.css';
-import { Client } from '../../client';
+import './simulate-board.css';
 import { BiogridSimulationResults } from '../../build';
 
 export const SimulatePage = () => {
@@ -26,7 +26,6 @@ export const SimulatePage = () => {
       townWidth: parseInt(params.townWidth as string),
     };
     const results = await client.api.simulateNewBiogrid({ body });
-    console.log(results)
     setSimulationResults(results);
   }
 
@@ -86,3 +85,4 @@ export const SimulatePage = () => {
 };
 
 export default SimulatePage;
+
