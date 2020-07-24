@@ -1,88 +1,75 @@
-
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import queryString from 'query-string';
+import React, { useState } from 'react';
+import { Distance, ItemPosition } from '@biogrid/grid-simulator';
+import { ReactComponent as SmallBatterySvg } from '../../assets/icons/battery-small.svg';
+import { ReactComponent as LargeBatterySvg } from '../../assets/icons/battery-large.svg';
+import { ReactComponent as HouseSvg } from '../../assets/icons/house.svg';
+import { ReactComponent as SolarPanelSvg } from '../../assets/icons/solar-panel.svg';
 import './simulate-board.css';
-import { BiogridSimulationResults } from '../../build';
 
-export const SimulatePage = () => {
-  const [simulationResults, setSimulationResults] = useState<
-    BiogridSimulationResults
-  >();
+interface GridItemRet {
+  gridItemName: string;
+  relativePosition: ItemPosition;
+}
 
-  const client = Client.getInstance();
+interface SimBoardProps {
+  height: Distance;
+  width: Distance;
+  items: GridItemRet[];
+}
 
-  async function getSimulationResults() {
-    const params = queryString.parse(window.location.hash.split('?')[1]);
-    console.log(window.location.hash.split('?')[1], params)
-    const body = {
-      startDate: new Date(params.startDate as string),
-      endDate: new Date(params.endDate as string),
-      smallBatteryCells: parseInt(params.smallBatteryCells as string),
-      largeBatteryCells: parseInt(params.largeBatteryCells as string),
-      numBuildings: parseInt(params.numBuildings as string),
-      numSolarPanels: parseInt(params.numSolarPanels as string),
-      townHeight: parseInt(params.townHeight as string),
-      townWidth: parseInt(params.townWidth as string),
-    };
-    const results = await client.api.simulateNewBiogrid({ body });
-    setSimulationResults(results);
-  }
-
-  const history = useHistory();
-
-  const redirectToHome = () => {
-    history.push('/');
-  }
-
-  useEffect(() => {
-    getSimulationResults();
-  }, []);
-
-
+const LargeBattery = () => {
   return (
-    <div className="simulation">
-      {simulationResults && (
-        <div className="results">
-          <table>
-            <tr>
-              <td>Time without energy</td>
-              <td>{simulationResults.timeWithoutEnoughEnergy}</td>
-            </tr>
-            <tr>
-              <td>Energy wasted from source</td>
-              <td>{simulationResults.energyWastedFromSource}</td>
-            </tr>
-            <tr>
-              <td>Energy wasted in transport</td>
-              <td>{simulationResults.energyWastedInTransportation}</td>
-            </tr>
-          </table>
-          {simulationResults.states.map((stateGraph) => (
-            <table className="state-graph">
-              {((stateGraph as any).nodes as any[]).map((node: any) => (
-                <tr className="gridItem">
-                  <td>{node.v}</td>
-                  <table className="grid-item-values">
-                    {Object.keys(node.value).map((key: string) => (
-                      <>
-                        <tr>
-                          <td>{key}</td>
-                          <td>{JSON.stringify(node.value[key])}</td>
-                        </tr>
-                      </>
-                    ))}
-                  </table>
-                </tr>
-              ))}
-            </table>
-          ))}
-        </div>
-      )}
-      <button onClick={redirectToHome} className="redirect">Change your Inputs!</button>
+    <div className="grid-item">
+      <LargeBatterySvg />
+    </div>
+  );
+};
+const SmallBattery = () => {
+  return (
+    <div className="grid-item">
+      <SmallBatterySvg />
+    </div>
+  );
+};
+const House = () => {
+  return (
+    <div className="grid-item">
+      <HouseSvg />
+    </div>
+  );
+};
+const SolarPanel = () => {
+  return (
+    <div className="grid-item">
+      <SolarPanelSvg />
     </div>
   );
 };
 
-export default SimulatePage;
+export const SimulationBoard = (props: SimBoardProps) => {
+  return (
+    <div className="simulation-board" style={{}}>
+      {props.items.map((item, i) => (
+        <div
+          className="grid-item-wrapper"
+          style={{
+            top: item.relativePosition.y,
+            left: item.relativePosition.x,
+          }}
+        >
+          {item.gridItemName.includes('small_battery') ? (
+            <SmallBattery />
+          ) : item.gridItemName.includes('large_battery') ? (
+            <LargeBattery />
+          ) : item.gridItemName.includes('solar_panel') ? (
+            <SolarPanel />
+          ) : (
+            <House />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
 
+export default SimulationBoard;

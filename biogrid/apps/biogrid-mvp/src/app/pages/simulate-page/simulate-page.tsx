@@ -4,6 +4,7 @@ import queryString from 'query-string';
 import './simulate-page.css';
 import { Client } from '../../client';
 import { BiogridSimulationResults } from '../../build';
+import SimulationBoard from '../../components/simulation-board';
 
 export const SimulatePage = () => {
   const [simulationResults, setSimulationResults] = useState<
@@ -45,6 +46,7 @@ export const SimulatePage = () => {
     <div className="simulation">
       {simulationResults && (
         <div className="results">
+          <SimulationBoard height={simulationResults.townSize.height} width={simulationResults.townSize.width} items ={(simulationResults.states[0] as any).nodes.map(node => node.value)} />
           <table>
             <tr>
               <td>Time without energy</td>

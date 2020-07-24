@@ -4,11 +4,15 @@ import {
   Building,
   BioBrain,
 } from '@biogrid/biogrid-simulator';
-import { ItemPosition } from '@biogrid/grid-simulator';
+import { ItemPosition, TownSize } from '@biogrid/grid-simulator';
 export interface BiogridSimulationResults {
   energyWastedFromSource?: number;
   energyWastedInTransportation?: number;
   timeWithoutEnoughEnergy?: number;
+  townSize: {
+    width: number,
+    height: number,
+  };
   states: any[];
 }
 
@@ -40,7 +44,7 @@ function createRandomBuildingPosition(
 export async function simulateNewBiogrid(
   body: NewBiogridOpts
 ): Promise<BiogridSimulationResults> {
-  const buildings: Building[] = []
+  const buildings: Building[] = [];
   for (let i = 0; i < body.numBuildings; i++) {
     const randomPos = createRandomBuildingPosition(
       body.townWidth,
@@ -55,7 +59,7 @@ export async function simulateNewBiogrid(
     numberOfSolarPanels: body.numSolarPanels,
   });
   const biobrain = BioBrain.Instance;
-  const initState = biogrid.getSystemState()
+  const initState = biogrid.getSystemState();
   const statesJson = [biogrid.getJsonGraphDetails()];
   const action = biobrain.computeAction(initState);
   biogrid.takeAction(action);
@@ -65,5 +69,6 @@ export async function simulateNewBiogrid(
     energyWastedInTransportation: 12,
     timeWithoutEnoughEnergy: 24,
     states: statesJson,
+    townSize: biogrid.getTownSize(),
   };
 }
