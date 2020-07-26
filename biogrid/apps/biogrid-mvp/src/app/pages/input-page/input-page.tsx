@@ -71,14 +71,11 @@ export const InputPage = () => {
       <img src={Visual} id="biogridVisual"></img>
       <p>This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 
         optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">biomimicry</a> to 
-        mimic the natural energy storage of the human body given a range of sunlight data, number of small and large 
-        battery cells, buildings, solar panels, and town size. In the <b>visual</b> above, the <b>large battery cells</b> are 
-        centered in the <b>middle of the town</b> so our grid can take energy from it in the event that
-        no energy is coming from our renewable sources. Outside of our large battery cells, we have <b>small 
-        battery cells</b> spread <b>throughout the town</b> so that our buildings can have an
-        immediate energy source when they have a spike in energy consumption.</p>
+        imitate the human body's glucose regulation procedures. </p>
 
-        <p> Click <a href="" onClick={redirectToInfo}>here</a> to learn more about how we constructed this project. </p>
+        <p>Hover over the inputs to learn how they're used in the simulation!</p>
+
+        <p>If you would like to learn more about how we designed this project click <a href="" onClick={redirectToInfo}>here</a>.</p>
           
         <div className="tooltipStartDate">
           <span className="tooltiptextStartDate">The date where we will start collecting sunlight data from</span>
