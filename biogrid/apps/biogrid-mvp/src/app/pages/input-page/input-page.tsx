@@ -74,6 +74,9 @@ export const InputPage = () => {
         immediate energy source when they have a spike in energy consumption.</p>
 
         <p> Click <a href="" onClick={redirectToInfo}>here</a> to learn more about how we constructed this project. </p>
+          
+        <div className="tooltipStartDate">
+          <span className="tooltiptextStartDate">The date where we will start collecting sunlight data from</span>
           <div className="startDatePicker">
             <label>Start Date</label>
             <DatePicker
@@ -82,6 +85,10 @@ export const InputPage = () => {
               onChange={(date: Date) => setStartDate(date)}
             />
           </div>
+        </div>
+
+        <div className="tooltipEndDate">
+          <span className="tooltiptextEndDate">The date where we will stop collecting sunlight data</span>
           <div className="endDatePicker">
             <label>End Date</label>
             <DatePicker
@@ -90,29 +97,52 @@ export const InputPage = () => {
               onChange={(date: Date) => setEndDate(date)}
             />
           </div>
-          <br></br>
+        </div>
+
+        <br></br>
+
+        <div className="tooltipSBC">
+          <span className="tooltiptextSBC">SBC's are used for quick sources of energy</span>
           <div className="smallBatteryCells">
             <label>Small Battery Cells</label>
             {smallBatteryCellInput}
           </div>
+        </div>
+
+        <div className="tooltipLBC">
+          <span className="tooltiptextLBC">LBC's are used as backup energy sources to our solar panels</span>
           <div className="largeBatteryCells">
             <label>Large Battery Cells</label>
             {largeBatteryCellInput}
           </div>
-          <br></br>
+        </div>
+
+        <br></br>
+
+        <div className="tooltipBuild">
+          <span className="tooltiptextBuild">Buildings are reperesented as energy consumers in our grid</span>
           <div className="buildings">
             <label>Buildings</label>
             {numBuildingsInput}
           </div>
+        </div>
+
+        <div className="tooltipSolar">
+          <span className="tooltiptextSolar">Solar Panels are the main energy source in our grid</span>
           <div className="solarPanels">
             <label>Solar Panels</label>
             {numSolarPanelsInput}
           </div>
+        </div>
+
           <br></br>
+
           <div className="townSize">
             <label>Town Size (Kilometers)</label>
             {townSizeInput}
           </div>
+
+
         <div className="submitButton">
           <input type="submit" className="submitButton" value="Run the Simulation!"/>
         </div>

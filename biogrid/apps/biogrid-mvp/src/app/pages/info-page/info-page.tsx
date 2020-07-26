@@ -12,7 +12,7 @@ export const InfoPage = () => {
       <img src={Visual} id="EnergyFlow"></img>
 
       <p>Firstly, the grid items (batteries(b), solar panels(s), and buildings(b)) will be randomly placed in the town. 
-      The grid items include the grid(g) itself as well. In case of small batteries, we will refer to them as s_b, and large batteries as l_b
+      The grid items include the grid(g) itself as well. In case of small batteries, we will refer to them as s_b, and large batteries as l_b.
       </p>
 
       <p>Then they will be connected with a directed graph, G which connects the grid items from the grid to these items except the solar panels i.e G(g, b), G(g, b). 

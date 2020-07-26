@@ -3,7 +3,7 @@
 }
 
 body {
-  background-color: #3b6d6d;
+  background-color: #0b5a5a;
 }
 
 br {
@@ -12,12 +12,17 @@ br {
 
 .buildings {
   display: inline-block;
-  margin-right: 1.25rem;
   margin-bottom: 1.25rem;
+  margin-left: 1.25rem;
+  margin-top: 1.25rem;
+  margin-right: 1.25rem;
 }
 
 .endDatePicker {
   display: inline-block;
+  margin-bottom: 1.25rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
   margin-top: 1.25rem;
 }
 
@@ -38,27 +43,165 @@ label {
 
 .largeBatteryCells {
   display: inline-block;
+  margin-bottom: 1.25rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  margin-top: 1.25rem;
 }
 
 .smallBatteryCells {
   display: inline-block;
-  margin-right: 1.25rem;
   margin-bottom: 1.25rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  margin-top: 1.25rem;
 }
 
 .solarPanels {
   display: inline-block;
+  margin-bottom: 1.25rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  margin-top: 1.25rem;
 }
 
 .startDatePicker {
   display: inline-block;
-  margin-top: 1.25rem;
-  margin-right: 1.25rem;
   margin-bottom: 1.25rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  margin-top: 1.25rem;
 }
 
 .submitButton {
   text-align: center;
+}
+
+.tooltipBuild {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipBuild .tooltiptextBuild {
+  visibility: hidden;
+  width: 450px;
+  background-color: rgb(22, 22, 22);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipBuild:hover .tooltiptextBuild {
+  visibility: visible;
+}
+
+
+.tooltipEndDate {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipEndDate .tooltiptextEndDate {
+  visibility: hidden;
+  width: 450px;
+  background-color: rgb(22, 22, 22);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipEndDate:hover .tooltiptextEndDate {
+  visibility: visible;
+}
+
+.tooltipLBC {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipLBC .tooltiptextLBC {
+  visibility: hidden;
+  width: 450px;
+  background-color: rgb(22, 22, 22);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipLBC:hover .tooltiptextLBC {
+  visibility: visible;
+}
+
+.tooltipSBC {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipSBC .tooltiptextSBC {
+  visibility: hidden;
+  width: 450px;
+  background-color: rgb(22, 22, 22);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipSBC:hover .tooltiptextSBC {
+  visibility: visible;
+}
+
+.tooltipSolar {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipSolar .tooltiptextSolar {
+  visibility: hidden;
+  width: 450px;
+  background-color: rgb(22, 22, 22);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipSolar:hover .tooltiptextSolar {
+  visibility: visible;
+}
+
+.tooltipStartDate {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipStartDate .tooltiptextStartDate {
+  visibility: hidden;
+  width: 450px;
+  background-color: rgb(22, 22, 22);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipStartDate:hover .tooltiptextStartDate {
+  visibility: visible;
 }
 
 .townSize {
