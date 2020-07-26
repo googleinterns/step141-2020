@@ -33,9 +33,13 @@ export const InputPage = () => {
   const [numSolarPanels, numSolarPanelsInput] = useInput({
     type: 'number',
   });
-  const [townSize, townSizeInput] = useInput({
+  const [townWidth, townWidthInput] = useInput({
     type: 'number',
   });
+  const [townHeight, townHeightInput] = useInput({
+    type: 'number',
+  });
+
   const history = useHistory();
 
   const redirectToInfo = (e: React.SyntheticEvent<EventTarget>) => {
@@ -52,7 +56,8 @@ export const InputPage = () => {
       largeBatteryCells,
       numBuildings,
       numSolarPanels,
-      townSize,
+      townWidth,
+      townHeight,
 
     };
     const client = Client.getInstance();
@@ -110,7 +115,7 @@ export const InputPage = () => {
         </div>
 
         <div className="tooltipLBC">
-          <span className="tooltiptextLBC">LBC's are used as backup energy sources to our solar panels</span>
+          <span className="tooltiptextLBC">LBC's are used as backup energy sources to the solar panels</span>
           <div className="largeBatteryCells">
             <label>Large Battery Cells</label>
             {largeBatteryCellInput}
@@ -120,7 +125,7 @@ export const InputPage = () => {
         <br></br>
 
         <div className="tooltipBuild">
-          <span className="tooltiptextBuild">Buildings are reperesented as energy consumers in our grid</span>
+          <span className="tooltiptextBuild">Buildings are reperesented as energy consumers in the grid</span>
           <div className="buildings">
             <label>Buildings</label>
             {numBuildingsInput}
@@ -128,19 +133,30 @@ export const InputPage = () => {
         </div>
 
         <div className="tooltipSolar">
-          <span className="tooltiptextSolar">Solar Panels are the main energy source in our grid</span>
+          <span className="tooltiptextSolar">Solar Panels are the main energy source in the grid</span>
           <div className="solarPanels">
             <label>Solar Panels</label>
             {numSolarPanelsInput}
           </div>
         </div>
 
-          <br></br>
+        <br></br>
 
-          <div className="townSize">
-            <label>Town Size (Kilometers)</label>
-            {townSizeInput}
+        <div className="tooltipWidth">
+          <span className="tooltiptextWidth">Used for even distribution of objects on the grid</span>
+          <div className="townWidth">
+            <label>Town Width (Kilometers)</label>
+            {townWidthInput}
           </div>
+        </div>
+
+        <div className="tooltipHeight">
+          <span className="tooltiptextHeight">Used for even distribution of objects on the grid</span>
+          <div className="townHeight">
+            <label>Town Height (Kilometers)</label>
+            {townHeightInput}
+          </div>
+        </div>
 
 
         <div className="submitButton">
