@@ -14,7 +14,7 @@ export const SMALL_BATTERY = {
 };
 
 /**
- * The values are for large batteries which store a maximum of 950 kWh 
+ * The values are for large batteries which store a maximum of 950 kWh
  * which is approximately equal the amount of power for a building in a month
  * @see https://www.altenergymag.com/article/2018/03/california-pilots-a-new-approach-to-balancing-with-li-ion-energy-storage/28204/
  * New large batteries have a capacity smaller than the maximum implemented as default start energy
@@ -55,7 +55,7 @@ export const enum GRID_ITEM_NAMES {
  * Buildings use majorly awg wire 13
  * @see https://homeguides.sfgate.com/estimate-amount-wire-needed-rewire-average-home-105819.html
  * Average house requires 7.25 rolls of a 50ft-roll
- * Batteries have inter resistance of about 0.7 - 1.2 Ω. In here, we are considering the average of these values 
+ * Batteries have inter resistance of about 0.7 - 1.2 Ω. In here, we are considering the average of these values
  * @see http://newport.eecs.uci.edu/~chou/pdf/chou-islped04-loadmatch.pdf
  * For small batteries we are considering the @insert value // TODO insert value
  * Solar panels have an average resistance of 3.617

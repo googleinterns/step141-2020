@@ -63,12 +63,6 @@ export const SimulatePage = () => {
     <div className="simulation">
       {simulationResults && (
         <div className="results">
-          <SimulationBoard
-            height={simulationResults.townSize.height}
-            width={simulationResults.townSize.width}
-            items={stateToGridItemRet(simulationResults.states[0])}
-            lines={stateToGridItemLines(simulationResults.states[0])}
-          />
           <table>
             <tr>
               <td>Time without energy</td>
@@ -83,6 +77,14 @@ export const SimulatePage = () => {
               <td>{simulationResults.energyWastedInTransportation}</td>
             </tr>
           </table>
+          <SimulationBoard
+            grid_height_km={simulationResults.townSize.height}
+            grid_width_km={simulationResults.townSize.width}
+            // TODO add changing indices to show the progression of time for each subsequent state
+            // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
+            items={stateToGridItemRet(simulationResults.states[0])}
+            lines={stateToGridItemLines(simulationResults.states[0])}
+          />
           {simulationResults.states.map((stateGraph) => (
             <table className="state-graph">
               {((stateGraph as any).nodes as any[]).map((node: any) => (
