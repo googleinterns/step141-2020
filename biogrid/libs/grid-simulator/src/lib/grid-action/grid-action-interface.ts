@@ -7,6 +7,8 @@ export interface SupplyingPath {
   [string: string]: string;
 }
 
+
 export interface GridAction {
   getSupplyingPaths: () => SupplyingPath;
+  getEfficiency: () => number;
 }

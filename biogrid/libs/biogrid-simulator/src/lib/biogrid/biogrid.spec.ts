@@ -99,7 +99,6 @@ describe('classes', () => {
     // Check to make sure that the houses have been refiled
     const building2 = gridTakeAction.getGridItem(name2) as Building;
     const building4 = gridTakeAction.getGridItem(name4) as Building;
-    
     const actual = [building2.getEnergyInJoules(), building4.getEnergyInJoules()]
     expect(actual).toEqual(expected);
   });

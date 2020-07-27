@@ -40,6 +40,9 @@ export class Biogrid implements Grid {
   // All details for the source of energy
   private solarPanels: EnergySource[];
 
+  // Holds the efficiency of the grid
+  private efficiency: number;
+
 
   constructor(town: Town, opts: BiogridOptions) {
 
@@ -65,7 +68,8 @@ export class Biogrid implements Grid {
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
 
     this.state = new BiogridState(this.createGridItems());
-
+    // Set the effieciency to 0 at the beginning
+    this.efficiency = 0;
   }
 
   private createGridItems(): GridItem[] {
@@ -79,6 +83,10 @@ export class Biogrid implements Grid {
 
   getSystemState() {
     return this.state;
+  }
+
+  getEfficiency() {
+    return this.efficiency;
   }
 
   getJsonGraphDetails() {
@@ -117,11 +125,12 @@ export class Biogrid implements Grid {
    * @returns a the current state with a new graph which includes the changes that were suggested by the brain
    */
   takeAction(action: GridAction) {
+    // Set new efficiency
+    this.efficiency = action.getEfficiency();
     // RETURN a new BiogridState
-    const allSupplyingPaths = action.getSupplyingPaths()
+    const allSupplyingPaths = action.getSupplyingPaths();
 
     const clonedGraph = this.state.cloneStateGraph();
-
     for (const supplyPath in allSupplyingPaths) {
       const oldGridItem = this.state.getGridItem(supplyPath);
       const supplyingGridItem = this.state.getGridItem(allSupplyingPaths[supplyPath]);
