@@ -3,6 +3,7 @@ import { RuralArea } from '../community';
 import { Building } from '../building';
 import { GRID_ITEM_NAMES, BUILDING } from '../config';
 import { BioBrain } from '../biobrain';
+import { ItemPosition } from '@biogrid/grid-simulator';
 
 let grid: Biogrid;
 let brain: BioBrain;
@@ -69,18 +70,18 @@ describe('classes', () => {
     expect(positions.length).toEqual(2 + 6 + 4 + 1);
     expect(positions).toEqual([
       { x: 0, y: 0 },
-      { x: 5, y: 0.8333333333333333 },
+      { x: 5, y: 0.5 },
       { x: 5, y: 2.5 },
-      { x: 5, y: 4.166666666666667 },
-      { x: 5, y: 5.833333333333334 },
+      { x: 5, y: 4 },
+      { x: 5, y: 5.5 },
       { x: 5, y: 7.5 },
-      { x: 5, y: 9.166666666666666 },
-      { x: 5, y: 2.5 },
-      { x: 5, y: 7.5 },
-      { x: 5, y: 1.25 },
-      { x: 5, y: 3.75 },
-      { x: 5, y: 6.25 },
-      { x: 5, y: 8.75 },
+      { x: 5, y: 9 },
+      { x: 5.5, y: 2.5 },
+      { x: 5.5, y: 7.5 },
+      { x: 5, y: 1 },
+      { x: 5, y: 3.5 },
+      { x: 5, y: 6 },
+      { x: 5, y: 8.5 },
     ]);
   });
 
@@ -92,15 +93,49 @@ describe('classes', () => {
     // There are two non full buildings, and the battery has to be refilled however
     // the components are placed on the grid randomly thus we cannot guarantee the battery is refilled
     // Energy may come from the solar panels but two buildings must be refiled
-    expect(Object.keys(action.getSupplyingPaths()).length).toBeGreaterThanOrEqual(2);
+    expect(
+      Object.keys(action.getSupplyingPaths()).length
+    ).toBeGreaterThanOrEqual(2);
 
     const gridTakeAction = grid.takeAction(action);
     // Make sure that the old grid and new grid are different after dispersion of emergy
     // Check to make sure that the houses have been refiled
     const building2 = gridTakeAction.getGridItem(name2) as Building;
     const building4 = gridTakeAction.getGridItem(name4) as Building;
-    
-    const actual = [building2.getEnergyInJoules(), building4.getEnergyInJoules()]
+
+    const actual = [
+      building2.getEnergyInJoules(),
+      building4.getEnergyInJoules(),
+    ];
     expect(actual).toEqual(expected);
+  });
+
+  test('new Biogrid does not overlap items', () => {
+    const grid = new Biogrid(
+      new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+      {
+        numberOfLargeBatteryCells: 2,
+        numberOfSmallBatteryCells: 6,
+        numberOfSolarPanels: 4,
+      }
+    );
+    function posToString(pos: ItemPosition) {
+      return `${pos.x}, ${pos.y}`;
+    }
+    const positions = grid.getSystemState().getAllPositions().map(posToString);
+    const distinctPositions = positions.filter(
+      (pos, ind) => positions.indexOf(pos) === ind
+    );
+    expect(distinctPositions.length).toEqual(positions.length);
+  });
+  test('new Biogrid throws error when it cannot fit all items into the grid', () => {
+    expect(() => new Biogrid(
+      new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+      {
+        numberOfLargeBatteryCells: 200,
+        numberOfSmallBatteryCells: 600,
+        numberOfSolarPanels: 4,
+      }
+    )).toThrow('There are too many items on the grid. New items could not be placed with a minimum distance of 0.5 km apart');
   });
 });
