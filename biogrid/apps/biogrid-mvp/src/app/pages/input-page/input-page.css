@@ -36,6 +36,14 @@ br {
   width: 56.25rem;
 }
 
+#intro {
+  background: #adadad;
+  border: 5px solid black;
+  border-radius: 5px;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+}
+
 label {
   display: block;
   text-align: left;
