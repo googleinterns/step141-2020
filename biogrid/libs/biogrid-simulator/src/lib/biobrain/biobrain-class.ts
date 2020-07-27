@@ -1,6 +1,28 @@
-import { Brain, GridAction, StateGraph, SupplyingPath, GridItem } from '@biogrid/grid-simulator';
-import { BiogridAction, Building, BioBattery } from '@biogrid/biogrid-simulator';
-import { GRID_ITEM_NAMES, RecievingAgents, SupplyingAgents, ShortestDistances } from '../config';
+import {
+  Brain,
+  GridAction,
+  StateGraph,
+  SupplyingPath,
+  GridItem,
+  Power,
+  Resistance
+} from '@biogrid/grid-simulator';
+import {
+  BiogridAction,
+  Building,
+  BioBattery
+} from '@biogrid/biogrid-simulator';
+import {
+  GRID_ITEM_NAMES,
+  RecievingAgents,
+  SupplyingAgents,
+  ShortestDistances,
+  calculateResistance,
+  calculatePowerWithCurrent,
+  calculateCurrent,
+  calculateVoltageFromPower,
+  calculateEfficiency
+} from '../config';
 import { Path, Graph } from 'graphlib';
 import { SolarPanel } from '../bioenergy-source';
 
@@ -254,5 +276,61 @@ export class BioBrain implements Brain {
         supplyingAgents[indexOfProvider].gridItemName;
     }
     return supplyToSupplyFromAgents;
+  }
+
+  /**
+   * This function is used to determine the resistance of the wires used for transporting power from one end to another
+   * @param length is the distance travelled by the power from supplier to receiver
+   */
+  private determineResistanceInWires(length: number) {
+    return calculateResistance(length);
+  }
+
+  private determineGridItemsInShortestPath(
+    start: string,
+    dest: string,
+    shortestDistances: ShortestDistances
+  ): string[] {
+    // Keeps track of the gridItems through which the power is going to pass
+    let gridItemsInShortestPath = [dest];
+    // Keeps track of the parent / predecessor of a vertex in the shortest distance path
+    let parent = shortestDistances[start][dest].predecessor;
+    while (parent !== start) {
+      gridItemsInShortestPath.push(parent);
+      parent = shortestDistances[start][parent].predecessor;
+    }
+    gridItemsInShortestPath.push(start);
+    return gridItemsInShortestPath;
+  }
+
+  private determineResistanceInShortestPath(
+    start: string,
+    dest: string,
+    shortestDistances: ShortestDistances
+  ) {
+    const gridItemsInShortestPath 
+      = this.determineGridItemsInShortestPath(start, dest, shortestDistances);
+    let gridItemResistance = 0;
+    for (const gridItemName of gridItemsInShortestPath) {
+      const gridItem: GridItem = this.clonedGraph.node(gridItemName);
+      gridItemResistance += gridItem.gridItemResistance;
+    }
+    return gridItemResistance;
+  }
+
+  private calculateVoltageToBeReceived(power: Power, resistance: Resistance) {
+    return calculateVoltageFromPower(power, resistance);
+  }
+
+  private calculateCurrentToBeInCircuit(voltage: number, loadResistance: number, wireResistance: number) {
+    return calculateCurrent(voltage, loadResistance, wireResistance);
+  }
+
+  private calculatePowerToBeSupplied(current: number, resistance: number) {
+    return calculatePowerWithCurrent(current, resistance);
+  }
+
+  private calculateSystemEfficiency(input: Power, output: Power) {
+    return calculateEfficiency(input, output);
   }
 }
