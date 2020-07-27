@@ -20,6 +20,11 @@ export type Power = number;
 export type SunlightIntensity = number;
 
 /**
+ * A fraction of cloud coverage, from 0 to 1
+ */
+export type CloudCoverage = number;
+
+/**
  * Position from the top left corner of a town
  */
 export interface ItemPosition {

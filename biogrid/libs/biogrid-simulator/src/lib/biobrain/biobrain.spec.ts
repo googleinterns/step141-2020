@@ -28,8 +28,8 @@ beforeAll(() => {
 });
 
 describe('BioBrain class', () => {
-  test('computeAction sends the required action in form of {receiverName: supplierName}', () => {
-    const action = actualBrain.computeAction(grid.getSystemState());
+  test('computeAction sends the required action in form of {receiverName: supplierName}', async () => {
+    const action = await actualBrain.computeAction(grid.getSystemState());
     const expectedPath = {
       [name2] : `${GRID_ITEM_NAMES.LARGE_BATTERY}-0`
     };
