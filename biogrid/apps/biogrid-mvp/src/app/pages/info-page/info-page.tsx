@@ -26,17 +26,6 @@ export const InfoPage = () => {
       or zero if there is not enough for it.
       </p>
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     </div>
     );
 };
