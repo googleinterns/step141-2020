@@ -58,12 +58,10 @@ export class Biogrid implements Grid {
       town.getTownSize(),
       opts.numberOfSmallBatteryCells
     );
-    this.allPositions.push(...smallBatteryPositions);
     const largeBatteryPositions = this.createGridItemPositions(
       town.getTownSize(),
       opts.numberOfLargeBatteryCells
     );
-    this.allPositions.push(...largeBatteryPositions);
 
     this.smallBatteries = this.createBatteries(
       smallBatteryPositions,
@@ -83,7 +81,6 @@ export class Biogrid implements Grid {
       town.getTownSize(),
       opts.numberOfSolarPanels
     );
-    this.allPositions.push(...solarPanelPositions);
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
 
     this.state = new BiogridState(this.createGridItems());
@@ -96,6 +93,10 @@ export class Biogrid implements Grid {
       ...this.town.getEnergyUsers(),
       ...this.solarPanels,
     ];
+  }
+
+  getTownSize() {
+    return this.town.getTownSize();
   }
 
   getSystemState() {
@@ -285,13 +286,17 @@ export class Biogrid implements Grid {
     let radius = GRID_DISTANCES.INCREMENTS_KM;
     let angle = 0;
     let outOfBoundsCount = 0;
+    let xOffset = 0,
+      yOffset = 0;
     let newPos = { x: pos.x + xOffset, y: pos.y + yOffset };
-    while (this.positionOccupied(newPos) && outOfBoundsCount < 4) {
-      if (newPos.x > townSize.width || newPos.y > townSize.height) {
+    while (
+      (this.positionOutOfBounds(newPos, townSize) ||
+        this.positionOccupied(newPos)) &&
+      outOfBoundsCount < 4
+    ) {
+      if (this.positionOutOfBounds(newPos, townSize)) {
         outOfBoundsCount++;
       }
-      let xOffset = 0,
-        yOffset = 0;
       switch (angle) {
         case 0:
           yOffset = 0;
@@ -325,6 +330,10 @@ export class Biogrid implements Grid {
       );
     }
     return newPos;
+  }
+
+  private positionOutOfBounds(pos: ItemPosition, townSize: TownSize): boolean {
+    return pos.x > townSize.width || pos.y > townSize.height;
   }
 
   private roundToGridDistance(distance: Distance): Distance {
