@@ -146,7 +146,8 @@ export class BioBrain implements Brain {
   /**
    * This method is used for charging individual largeBatteries which might not have enough energy
    * It calls the @method determineSupplyingPath which calculates which supplier can give these large batteries power
-   * @returns @interface resultingSupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+   * @returns @interface resultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
+   * the one which can supplying, powerInput, and powerOutput
    */
   private chargeLargebatteries(
     shortestDistances: {[source: string]: { [node: string]: Path}}
@@ -169,7 +170,8 @@ export class BioBrain implements Brain {
   /**
    * This method is used for charging individual smallBatteries which might not have energy energy
    * It calls the @method determineSupplyingPath which calculates which supplier can give these small batteries power
-   * @returns @interface resultingSupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+   * @returns @interface resultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
+   * the one which can supplying, powerInput, and powerOutput
    */
   private chargeSmallBatteries(
     shortestDistances: {[source: string]: { [node: string]: Path}}
@@ -200,7 +202,8 @@ export class BioBrain implements Brain {
   /**
    * This method is used for charging the individual buildings which might not have energy energy
    * It calls the @method determineSupplyingPath which calculates which supplier can give these buildings power
-   * @returns @interface resultingSupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+   * @returns @interface resultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
+   * the one which can supplying, powerInput, and powerOutput
    */
   private chargeBuildings(
     shortestDistances: {[source: string]: { [node: string]: Path}}
@@ -243,7 +246,8 @@ export class BioBrain implements Brain {
    * @param supplyingAgents holds a list of grid items (@class BioBattery or @class SolarPanel)
    * which can supply energy to @param recievingAgents
    * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
-   * @returns @interface resultingSupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+   * @returns @interface resultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
+   * the one which can supplying, powerInput, and powerOutput
    */
   private determineSupplyingPath(
     recievingAgents: RecievingAgents,
@@ -341,6 +345,13 @@ export class BioBrain implements Brain {
     return calculateResistance(length);
   }
 
+  /**
+   * This method determmines which grid item is in the shortest path.
+   * @param start is the starting gridItem name in the shortestPath
+   * @param dest is gridItem name for the destination in the shortestPath
+   * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
+   * @returns a list of the names for the gridItems in the shortestPath
+   */
   private determineGridItemsInShortestPath(
     start: string,
     dest: string,
@@ -359,6 +370,13 @@ export class BioBrain implements Brain {
     return gridItemsInShortestPath;
   }
 
+/**
+ * This method determmines the resistance of the gridItems in the shortest path.
+ * @param start is the starting gridItem name in the shortestPath
+ * @param dest is gridItem name for the destination in the shortestPath
+ * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
+ * @returns the total resistance of the gridItems in the shortest path excluding the wires (shortest distance itself)
+ */
   private determineResistanceInShortestPath(
     start: string,
     dest: string,
@@ -374,18 +392,42 @@ export class BioBrain implements Brain {
     return gridItemResistance;
   }
 
+  /**
+   * This method calculates the voltage to be received
+   * @param power is the power which is to be received by the receiving gridItem
+   * @param resistance is the the resistance of the receiving gridItem
+   * @returns the voltage for a particular griditem whose @param power and @param resistance are given
+   */
   private calculateVoltageToBeReceived(power: Power, resistance: Resistance) {
     return calculateVoltageFromPower(power, resistance);
   }
 
+  /**
+   * This method calculates the current in a circuit. Since this is a series circuit, the current is constant
+   * @param voltage is the voltage at a particular gridItem
+   * @param loadResistance is the resistance for the grid items in the shortest path
+   * @param wireResistance is the resistance of the wires whose length is the shortest path
+   * @return the current in the circuit starting beginning of shortest path to its end
+   */
   private calculateCurrentToBeInCircuit(voltage: number, loadResistance: number, wireResistance: number) {
     return calculateCurrent(voltage, loadResistance, wireResistance);
   }
 
+  /**
+   * 
+   * @param current is the current in the grid
+   * @param resistance is the total resistance in the grid
+   * @returns the power to be supplied given the resistances in the grid
+   */
   private calculatePowerToBeSupplied(current: number, resistance: number) {
     return calculatePowerWithCurrent(current, resistance);
   }
 
+  /**
+   * @param input is the input Power at the beginning of the circuit
+   * @param output is the output power at the end of the the circuit
+   * @returns the efficiency of the system which is in percentages
+   */
   private calculateSystemEfficiency(input: Power, output: Power) {
     return calculateEfficiency(input, output);
   }
