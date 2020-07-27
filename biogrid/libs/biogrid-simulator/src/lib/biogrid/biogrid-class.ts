@@ -289,6 +289,8 @@ export class Biogrid implements Grid {
     let xOffset = 0,
       yOffset = 0;
     let newPos = { x: pos.x + xOffset, y: pos.y + yOffset };
+    // If {@code outOfBoundsCount} is greater than 3, then that means the upwards, left, right, and down
+    // Are all out of bounds. Thus there is no where left to place the item
     while (
       (this.positionOutOfBounds(newPos, townSize) ||
         this.positionOccupied(newPos)) &&
