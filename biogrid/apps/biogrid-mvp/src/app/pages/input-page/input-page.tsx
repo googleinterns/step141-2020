@@ -101,7 +101,7 @@ export const InputPage = () => {
           </div>
         </div>
 
-        <br></br>
+        <br/>
 
         <div className="tooltipSBC">
           <span className="tooltiptextSBC">SBC's are used for quick sources of energy</span>
@@ -119,7 +119,7 @@ export const InputPage = () => {
           </div>
         </div>
 
-        <br></br>
+        <br/>
 
         <div className="tooltipBuild">
           <span className="tooltiptextBuild">Buildings are reperesented as energy consumers in the grid</span>
@@ -137,7 +137,7 @@ export const InputPage = () => {
           </div>
         </div>
 
-        <br></br>
+        <br/>
 
         <div className="tooltipWidth">
           <span className="tooltiptextWidth">Used for even distribution of objects on the grid</span>
