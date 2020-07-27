@@ -43,7 +43,6 @@ export class Biogrid implements Grid {
   // Holds the efficiency of the grid
   private efficiency: number;
 
-
   constructor(town: Town, opts: BiogridOptions) {
 
     // Batteries
