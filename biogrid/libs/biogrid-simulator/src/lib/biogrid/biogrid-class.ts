@@ -7,14 +7,22 @@ import {
   ItemPosition,
   Energy,
   Battery,
-  GridItem
+  GridItem,
+  Distance,
 } from '@biogrid/grid-simulator';
-import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
-import { 
-  BioBattery, 
+import {
+  LARGE_BATTERY,
+  SMALL_BATTERY,
+  SOLAR_PANEL,
+  GRID_ITEM_NAMES,
+  RESISTANCE,
+  GRID_DISTANCES,
+} from '../config';
+import {
+  BioBattery,
   BiogridState,
   Building,
-  SolarPanel
+  SolarPanel,
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
 
@@ -34,18 +42,28 @@ export class Biogrid implements Grid {
   // The large batteries in the grid, will approximately have a maxCapacity of 540,000KJ
   private largeBatteries: Battery[];
 
+  // A dictionary with the position as its key
+  // Used to keep track of whether an item is already placed in a position
+  private itemInPosition: { [positionString: string]: boolean } = {};
+
   // All details for the houses / energyUsers in the grid
   private town: Town;
 
   // All details for the source of energy
   private solarPanels: EnergySource[];
 
-
   constructor(town: Town, opts: BiogridOptions) {
-
     // Batteries
-    const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
-    const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
+    const smallBatteryPositions = this.createGridItemPositions(
+      town.getTownSize(),
+      opts.numberOfSmallBatteryCells
+    );
+    this.allPositions.push(...smallBatteryPositions);
+    const largeBatteryPositions = this.createGridItemPositions(
+      town.getTownSize(),
+      opts.numberOfLargeBatteryCells
+    );
+    this.allPositions.push(...largeBatteryPositions);
 
     this.smallBatteries = this.createBatteries(
       smallBatteryPositions,
@@ -61,11 +79,14 @@ export class Biogrid implements Grid {
 
     // Enery Source
     // TODO implement the solar panels
-    const solarPanelPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSolarPanels);
+    const solarPanelPositions = this.createGridItemPositions(
+      town.getTownSize(),
+      opts.numberOfSolarPanels
+    );
+    this.allPositions.push(...solarPanelPositions);
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
 
     this.state = new BiogridState(this.createGridItems());
-
   }
 
   private createGridItems(): GridItem[] {
@@ -74,7 +95,7 @@ export class Biogrid implements Grid {
       ...this.largeBatteries,
       ...this.town.getEnergyUsers(),
       ...this.solarPanels,
-    ]
+    ];
   }
 
   getSystemState() {
@@ -85,18 +106,32 @@ export class Biogrid implements Grid {
     return this.state.getJsonGraph();
   }
 
-  private createBatteries(positions: ItemPosition[], gridItemName: string): Battery[] {
-    const batteryResistance = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-      ? RESISTANCE.LARGE_BATTERY
-      : RESISTANCE.SMALL_BATTERY;
-    const maxCapacity = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-      ? LARGE_BATTERY.MAX_CAPACITY
-      : SMALL_BATTERY.MAX_CAPACITY;
-    const initEnergy = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-      ? LARGE_BATTERY.DEFAULT_START_ENERGY
-      : SMALL_BATTERY.DEFAULT_START_ENERGY;
+  private createBatteries(
+    positions: ItemPosition[],
+    gridItemName: string
+  ): Battery[] {
+    const batteryResistance =
+      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+        ? RESISTANCE.LARGE_BATTERY
+        : RESISTANCE.SMALL_BATTERY;
+    const maxCapacity =
+      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+        ? LARGE_BATTERY.MAX_CAPACITY
+        : SMALL_BATTERY.MAX_CAPACITY;
+    const initEnergy =
+      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+        ? LARGE_BATTERY.DEFAULT_START_ENERGY
+        : SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
-      (position, index) => new BioBattery(position.x, position.y, `${gridItemName}-${index}`, batteryResistance, initEnergy, maxCapacity)
+      (position, index) =>
+        new BioBattery(
+          position.x,
+          position.y,
+          `${gridItemName}-${index}`,
+          batteryResistance,
+          initEnergy,
+          maxCapacity
+        )
     );
   }
 
@@ -107,7 +142,13 @@ export class Biogrid implements Grid {
   // TODO pass a list of equal length to hold the area for the solar panels
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
     return positions.map(
-      (position, index) => new SolarPanel(position.x, position.y, SOLAR_PANEL.AREA, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`)
+      (position, index) =>
+        new SolarPanel(
+          position.x,
+          position.y,
+          SOLAR_PANEL.AREA,
+          `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
+        )
     );
   }
   /**
@@ -118,19 +159,25 @@ export class Biogrid implements Grid {
    */
   takeAction(action: GridAction) {
     // RETURN a new BiogridState
-    const allSupplyingPaths = action.getSupplyingPaths()
+    const allSupplyingPaths = action.getSupplyingPaths();
 
     const clonedGraph = this.state.cloneStateGraph();
 
     for (const supplyPath in allSupplyingPaths) {
       const oldGridItem = this.state.getGridItem(supplyPath);
-      const supplyingGridItem = this.state.getGridItem(allSupplyingPaths[supplyPath]);
+      const supplyingGridItem = this.state.getGridItem(
+        allSupplyingPaths[supplyPath]
+      );
       const typeOldGridItem = this.getGridItemType(oldGridItem);
       if (typeOldGridItem === GRID_ITEM_NAMES.ENERGY_USER) {
         const energyUser = oldGridItem as Building;
-        const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
+        const energyUserReq =
+          energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
-        if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY || typeSupplyingGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
+        if (
+          typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY ||
+          typeSupplyingGridItem === GRID_ITEM_NAMES.SMALL_BATTERY
+        ) {
           const battery = supplyingGridItem as BioBattery;
           battery.supplyPower(energyUserReq);
           clonedGraph.setNode(battery.gridItemName, battery);
@@ -145,7 +192,8 @@ export class Biogrid implements Grid {
         clonedGraph.setNode(energyUser.gridItemName, energyUser);
       } else if (typeOldGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
         const energyUser = oldGridItem as BioBattery;
-        const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
+        const energyUserReq =
+          energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
           const battery = supplyingGridItem as BioBattery;
@@ -205,11 +253,95 @@ export class Biogrid implements Grid {
     const rows = Math.ceil(numberOfGridItems / cols);
     const positions: ItemPosition[] = [];
     for (let i = 0; i < numberOfGridItems; i++) {
-      positions.push({
-        x: (((i % cols) + 0.5) / cols) * townSize.width,
-        y: ((Math.floor(i / cols) + 0.5) / rows) * townSize.height,
-      });
+      const newPositionUnverified = {
+        x: this.roundToGridDistance(
+          (((i % cols) + 0.5) / cols) * townSize.width
+        ),
+        y: this.roundToGridDistance(
+          ((Math.floor(i / cols) + 0.5) / rows) * townSize.height
+        ),
+      };
+      const newPosition = this.findNearestUnoccupiedPosition(
+        newPositionUnverified,
+        townSize
+      );
+      positions.push(newPosition);
+      this.itemInPosition[this.formatItemPosition(newPosition)] = true;
     }
     return positions;
+  }
+
+  /**
+   * Find the nearest unoccupied position to {@code pos} by looking looking in a spiral with pos at its center
+   * First the space immediatly right of pos is checked, then the one above, then to the left, then below, then two right spaces out, two right up, etc
+   */
+  private findNearestUnoccupiedPosition(
+    pos: ItemPosition,
+    townSize: TownSize
+  ): ItemPosition {
+    if (!this.positionOccupied(pos)) {
+      return pos;
+    }
+    let radius = GRID_DISTANCES.INCREMENTS_KM;
+    let angle = 0;
+    let outOfBoundsCount = 0;
+    let newPos = { x: pos.x + xOffset, y: pos.y + yOffset };
+    while (this.positionOccupied(newPos) && outOfBoundsCount < 4) {
+      if (newPos.x > townSize.width || newPos.y > townSize.height) {
+        outOfBoundsCount++;
+      }
+      let xOffset = 0,
+        yOffset = 0;
+      switch (angle) {
+        case 0:
+          yOffset = 0;
+          xOffset = radius;
+          break;
+        case 90:
+          xOffset = 0;
+          yOffset = radius;
+          break;
+        case 180:
+          xOffset = -1 * radius;
+          yOffset = 0;
+          break;
+        case 270:
+          xOffset = 0;
+          yOffset = -1 * radius;
+          break;
+      }
+      newPos = { x: pos.x + xOffset, y: pos.y + yOffset };
+      // Increment the angle by 90 degrees
+      angle = angle + 90;
+      if (angle === 360) {
+        radius += GRID_DISTANCES.INCREMENTS_KM;
+        // Reset the angle
+        angle = 0;
+      }
+    }
+    if (outOfBoundsCount >= 4) {
+      throw new Error(
+        `There are too many items on the grid. New items could not be placed with a minimum distance of ${GRID_DISTANCES.INCREMENTS_KM} km apart`
+      );
+    }
+    return newPos;
+  }
+
+  private roundToGridDistance(distance: Distance): Distance {
+    return (
+      Math.floor(distance / GRID_DISTANCES.INCREMENTS_KM) *
+      GRID_DISTANCES.INCREMENTS_KM
+    );
+  }
+
+  private positionOccupied(pos: ItemPosition): boolean {
+    return this.itemInPosition[this.formatItemPosition(pos)];
+  }
+
+  /**
+   * Convert an item into a string
+   */
+  private formatItemPosition(pos: ItemPosition): string {
+    return `${pos.x}, ${pos.y}`;
   }
 }

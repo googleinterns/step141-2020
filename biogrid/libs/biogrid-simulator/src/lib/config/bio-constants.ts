@@ -14,7 +14,7 @@ export const SMALL_BATTERY = {
 };
 
 /**
- * The values are for large batteries which store a maximum of 950 kWh 
+ * The values are for large batteries which store a maximum of 950 kWh
  * which is approximately equal the amount of power for a building in a month
  * @see https://www.altenergymag.com/article/2018/03/california-pilots-a-new-approach-to-balancing-with-li-ion-energy-storage/28204/
  * New large batteries have a capacity smaller than the maximum implemented as default start energy
@@ -34,7 +34,7 @@ export const SOLAR_PANEL = {
   AREA: 10,
   DEFAULT_INITIAL_ENERGY: 250,
   KILOLUX_TO_KILOWATT_PER_SQUARE_METER: 0.0079,
-  MIN_CAPACITY: 240
+  MIN_CAPACITY: 240,
 };
 
 export const enum GRID_ITEM_NAMES {
@@ -43,6 +43,12 @@ export const enum GRID_ITEM_NAMES {
   LARGE_BATTERY = 'large_battery',
   SMALL_BATTERY = 'small_battery',
   SOLAR_PANEL = 'solar_panel',
+}
+
+export const GRID_DISTANCES = {
+  // The discrete unit of distance for laying items apart, both vertically and horizontally
+  // So, every item is 0.2, 0.4, or 0.6, etc... km apart on the x and y plane
+  INCREMENTS_KM: 0.2,
 };
 
 /**
@@ -55,7 +61,7 @@ export const enum GRID_ITEM_NAMES {
  * Buildings use majorly awg wire 13
  * @see https://homeguides.sfgate.com/estimate-amount-wire-needed-rewire-average-home-105819.html
  * Average house requires 7.25 rolls of a 50ft-roll
- * Batteries have inter resistance of about 0.7 - 1.2 Ω. In here, we are considering the average of these values 
+ * Batteries have inter resistance of about 0.7 - 1.2 Ω. In here, we are considering the average of these values
  * @see http://newport.eecs.uci.edu/~chou/pdf/chou-islped04-loadmatch.pdf
  * For small batteries we are considering the @insert value // TODO insert value
  * Solar panels have an average resistance of 3.617
@@ -68,12 +74,12 @@ export const RESISTANCE = {
   // Average resistance
   LARGE_BATTERY: 0.95,
   // Represents the resistances of awg wire 16
-  RESISTANCE_16: 13.17,  // Measured in ohm/km
+  RESISTANCE_16: 13.17, // Measured in ohm/km
   // TODO insert the correct resistance for the small batteries used
   SMALL_BATTERY: 0.4,
   // TODO insert the correct resistance for the solar panels used
-  SOLAR_PANEL: 3.617
-}
+  SOLAR_PANEL: 3.617,
+};
 
 /**
  * A building uses approximately 1000 KWh (kilo watts hour) per month,
