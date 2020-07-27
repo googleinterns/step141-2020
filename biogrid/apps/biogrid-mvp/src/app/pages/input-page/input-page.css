@@ -10,20 +10,12 @@ br {
   clear: both;
 }
 
-.buildings {
+.buildings, .endDatePicker, .largeBatteryCells, 
+.smallBatteryCells, .solarPanels, .startDatePicker, 
+.townHeight, .townWidth {
   display: inline-block;
-  margin-bottom: 1.25rem;
-  margin-left: 1.25rem;
-  margin-top: 1.25rem;
-  margin-right: 1.25rem;
-}
+  margin: 1.25rem;
 
-.endDatePicker {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-  margin-top: 1.25rem;
 }
 
 .input-page {
@@ -49,48 +41,21 @@ label {
   text-align: left;
 }
 
-.largeBatteryCells {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-  margin-top: 1.25rem;
-}
-
-.smallBatteryCells {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-  margin-top: 1.25rem;
-}
-
-.solarPanels {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-  margin-top: 1.25rem;
-}
-
-.startDatePicker {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-  margin-top: 1.25rem;
-}
-
 .submitButton {
   text-align: center;
 }
 
-.tooltipBuild {
+.tooltipBuild, .tooltipEndDate, .tooltipHeight, 
+.tooltipLBC, .tooltipSBC, .tooltipSolar, 
+.tooltipStartDate, .tooltipWidth {
   position: relative;
   display: inline-block;
 }
 
-.tooltipBuild .tooltiptextBuild {
+.tooltipBuild .tooltiptextBuild, .tooltipEndDate .tooltiptextEndDate, 
+.tooltipHeight .tooltiptextHeight, .tooltipLBC .tooltiptextLBC, 
+.tooltipSBC .tooltiptextSBC, .tooltipSolar .tooltiptextSolar, 
+.tooltipStartDate .tooltiptextStartDate, .tooltipWidth .tooltiptextWidth {
   visibility: hidden;
   width: 450px;
   background-color: rgb(22, 22, 22);
@@ -102,171 +67,9 @@ label {
   z-index: 1;
 }
 
-.tooltipBuild:hover .tooltiptextBuild {
+.tooltipBuild:hover .tooltiptextBuild, .tooltipEndDate:hover .tooltiptextEndDate,
+.tooltipHeight:hover .tooltiptextHeight, .tooltipLBC:hover .tooltiptextLBC,
+.tooltipSBC:hover .tooltiptextSBC, .tooltipSolar:hover .tooltiptextSolar, 
+.tooltipStartDate:hover .tooltiptextStartDate, .tooltipWidth:hover .tooltiptextWidth {
   visibility: visible;
 }
-
-
-.tooltipEndDate {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltipEndDate .tooltiptextEndDate {
-  visibility: hidden;
-  width: 450px;
-  background-color: rgb(22, 22, 22);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltipEndDate:hover .tooltiptextEndDate {
-  visibility: visible;
-}
-
-.tooltipHeight {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltipHeight .tooltiptextHeight {
-  visibility: hidden;
-  width: 450px;
-  background-color: rgb(22, 22, 22);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltipHeight:hover .tooltiptextHeight {
-  visibility: visible;
-}
-
-.tooltipLBC {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltipLBC .tooltiptextLBC {
-  visibility: hidden;
-  width: 450px;
-  background-color: rgb(22, 22, 22);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltipLBC:hover .tooltiptextLBC {
-  visibility: visible;
-}
-
-.tooltipSBC {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltipSBC .tooltiptextSBC {
-  visibility: hidden;
-  width: 450px;
-  background-color: rgb(22, 22, 22);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltipSBC:hover .tooltiptextSBC {
-  visibility: visible;
-}
-
-.tooltipSolar {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltipSolar .tooltiptextSolar {
-  visibility: hidden;
-  width: 450px;
-  background-color: rgb(22, 22, 22);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltipSolar:hover .tooltiptextSolar {
-  visibility: visible;
-}
-
-.tooltipStartDate {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltipStartDate .tooltiptextStartDate {
-  visibility: hidden;
-  width: 450px;
-  background-color: rgb(22, 22, 22);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltipStartDate:hover .tooltiptextStartDate {
-  visibility: visible;
-}
-
-.tooltipWidth {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltipWidth .tooltiptextWidth {
-  visibility: hidden;
-  width: 450px;
-  background-color: rgb(22, 22, 22);
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltipWidth:hover .tooltiptextWidth {
-  visibility: visible;
-}
-
-.townHeight {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-  margin-top: 1.25rem;
-}
-
-.townWidth {
-  display: inline-block;
-  margin-bottom: 1.25rem;
-  margin-left: 1.25rem;
-  margin-right: 1.25rem;
-  margin-top: 1.25rem;
-}
-
