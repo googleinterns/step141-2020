@@ -34,16 +34,13 @@ export class Biogrid implements Grid {
   // The large batteries in the grid, will approximately have a maxCapacity of 540,000KJ
   private largeBatteries: Battery[];
 
-  // All details for the houses / energyUsers in the grid
-  private town: Town;
-
   // All details for the source of energy
   private solarPanels: EnergySource[];
 
   // Holds the efficiency of the grid
   private efficiency: number;
 
-  constructor(town: Town, opts: BiogridOptions) {
+  constructor(private town: Town, opts: BiogridOptions) {
 
     // Batteries
     const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
@@ -57,9 +54,6 @@ export class Biogrid implements Grid {
       largeBatteryPositions,
       GRID_ITEM_NAMES.LARGE_BATTERY
     );
-
-    // Towns
-    this.town = town;
 
     // Enery Source
     // TODO implement the solar panels
