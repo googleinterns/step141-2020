@@ -5,7 +5,7 @@ import './simulate-page.css';
 import { Client } from '../../client';
 import { BiogridSimulationResults } from '../../build';
 import SimulationBoard, {
-  GridItemRet,
+  GridItemRet, GridItemLines,
 } from '../../components/simulation-board';
 
 export const SimulatePage = () => {
@@ -46,7 +46,7 @@ export const SimulatePage = () => {
       };
     });
   };
-  const stateToGridItemLines = (state: any): GridItemRet[] => {
+  const stateToGridItemLines = (state: any): GridItemLines[] => {
     return state.edges.map((edge: any) => {
       return {
         fromItem: edge.v,
