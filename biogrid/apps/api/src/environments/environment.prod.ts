@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  port: 8080
+  // Leave port null so that the Heroku env variable can override it
+  port: null
 };

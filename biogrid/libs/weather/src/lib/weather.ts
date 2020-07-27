@@ -60,7 +60,7 @@ export class WeatherLib {
   getCloudCoverage(date: Date): CloudCoverage {
     const dateFormatted = this.formatDateWithHour(date);
     if (!this.weatherData[dateFormatted]) {
-      throw new Error('Date not found within the specified time range');
+      throw new Error(`Date ${dateFormatted} not found within the specified time range`);
     }
     return this.weatherData[dateFormatted].cloudCoverage;
   }
@@ -68,7 +68,7 @@ export class WeatherLib {
   isDay(date: Date): boolean {
     const dateFormatted = this.formatDateWithHour(date);
         if (!this.weatherData[dateFormatted]) {
-      throw new Error('Date not found within the specified time range');
+      throw new Error(`Date ${dateFormatted} not found within the specified time range`);
     }
     return this.weatherData[dateFormatted].isDay;
   }
@@ -79,12 +79,12 @@ export class WeatherLib {
 
   private formatDate(date: Date): string {
     let d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
+      month = `${(d.getMonth() + 1)}`,
+      day = `${d.getDate()}`,
       year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+    if (month.length < 2) month = `0${month}`;
+    if (day.length < 2) day = `0${day}`;
 
     return [year, month, day].join('-');
   }

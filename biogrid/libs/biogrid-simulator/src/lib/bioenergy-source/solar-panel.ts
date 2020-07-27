@@ -8,13 +8,15 @@ import {
   Distance,
   CloudCoverage,
 } from '@biogrid/grid-simulator';
-import { SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
+import { SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
 
 export class SolarPanel extends EnergySource {
   private sizeSqMtr: number;
-  name: string;
+  // This is unique to every single solar panel but all have a same prefix name
+  gridItemName: string;
   date: Date;
   private weatherLib: WeatherLib;
+  gridItemResistance: number = RESISTANCE.SOLAR_PANEL;
   /**
    * @param efficiency - default to 17.5% efficiency as solar panels are often between 15% and 20% efficiency
    */
@@ -22,7 +24,7 @@ export class SolarPanel extends EnergySource {
     x: Distance,
     y: Distance,
     sizeSqMtr: number,
-    name: string = GRID_ITEM_NAMES.SOLAR_PANEL,
+    gridItemName: string = GRID_ITEM_NAMES.SOLAR_PANEL,
     efficiency = 0.175,
     longitude = 0,
     latitude = 0,
@@ -35,7 +37,7 @@ export class SolarPanel extends EnergySource {
       );
     }
     this.sizeSqMtr = sizeSqMtr;
-    this.name = name;
+    this.gridItemName = gridItemName;
     this.date = date;
     this.weatherLib = new WeatherLib(date, longitude, latitude);
   }
@@ -84,6 +86,12 @@ export class SolarPanel extends EnergySource {
 
   private cloudCoverageToKiloWattsPerSquareMeter(cloudCoverage: CloudCoverage) {
     // CalculationDerived from https://scool.larc.nasa.gov/lesson_plans/CloudCoverSolarRadiation.pdf
-    return 990 * (1 - 0.75 * Math.pow(cloudCoverage, 3)) / 1000;
+    return (
+      (SOLAR_PANEL.CLEAR_SKY_POWER_WATTS *
+        (1 -
+          SOLAR_PANEL.CLOUD_COVERAGE_SCALING_CONSTANT *
+            Math.pow(cloudCoverage, 3))) /
+      1000
+    );
   }
 }

@@ -1,7 +1,7 @@
 import { BiogridState } from './';
 import { StateGraphVertex, GridItem } from '@biogrid/grid-simulator';
 import { Building } from '../building';
-import { GRID_ITEM_NAMES } from '../config';
+import { GRID_ITEM_NAMES, RESISTANCE } from '../config';
 import { Edge, Graph, alg } from "graphlib";
 
 describe('classes', () => {
@@ -23,7 +23,8 @@ describe('classes', () => {
   const building5 = new Building(32, 9, 9, name5);
 
   const grid: GridItem = {
-    name: GRID_ITEM_NAMES.GRID,
+    gridItemName: GRID_ITEM_NAMES.GRID,
+    gridItemResistance: RESISTANCE.GRID,
     getRelativePosition() {
       return { x: 0, y: 0 };
     },
@@ -40,7 +41,7 @@ describe('classes', () => {
     expect(state.getAllVertices().length).toEqual(newVertices.length + 1);
     expect(graph.outEdges(name1)).toEqual([{v: name1, w: name2} as Edge]);
     // Expect another inEdge from the grid to the building
-    expect(graph.inEdges(name1)).toEqual([{v: grid.name, w: name1} as Edge, { v: name2, w: name1} as Edge]);
+    expect(graph.inEdges(name1)).toEqual([{v: grid.gridItemName, w: name1} as Edge, { v: name2, w: name1} as Edge]);
   });
 
   test('verify the shortest distances are correct', () => {
@@ -52,16 +53,24 @@ describe('classes', () => {
       building5,
     ];
     const expectedGraph = new Graph();
-    expectedGraph.setNode(grid.name, grid);
-    newVertices.map(vertex => expectedGraph.setNode(vertex.name, vertex));
+    expectedGraph.setNode(grid.gridItemName, grid);
+    newVertices.map(vertex => expectedGraph.setNode(vertex.gridItemName, vertex));
     // Add all possible edges
     // Add edges to the graph connecting the grid to the building
-    newVertices.map(vertex => expectedGraph.setEdge(grid.name, vertex.name, calculateDistance(grid, vertex)));
+    newVertices.map(vertex => expectedGraph.setEdge(grid.gridItemName, vertex.gridItemName, calculateDistance(grid, vertex)));
     // Add edges to the graph connecting the building to the other, and vice versa i.e A to B, B to A
     for (let i = 0; i < newVertices.length; i++) {
       for (let j = i + 1; j < newVertices.length; j++) {
-        expectedGraph.setEdge(newVertices[i].name, newVertices[j].name, calculateDistance(newVertices[i], newVertices[j]));
-        expectedGraph.setEdge(newVertices[j].name, newVertices[i].name, calculateDistance(newVertices[j], newVertices[i]));
+        expectedGraph.setEdge(
+          newVertices[i].gridItemName,
+          newVertices[j].gridItemName,
+          calculateDistance(newVertices[i], newVertices[j])
+        );
+        expectedGraph.setEdge(
+          newVertices[j].gridItemName,
+          newVertices[i].gridItemName,
+          calculateDistance(newVertices[j], newVertices[i])
+        );
       }
     }
     const expectedShortestdistances = alg.dijkstraAll(expectedGraph, getWeights(expectedGraph));

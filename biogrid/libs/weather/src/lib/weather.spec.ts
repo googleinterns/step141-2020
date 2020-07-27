@@ -14,7 +14,7 @@ describe('weather', () => {
   test('get the intensity for each hour of July 20th 2020 at long and lat 0 0', async () => {
     expect(
       weatherLib.getCloudCoverage(addHours(2, new Date('7/20/2020')))
-    ).toEqual(0.12);
+    ).toEqual(0.44);
   }, 30000);
   test('getIntensity throws an error for an outofrange date', async () => {
     const startDate = new Date('7/20/2020');
@@ -22,7 +22,7 @@ describe('weather', () => {
     await weatherLib.setup();
     expect(
       () => weatherLib.getCloudCoverage(addHours(2, new Date('7/01/2020')))
-    ).toThrowError('Date not found within the specified time range');
+    ).toThrowError('Date 2020-07-01:2 not found within the specified time range');
   });
   test('isDay for each hour of July 20th 2020 at long and lat 0 0 at hour 2', async () => {
     const startDate = new Date('7/20/2020');
@@ -35,7 +35,7 @@ describe('weather', () => {
     const weatherLib = new WeatherLib(startDate, /* long = */ 0, /* lat = */ 0);
     await weatherLib.setup();
     expect(() => weatherLib.isDay(addHours(2, new Date('7/01/2020')))).toThrowError(
-      'Date not found within the specified time range'
+      'Date 2020-07-01:2 not found within the specified time range'
     );
   });
 });

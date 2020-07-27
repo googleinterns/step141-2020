@@ -46,5 +46,6 @@ export abstract class EnergySource implements EnergySourceInterface {
 
   abstract getPowerAmount(date: Date): Promise<Power>;
   abstract getEnergyInJoules(): Promise<Power>;
-  abstract name: string;
+  abstract gridItemName: string;
+  abstract gridItemResistance: number;
 }

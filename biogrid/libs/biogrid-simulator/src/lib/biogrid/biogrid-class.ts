@@ -9,11 +9,11 @@ import {
   Battery,
   GridItem
 } from '@biogrid/grid-simulator';
-import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES } from '../config';
+import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
 import { 
   BioBattery, 
   BiogridState,
-  Building, 
+  Building,
   SolarPanel
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
@@ -46,17 +46,13 @@ export class Biogrid implements Grid {
     // Batteries
     const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
     const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
-    
+
     this.smallBatteries = this.createBatteries(
       smallBatteryPositions,
-      SMALL_BATTERY.DEFAULT_START_ENERGY,
-      SMALL_BATTERY.MAX_CAPACITY,
       GRID_ITEM_NAMES.SMALL_BATTERY
     );
     this.largeBatteries = this.createBatteries(
       largeBatteryPositions,
-      LARGE_BATTERY.DEFAULT_START_ENERGY,
-      LARGE_BATTERY.MAX_CAPACITY,
       GRID_ITEM_NAMES.LARGE_BATTERY
     );
 
@@ -86,12 +82,21 @@ export class Biogrid implements Grid {
   }
 
   getJsonGraphDetails() {
-    this.state.getJsonGraph();
+    return this.state.getJsonGraph();
   }
 
-  private createBatteries(positions: ItemPosition[], initEnergy: Energy, maxCapacity: Energy, name: string): Battery[] {
+  private createBatteries(positions: ItemPosition[], gridItemName: string): Battery[] {
+    const batteryResistance = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+      ? RESISTANCE.LARGE_BATTERY
+      : RESISTANCE.SMALL_BATTERY;
+    const maxCapacity = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+      ? LARGE_BATTERY.MAX_CAPACITY
+      : SMALL_BATTERY.MAX_CAPACITY;
+    const initEnergy = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+      ? LARGE_BATTERY.DEFAULT_START_ENERGY
+      : SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
-      (position, index) => new BioBattery(position.x, position.y, `${name}-${index}`, initEnergy, maxCapacity)
+      (position, index) => new BioBattery(position.x, position.y, `${gridItemName}-${index}`, batteryResistance, initEnergy, maxCapacity)
     );
   }
 
@@ -107,7 +112,7 @@ export class Biogrid implements Grid {
   }
   /**
    * This method takes the results of th brain and then it changes the state graph as suggested by the brain.
-   * The results of the brain are in form of an object key:value pair, with the receiver name as key and supplier name as value
+   * The results of the brain are in form of an object key:value pair, with the receiver gridItemName as key and supplier gridItemName as value
    * @param action holds the results from the brain
    * @returns a the current state with a new graph which includes the changes that were suggested by the brain
    */
@@ -128,16 +133,16 @@ export class Biogrid implements Grid {
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY || typeSupplyingGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
           const battery = supplyingGridItem as BioBattery;
           battery.supplyPower(energyUserReq);
-          clonedGraph.setNode(battery.name, battery);
+          clonedGraph.setNode(battery.gridItemName, battery);
         } else if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
           const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
-          clonedGraph.setNode(solarpanel.name, solarpanel);
+          clonedGraph.setNode(solarpanel.gridItemName, solarpanel);
         } else {
           continue;
         }
         energyUser.increaseEnergy(energyUserReq);
-        clonedGraph.setNode(energyUser.name, energyUser);
+        clonedGraph.setNode(energyUser.gridItemName, energyUser);
       } else if (typeOldGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
         const energyUser = oldGridItem as BioBattery;
         const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
@@ -145,16 +150,16 @@ export class Biogrid implements Grid {
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
           const battery = supplyingGridItem as BioBattery;
           battery.supplyPower(energyUserReq);
-          clonedGraph.setNode(battery.name, battery);
+          clonedGraph.setNode(battery.gridItemName, battery);
         } else if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
           const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
-          clonedGraph.setNode(solarpanel.name, solarpanel);
+          clonedGraph.setNode(solarpanel.gridItemName, solarpanel);
         } else {
           continue;
         }
         energyUser.startCharging(energyUserReq);
-        clonedGraph.setNode(energyUser.name, energyUser);
+        clonedGraph.setNode(energyUser.gridItemName, energyUser);
       } else if (typeOldGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
         const energyUser = oldGridItem as BioBattery;
         const energyUserReq =
@@ -167,7 +172,7 @@ export class Biogrid implements Grid {
           continue;
         }
         energyUser.startCharging(energyUserReq);
-        clonedGraph.setNode(energyUser.name, energyUser);
+        clonedGraph.setNode(energyUser.gridItemName, energyUser);
       }
     }
     this.state.setnewStateGraph(clonedGraph);
@@ -175,13 +180,13 @@ export class Biogrid implements Grid {
   }
 
   private getGridItemType(gridItem: GridItem): string {
-    if (gridItem.name.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
+    if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
       return GRID_ITEM_NAMES.ENERGY_USER;
-    } else if (gridItem.name.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
+    } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
       return GRID_ITEM_NAMES.SMALL_BATTERY;
-    } else if (gridItem.name.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
+    } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
       return GRID_ITEM_NAMES.LARGE_BATTERY;
-    } else if (gridItem.name.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
+    } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
       return GRID_ITEM_NAMES.SOLAR_PANEL;
     }
     return GRID_ITEM_NAMES.GRID;
