@@ -60,7 +60,7 @@ export class Biogrid implements Grid {
     const solarPanelPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSolarPanels);
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
 
-    this.state = new BiogridState(this.createGridItems());
+    this.state = new BiogridState(this.createGridItems(), town.getTownSize());
     // Set the effieciency to 0 at the beginning
     this.efficiency = 0;
   }
