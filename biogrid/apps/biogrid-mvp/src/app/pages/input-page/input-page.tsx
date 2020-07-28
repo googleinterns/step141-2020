@@ -8,7 +8,6 @@
  * Last modified : 2020-07-28 11:27:22
  */
 
-
 import React, { useState } from 'react';
 import './input-page.css';
 import './input-page.scss';
@@ -164,7 +163,6 @@ export const InputPage = () => {
             {townHeightInput}
           </div>
         </div>
-
 
         <div className="submitButton">
           <input type="submit" className="submitButton" value="Run the Simulation!"/>

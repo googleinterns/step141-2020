@@ -7,14 +7,11 @@
  * Last modified : 2020-07-28 11:15:32
  */
 
-
 import React from 'react';
 import './info-page.css';
 import Visual from './EnergyFlowVisual.png';
 
 export const InfoPage = () => {
-
-
   return (
     <div className="info-page">
       <h1>The Logic</h1>
@@ -25,7 +22,7 @@ export const InfoPage = () => {
       The grid items include the <b>grid(g)</b> itself as well.
       </p>
 
-      <p>Then the grid items will be connected by a <b>directed graph G</b>, which connects them from the <b>grid</b> to each item except the solar panels i.e <b>G(g, s_b), G(g, l_b), G(g, B)</b>. 
+      <p>Each grid item except the solar panels is connected to grid <b>g</b> by a <b>directed graph G</b>, i.e <b>G(g, s_b), G(g, l_b), G(g, B)</b>. 
       Also some of the grid items are connected to one another. For instance the small batteries are connected to the buildings <b>G(s_b, B)</b>, the buildings are connected to one another <b>G(B_0, B_1)</b>. 
       The batteries, and solar panels are connected to the grid i.e <b>G(s_b, g), G(l_b, g), G(s, g)</b>.
       </p>
