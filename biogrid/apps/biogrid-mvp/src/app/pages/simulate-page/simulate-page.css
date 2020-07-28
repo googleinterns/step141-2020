@@ -3,17 +3,29 @@
 }
 
 .results {
+  display: flex;
   font-family: sans-serif;
+  justify-content: center;
+  padding: 2rem;
 }
+
+.simboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+
+
 
 .simulation {
   background-color: #f2f2f2;
   border-radius: 0.3125rem;
   font-family: sans-serif;
-  margin: auto;
+  margin: 2rem;
   padding: 1.25rem;
   text-align: center;
-  width: 56.25rem;
+  min-width: 56.25rem;
 }
 
 table {
