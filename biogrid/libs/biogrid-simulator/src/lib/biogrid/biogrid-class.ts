@@ -14,7 +14,8 @@ import {
   BioBattery, 
   BiogridState,
   Building,
-  SolarPanel
+  SolarPanel,
+  SolarPanelParams
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
 
@@ -108,7 +109,13 @@ export class Biogrid implements Grid {
   // TODO pass a list of equal length to hold the area for the solar panels
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
     return positions.map(
-      (position, index) => new SolarPanel(position.x, position.y, SOLAR_PANEL.AREA, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`)
+      (position, index) => new SolarPanel({
+        x: position.x,
+        y: position.y,
+        efficiency: 0.75,
+        sizeSqMtr: SOLAR_PANEL.AREA,
+        gridItemName: `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
+      } as SolarPanelParams)
     );
   }
   /**
