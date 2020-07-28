@@ -160,7 +160,7 @@ export const SimulationBoard = (props: SimBoardProps) => {
                   SIZES.ICON_WIDTH_PERCENT / 2
                 )}`}
                 marker-end="url(#arrowhead)"
-                stroke={line.powerThroughLinesKiloWatts ? 'blue' : 'grey'}
+                stroke={(line.powerThroughLinesKiloWatts || 0) > 0 ? 'blue' : 'grey'}
                 stroke-width={kiloWattToThickness(
                   line.powerThroughLinesKiloWatts || 1
                 )}
