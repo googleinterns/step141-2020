@@ -1,3 +1,13 @@
+/**
+ * @summary Designs the page where user can learn more about the backend algorithms.
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ * 
+ * Created at    : 2020-06-23 15:45:11
+ * Last modified : 2020-07-28 11:15:32
+ */
+
+
 import React from 'react';
 import './info-page.css';
 import Visual from './EnergyFlowVisual.png';

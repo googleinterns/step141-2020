@@ -1,3 +1,14 @@
+/**
+ * @summary Designs the page where user will enter inputs to run simulation.
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ * 
+ * Created at    : 2020-07-01 11:53:16
+ * Last modified : 2020-07-28 11:27:22
+ */
+
+
 import React, { useState } from 'react';
 import './input-page.css';
 import './input-page.scss';
@@ -68,7 +79,7 @@ export const InputPage = () => {
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
       <h1>Welcome to the Biogrid Simulator!</h1>
       
-      <p id="intro">This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 
+      <p>This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 
         optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">biomimicry</a> to 
         imitate the human body's glucose regulation procedures. </p>
 

@@ -1,3 +1,12 @@
+/**
+ * @summary Styles the page where user will enter inputs to run simulation.
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ * 
+ * Created at    : 2020-06-23 10:12:21
+ * Last modified : 2020-07-28 11:27:22
+ */
+
 body {
   background-color: #0b5a5a;
 }
@@ -22,14 +31,6 @@ br {
   padding: 1.25rem;
   text-align: center;
   width: 56.25rem;
-}
-
-#intro {
-  background: #0ca8a8;
-  border: 5px solid black;
-  border-radius: 5px;
-  color: black;
-  padding: 10px;
 }
 
 label {
