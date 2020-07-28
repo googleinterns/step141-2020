@@ -34,7 +34,9 @@ export const SOLAR_PANEL = {
   AREA: 10,
   DEFAULT_INITIAL_ENERGY: 250,
   KILOLUX_TO_KILOWATT_PER_SQUARE_METER: 0.0079,
-  MIN_CAPACITY: 240
+  MIN_CAPACITY: 240,
+  CLEAR_SKY_POWER_WATTS: 990,
+  CLOUD_COVERAGE_SCALING_CONSTANT: 0.75,
 };
 
 export const enum GRID_ITEM_NAMES {
@@ -43,7 +45,7 @@ export const enum GRID_ITEM_NAMES {
   LARGE_BATTERY = 'large_battery',
   SMALL_BATTERY = 'small_battery',
   SOLAR_PANEL = 'solar_panel',
-};
+}
 
 /**
  * Resistance of the differents components used in the grid
@@ -68,12 +70,12 @@ export const RESISTANCE = {
   // Average resistance
   LARGE_BATTERY: 0.95,
   // Represents the resistances of awg wire 16
-  RESISTANCE_16: 13.17,  // Measured in ohm/km
+  RESISTANCE_16: 13.17, // Measured in ohm/km
   // TODO insert the correct resistance for the small batteries used
   SMALL_BATTERY: 0.4,
   // TODO insert the correct resistance for the solar panels used
-  SOLAR_PANEL: 3.617
-}
+  SOLAR_PANEL: 3.617,
+};
 
 /**
  * A building uses approximately 1000 KWh (kilo watts hour) per month,
