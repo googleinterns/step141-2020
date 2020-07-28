@@ -33,9 +33,9 @@ describe('test for BioBattery class', () => {
     expect(battery.isFull()).toEqual(expected);
   });
 
-  test('battery is empty when its currentpower is at zero', () => {
+  test('battery is empty when its currentpower is at zero', async () => {
     const battery = new BioBattery(10, 5,  'small_battery', RESISTANCE.SMALL_BATTERY, 1, 10);
     const expected = false;
-    expect(battery.isEmpty()).toEqual(expected);
+    expect(await battery.isEmpty()).toEqual(expected);
   });
 });

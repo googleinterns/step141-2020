@@ -19,7 +19,8 @@ export function calculateResistance(length: number, isMetre: boolean = false) {
  * This function calculates the current passing through the circuit at any given time using the physics 
  * equation of calculating current, I = V / R where I is the current, V is voltage, R is resistance
  * @param voltage is the voltage of the circuit at that particular point
- * @param resistance is the resistance of the wires and any connected materials in the circuit
+ * @param loadResistance is the resistance for the grid items in the shortest path
+ * @param wireResistance is the resistance of the wires
  * @returns the current flowing in that particular circuit
  */
 export function calculateCurrent(voltage: number, loadResistance: number, wireResistance: number) {
@@ -51,6 +52,32 @@ export function calculateVoltage(current: number, resistance: number) {
  */
 export function calculatePower(voltage: number, resistance: number) {
   return (Math.pow(voltage, 2) / resistance);
+}
+
+/**
+ * This function calculates the power in the circuit for usage in the efficiency
+ * It calculates this based on the two physics equations
+ *    1. P = V * I
+ *    2. V = I * R
+ * where P is power, V is voltage, I is current and R is resistance
+ * Since current is constant in circuits
+ * Th final equation used is P = I^2 * R
+ * @param current is the current in the circuit at that particular time
+ * @param resistance is the resistance of the wires
+ * @return the power transport over the given @param resistance
+ */
+export function calculatePowerWithCurrent(current: number, resistance: number) {
+  return (Math.pow(current, 2) * resistance);
+}
+
+/**
+ * This function is used to calculate the current in the circuit using the given @param power
+ * @param power is the power coming in the circuit
+ * @param resistance is the resistance of the circuit
+ * @returns the current that is going through the circuit over the given @param resistance
+ */
+export function calculateCurrentFromPower(power: number, resistance: number) {
+  return Math.sqrt(power / resistance);
 }
 
 /**

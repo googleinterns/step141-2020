@@ -43,13 +43,14 @@ export class Biogrid implements Grid {
   // The large batteries in the grid, will approximately have a maxCapacity of 540,000KJ
   private largeBatteries: Battery[];
 
-  // All details for the houses / energyUsers in the grid
-  private town: Town;
-
   // All details for the source of energy
   private solarPanels: EnergySource[];
 
-  constructor(town: Town, opts: BiogridOptions) {
+  // Holds the efficiency of the grid
+  private efficiency: number;
+
+  constructor(private town: Town, opts: BiogridOptions) {
+
     // Batteries
     const smallBatteryPositions = this.createGridItemPositions(
       town.getTownSize(),
@@ -69,9 +70,6 @@ export class Biogrid implements Grid {
       GRID_ITEM_NAMES.LARGE_BATTERY
     );
 
-    // Towns
-    this.town = town;
-
     // Enery Source
     // TODO implement the solar panels
     const solarPanelPositions = this.createGridItemPositions(
@@ -81,6 +79,8 @@ export class Biogrid implements Grid {
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
 
     this.state = new BiogridState(this.createGridItems());
+    // Set the effieciency to 0 at the beginning
+    this.efficiency = 0;
   }
 
   private createGridItems(): GridItem[] {
@@ -98,6 +98,10 @@ export class Biogrid implements Grid {
 
   getSystemState() {
     return this.state;
+  }
+
+  getEfficiency() {
+    return this.efficiency;
   }
 
   getJsonGraphDetails() {
@@ -157,11 +161,12 @@ export class Biogrid implements Grid {
    */
   takeAction(action: GridAction) {
     const powerEdges: { v: string; w: string; power: Power }[] = [];
+    // Set new efficiency
+    this.efficiency = action.getEfficiency();
     // RETURN a new BiogridState
     const allSupplyingPaths = action.getSupplyingPaths();
 
     const clonedGraph = this.state.cloneStateGraph();
-
     for (const supplyPath in allSupplyingPaths) {
       const oldGridItem = this.state.getGridItem(supplyPath);
       // take energy from the supplying grid item and transfer it to the energy user

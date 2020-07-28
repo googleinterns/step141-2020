@@ -10,6 +10,11 @@ export type Distance = number;
 export type Energy = number;
 
 /**
+ * Resistance is represented in Ohms (Ω)
+ */
+export type Resistance = number;
+
+/**
  * In KiloWatts
  */
 export type Power = number;
@@ -18,6 +23,11 @@ export type Power = number;
  * In KiloLux, which equals one thousand lumin per meter squared
  */
 export type SunlightIntensity = number;
+
+/**
+ * A fraction of cloud coverage, from 0 to 1
+ */
+export type CloudCoverage = number;
 
 /**
  * Position from the top left corner of a town
