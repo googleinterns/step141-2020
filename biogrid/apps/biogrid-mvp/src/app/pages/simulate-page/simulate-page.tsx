@@ -1,10 +1,12 @@
-import { useHistory } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import './simulate-page.css';
 import { Client } from '../../client';
 import { BiogridSimulationResults } from '../../build';
-
+import SimulationBoard, {
+  GridItemRet, GridItemLines,
+} from '../../components/simulation-board';
 
 export const SimulatePage = () => {
   const [simulationResults, setSimulationResults] = useState<
@@ -15,7 +17,6 @@ export const SimulatePage = () => {
 
   async function getSimulationResults() {
     const params = queryString.parse(window.location.hash.split('?')[1]);
-    console.log(window.location.hash.split('?')[1], params)
     const body = {
       startDate: new Date(params.startDate as string),
       endDate: new Date(params.endDate as string),
@@ -34,12 +35,29 @@ export const SimulatePage = () => {
 
   const redirectToHome = () => {
     history.push('/');
-  }
+  };
+
+  const stateToGridItemRet = (state: any): GridItemRet[] => {
+    return state.nodes.map((node: any) => {
+      return {
+        gridItemName: node.value.gridItemName,
+        relativePosition: node.value.position ||
+          node.value.relativePosition || { x: 0, y: 0 },
+      };
+    });
+  };
+  const stateToGridItemLines = (state: any): GridItemLines[] => {
+    return state.edges.map((edge: any) => {
+      return {
+        fromItem: edge.v,
+        toItem: edge.w,
+      };
+    });
+  };
 
   useEffect(() => {
     getSimulationResults();
   }, []);
-
 
   return (
     <div className="simulation">
@@ -59,6 +77,14 @@ export const SimulatePage = () => {
               <td>{simulationResults.energyWastedInTransportation}</td>
             </tr>
           </table>
+          <SimulationBoard
+            grid_height_km={simulationResults.townSize.height}
+            grid_width_km={simulationResults.townSize.width}
+            // TODO add changing indices to show the progression of time for each subsequent state
+            // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
+            items={stateToGridItemRet(simulationResults.states[0])}
+            lines={stateToGridItemLines(simulationResults.states[0])}
+          />
           {simulationResults.states.map((stateGraph) => (
             <table className="state-graph">
               {((stateGraph as any).nodes as any[]).map((node: any) => (
@@ -80,7 +106,9 @@ export const SimulatePage = () => {
           ))}
         </div>
       )}
-      <button onClick={redirectToHome} className="redirect">Change your Inputs!</button>
+      <button onClick={redirectToHome} className="redirect">
+        Change your Inputs!
+      </button>
     </div>
   );
 };
