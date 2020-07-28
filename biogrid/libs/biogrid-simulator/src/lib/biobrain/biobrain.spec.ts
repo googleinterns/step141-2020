@@ -13,9 +13,9 @@ const name3 = `${GRID_ITEM_NAMES.ENERGY_USER}-3`;
 beforeAll(() => {
   actualBrain = BioBrain.Instance;
   const ruralArea = [
-    new Building(BUILDING.MAX_CAPACITY, 3, 4, name1),
-    new Building(0, 7, 9, name2),
-    new Building(BUILDING.MAX_CAPACITY, 7, 8, name3),
+    new Building({energy: BUILDING.MAX_CAPACITY, x: 3, y: 4, gridItemName: name1}),
+    new Building({energy: 0, x: 7, y: 9, gridItemName: name2}),
+    new Building({energy: BUILDING.MAX_CAPACITY, x: 7, y: 8, gridItemName: name3}),
   ];
   grid = new Biogrid(
     new RuralArea(ruralArea, /* townWidth = */ 10, /* townHeight = */ 10),
