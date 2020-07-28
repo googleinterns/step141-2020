@@ -10,14 +10,7 @@ import {
   GridItem,
   Distance,
 } from '@biogrid/grid-simulator';
-import {
-  LARGE_BATTERY,
-  SMALL_BATTERY,
-  SOLAR_PANEL,
-  GRID_ITEM_NAMES,
-  RESISTANCE,
-  GRID_DISTANCES,
-} from '../config';
+import * as bioconstants from '../config/bio-constants';
 import {
   BioBattery,
   BiogridState,
@@ -65,11 +58,11 @@ export class Biogrid implements Grid {
 
     this.smallBatteries = this.createBatteries(
       smallBatteryPositions,
-      GRID_ITEM_NAMES.SMALL_BATTERY
+      bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY
     );
     this.largeBatteries = this.createBatteries(
       largeBatteryPositions,
-      GRID_ITEM_NAMES.LARGE_BATTERY
+      bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY
     );
 
     // Towns
@@ -112,17 +105,17 @@ export class Biogrid implements Grid {
     gridItemName: string
   ): Battery[] {
     const batteryResistance =
-      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-        ? RESISTANCE.LARGE_BATTERY
-        : RESISTANCE.SMALL_BATTERY;
+      gridItemName ===  bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY
+        ? bioconstants.RESISTANCE.LARGE_BATTERY
+        : bioconstants.RESISTANCE.SMALL_BATTERY;
     const maxCapacity =
-      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-        ? LARGE_BATTERY.MAX_CAPACITY
-        : SMALL_BATTERY.MAX_CAPACITY;
+      gridItemName === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY
+        ? bioconstants.LARGE_BATTERY.MAX_CAPACITY
+        : bioconstants.SMALL_BATTERY.MAX_CAPACITY;
     const initEnergy =
-      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-        ? LARGE_BATTERY.DEFAULT_START_ENERGY
-        : SMALL_BATTERY.DEFAULT_START_ENERGY;
+      gridItemName === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY
+        ? bioconstants.LARGE_BATTERY.DEFAULT_START_ENERGY
+        : bioconstants.SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
       (position, index) =>
         new BioBattery(
@@ -147,8 +140,8 @@ export class Biogrid implements Grid {
         new SolarPanel(
           position.x,
           position.y,
-          SOLAR_PANEL.AREA,
-          `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
+          bioconstants.SOLAR_PANEL.AREA,
+          `${bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
         )
     );
   }
@@ -170,19 +163,19 @@ export class Biogrid implements Grid {
         allSupplyingPaths[supplyPath]
       );
       const typeOldGridItem = this.getGridItemType(oldGridItem);
-      if (typeOldGridItem === GRID_ITEM_NAMES.ENERGY_USER) {
+      if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.ENERGY_USER) {
         const energyUser = oldGridItem as Building;
         const energyUserReq =
           energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
         if (
-          typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY ||
-          typeSupplyingGridItem === GRID_ITEM_NAMES.SMALL_BATTERY
+          typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY ||
+          typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY
         ) {
           const battery = supplyingGridItem as BioBattery;
           battery.supplyPower(energyUserReq);
           clonedGraph.setNode(battery.gridItemName, battery);
-        } else if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
+        } else if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL) {
           const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
           clonedGraph.setNode(solarpanel.gridItemName, solarpanel);
@@ -191,16 +184,16 @@ export class Biogrid implements Grid {
         }
         energyUser.increaseEnergy(energyUserReq);
         clonedGraph.setNode(energyUser.gridItemName, energyUser);
-      } else if (typeOldGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
+      } else if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY) {
         const energyUser = oldGridItem as BioBattery;
         const energyUserReq =
           energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
-        if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
+        if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY) {
           const battery = supplyingGridItem as BioBattery;
           battery.supplyPower(energyUserReq);
           clonedGraph.setNode(battery.gridItemName, battery);
-        } else if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
+        } else if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL) {
           const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
           clonedGraph.setNode(solarpanel.gridItemName, solarpanel);
@@ -209,12 +202,12 @@ export class Biogrid implements Grid {
         }
         energyUser.startCharging(energyUserReq);
         clonedGraph.setNode(energyUser.gridItemName, energyUser);
-      } else if (typeOldGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
+      } else if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY) {
         const energyUser = oldGridItem as BioBattery;
         const energyUserReq =
           energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
         const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
-        if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
+        if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL) {
           const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
         } else {
@@ -229,16 +222,16 @@ export class Biogrid implements Grid {
   }
 
   private getGridItemType(gridItem: GridItem): string {
-    if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.ENERGY_USER)) {
-      return GRID_ITEM_NAMES.ENERGY_USER;
-    } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.SMALL_BATTERY)) {
-      return GRID_ITEM_NAMES.SMALL_BATTERY;
-    } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.LARGE_BATTERY)) {
-      return GRID_ITEM_NAMES.LARGE_BATTERY;
-    } else if (gridItem.gridItemName.includes(GRID_ITEM_NAMES.SOLAR_PANEL)) {
-      return GRID_ITEM_NAMES.SOLAR_PANEL;
+    if (gridItem.gridItemName.includes(bioconstants.GRID_ITEM_NAMES.ENERGY_USER)) {
+      return bioconstants.GRID_ITEM_NAMES.ENERGY_USER;
+    } else if (gridItem.gridItemName.includes(bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY)) {
+      return bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY;
+    } else if (gridItem.gridItemName.includes(bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY)) {
+      return bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY;
+    } else if (gridItem.gridItemName.includes(bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL)) {
+      return bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL;
     }
-    return GRID_ITEM_NAMES.GRID;
+    return bioconstants.GRID_ITEM_NAMES.GRID;
   }
 
   /**
@@ -274,16 +267,13 @@ export class Biogrid implements Grid {
 
   /**
    * Find the nearest unoccupied position to {@code pos} by looking looking in a spiral with pos at its center
-   * First the space immediatly right of pos is checked, then the one above, then to the left, then below, then two right spaces out, two right up, etc
+   * First the space immediately right of pos is checked, then the one above, then to the left, then below, then two right spaces out, two right up, etc
    */
   private findNearestUnoccupiedPosition(
     pos: ItemPosition,
     townSize: TownSize
   ): ItemPosition {
-    if (!this.positionOccupied(pos)) {
-      return pos;
-    }
-    let radius = GRID_DISTANCES.INCREMENTS_KM;
+    let radius = bioconstants.GRID_DISTANCES.INCREMENTS_KM;
     let angle = 0;
     let outOfBoundsCount = 0;
     let xOffset = 0,
@@ -321,14 +311,14 @@ export class Biogrid implements Grid {
       // Increment the angle by 90 degrees
       angle = angle + 90;
       if (angle === 360) {
-        radius += GRID_DISTANCES.INCREMENTS_KM;
+        radius += bioconstants.GRID_DISTANCES.INCREMENTS_KM;
         // Reset the angle
         angle = 0;
       }
     }
     if (outOfBoundsCount >= 4) {
       throw new Error(
-        `There are too many items on the grid. New items could not be placed with a minimum distance of ${GRID_DISTANCES.INCREMENTS_KM} km apart`
+        `There are too many items on the grid. New items could not be placed with a minimum distance of ${bioconstants.GRID_DISTANCES.INCREMENTS_KM} km apart`
       );
     }
     return newPos;
@@ -340,8 +330,8 @@ export class Biogrid implements Grid {
 
   private roundToGridDistance(distance: Distance): Distance {
     return (
-      Math.floor(distance / GRID_DISTANCES.INCREMENTS_KM) *
-      GRID_DISTANCES.INCREMENTS_KM
+      Math.floor(distance / bioconstants.GRID_DISTANCES.INCREMENTS_KM) *
+      bioconstants.GRID_DISTANCES.INCREMENTS_KM
     );
   }
 
