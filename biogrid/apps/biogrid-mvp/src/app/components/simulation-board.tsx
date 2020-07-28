@@ -17,7 +17,7 @@ export interface GridItemRet {
 export interface GridItemLines {
   fromItem: string;
   toItem: string;
-  powerThroughLinesKiloWatts: number;
+  powerThroughLinesKiloWatts?: number;
 }
 
 interface SimBoardProps {
@@ -160,8 +160,10 @@ export const SimulationBoard = (props: SimBoardProps) => {
                   SIZES.ICON_WIDTH_PERCENT / 2
                 )}`}
                 marker-end="url(#arrowhead)"
-                stroke="blue"
-                stroke-width={kiloWattToThickness(line.powerThroughLinesKiloWatts)}
+                stroke={line.powerThroughLinesKiloWatts ? 'blue' : 'grey'}
+                stroke-width={kiloWattToThickness(
+                  line.powerThroughLinesKiloWatts || 1
+                )}
               />
             </>
           ))}

@@ -10,6 +10,11 @@ import {
 } from '@biogrid/grid-simulator';
 import { GRID_ITEM_NAMES, ShortestDistances, RESISTANCE } from '../config';
 
+interface EdgeLabel {
+  distance: number;
+  power?: Power;
+}
+
 export class BiogridState implements StateGraph {
   private graph: graphlib.Graph;
 
@@ -70,7 +75,12 @@ export class BiogridState implements StateGraph {
   /**
    * Set power between the nodes via the edges of the state graph
    */
-  public setPowerBetweenNodes(v: string, w: string, power: Power) {}
+  public setPowerBetweenNodes(v: string, w: string, power: Power) {
+    const labelFromV: EdgeLabel = this.graph.edge(v, GRID_ITEM_NAMES.GRID);
+    const labelToW: EdgeLabel = this.graph.edge(GRID_ITEM_NAMES.GRID, w);
+    this.graph.setEdge(v, GRID_ITEM_NAMES.GRID, { distance: labelFromV.distance, power });
+    this.graph.setEdge("grid", w, { distance: labelToW.distance, power });
+  }
 
   /**
    * Method finds all the vertices in the graph and returns tehir names

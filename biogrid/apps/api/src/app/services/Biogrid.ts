@@ -5,13 +5,14 @@ import {
   BioBrain,
 } from '@biogrid/biogrid-simulator';
 import { ItemPosition, TownSize } from '@biogrid/grid-simulator';
+import constants from '../config/constants';
 export interface BiogridSimulationResults {
   energyWastedFromSource?: number;
   energyWastedInTransportation?: number;
   timeWithoutEnoughEnergy?: number;
   townSize: {
-    width: number,
-    height: number,
+    width: number;
+    height: number;
   };
   states: any[];
 }
@@ -61,9 +62,12 @@ export async function simulateNewBiogrid(
   const biobrain = BioBrain.Instance;
   const initState = biogrid.getSystemState();
   const statesJson = [biogrid.getJsonGraphDetails()];
-  const action = biobrain.computeAction(initState);
-  biogrid.takeAction(action);
-  statesJson.push(biogrid.getJsonGraphDetails());
+  for (let i = 0; i < constants.simulation.NUMBER_OF_SIM_CYCLES; i++) {
+    const action = biobrain.computeAction(initState);
+    biogrid.takeAction(action);
+    statesJson.push(biogrid.getJsonGraphDetails());
+  }
+
   return {
     energyWastedFromSource: 10,
     energyWastedInTransportation: 12,

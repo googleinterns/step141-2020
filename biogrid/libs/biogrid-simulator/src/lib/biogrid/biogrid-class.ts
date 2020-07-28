@@ -8,6 +8,7 @@ import {
   Energy,
   Battery,
   GridItem,
+  Power,
 } from '@biogrid/grid-simulator';
 import {
   LARGE_BATTERY,
@@ -15,6 +16,7 @@ import {
   SOLAR_PANEL,
   GRID_ITEM_NAMES,
   RESISTANCE,
+  TIME,
 } from '../config';
 import {
   BioBattery,
@@ -23,6 +25,7 @@ import {
   SolarPanel,
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
+import { Graph } from 'graphlib';
 
 export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
@@ -153,6 +156,7 @@ export class Biogrid implements Grid {
    * @returns a the current state with a new graph which includes the changes that were suggested by the brain
    */
   takeAction(action: GridAction) {
+    const powerEdges: { v: string; w: string; power: Power }[] = [];
     // RETURN a new BiogridState
     const allSupplyingPaths = action.getSupplyingPaths();
 
@@ -210,8 +214,21 @@ export class Biogrid implements Grid {
         (energyUser as BioBattery).startCharging(energyUserReq);
         clonedGraph.setNode(energyUser.gridItemName, energyUser);
       }
+      powerEdges.push({
+        v: supplyingGridItem.gridItemName,
+        w: energyUser.gridItemName,
+        // convert kilojoules into kilowatts
+        power: energyUserReq / (TIME.DISCRETE_UNIT_HOURS * 60 * 60),
+      });
     }
     this.state.setnewStateGraph(clonedGraph);
+    powerEdges.forEach((powerEdge) => {
+      this.state.setPowerBetweenNodes(
+        powerEdge.v,
+        powerEdge.w,
+        powerEdge.power
+      );
+    });
     return this.state;
   }
 

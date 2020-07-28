@@ -54,7 +54,7 @@ export const SimulatePage = () => {
         fromItem: edge.v,
         toItem: edge.w,
         // TODO this is not a correct value
-        powerThroughLinesKiloWatts: edge.value.distance,
+        powerThroughLinesKiloWatts: edge.value.power,
       };
     });
   };
