@@ -4,7 +4,6 @@ import './input-page.scss';
 import DatePicker from 'react-datepicker';
 import { Client } from '../../client';
 import { useHistory } from 'react-router-dom';
-import Visual from "./BioGridVisual.jpg";
 
 function useInput(opts: { type: string }) {
   const [value, setValue] = useState('');
@@ -68,7 +67,7 @@ export const InputPage = () => {
     <div className="input-page">
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
       <h1>Welcome to the Biogrid Simulator!</h1>
-      <img src={Visual} id="biogridVisual"></img>
+      
       <p id="intro">This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 
         optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">biomimicry</a> to 
         imitate the human body's glucose regulation procedures. </p>
