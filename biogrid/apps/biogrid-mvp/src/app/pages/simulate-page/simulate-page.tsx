@@ -54,7 +54,7 @@ export const SimulatePage = () => {
         fromItem: edge.v,
         toItem: edge.w,
         // TODO this is not a correct value
-        powerThroughLinesKiloWatts: edge.value,
+        powerThroughLinesKiloWatts: edge.value.distance,
       };
     });
   };
@@ -135,10 +135,10 @@ export const SimulatePage = () => {
               // TODO add changing indices to show the progression of time for each subsequent state
               // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
               items={stateToGridItemRet(
-                simulationResults.states[currentStateFrame]
+                simulationResults.states[currentStateFrame < simulationResults.states.length ? currentStateFrame : 0]
               )}
               lines={stateToGridItemLines(
-                simulationResults.states[currentStateFrame]
+                simulationResults.states[currentStateFrame < simulationResults.states.length ? currentStateFrame : 0]
               )}
             />
           </div>

@@ -2,7 +2,7 @@ import { BiogridState } from './';
 import { StateGraphVertex, GridItem } from '@biogrid/grid-simulator';
 import { Building } from '../building';
 import { GRID_ITEM_NAMES, RESISTANCE } from '../config';
-import { Edge, Graph, alg } from "graphlib";
+import { Edge, Graph, alg } from 'graphlib';
 
 describe('classes', () => {
   const x1 = 10,
@@ -39,9 +39,12 @@ describe('classes', () => {
     const graph = state.getGraph();
     // +1 to the expected vertices because of the grid which is automatically added
     expect(state.getAllVertices().length).toEqual(newVertices.length + 1);
-    expect(graph.outEdges(name1)).toEqual([{v: name1, w: name2} as Edge]);
+    expect(graph.outEdges(name1)).toEqual([{ v: name1, w: name2 } as Edge]);
     // Expect another inEdge from the grid to the building
-    expect(graph.inEdges(name1)).toEqual([{v: grid.gridItemName, w: name1} as Edge, { v: name2, w: name1} as Edge]);
+    expect(graph.inEdges(name1)).toEqual([
+      { v: grid.gridItemName, w: name1 } as Edge,
+      { v: name2, w: name1 } as Edge,
+    ]);
   });
 
   test('verify the shortest distances are correct', () => {
@@ -54,26 +57,35 @@ describe('classes', () => {
     ];
     const expectedGraph = new Graph();
     expectedGraph.setNode(grid.gridItemName, grid);
-    newVertices.map(vertex => expectedGraph.setNode(vertex.gridItemName, vertex));
+    newVertices.map((vertex) =>
+      expectedGraph.setNode(vertex.gridItemName, vertex)
+    );
     // Add all possible edges
     // Add edges to the graph connecting the grid to the building
-    newVertices.map(vertex => expectedGraph.setEdge(grid.gridItemName, vertex.gridItemName, calculateDistance(grid, vertex)));
+    newVertices.map((vertex) =>
+      expectedGraph.setEdge(grid.gridItemName, vertex.gridItemName, {
+        distance: calculateDistance(grid, vertex),
+      })
+    );
     // Add edges to the graph connecting the building to the other, and vice versa i.e A to B, B to A
     for (let i = 0; i < newVertices.length; i++) {
       for (let j = i + 1; j < newVertices.length; j++) {
         expectedGraph.setEdge(
           newVertices[i].gridItemName,
           newVertices[j].gridItemName,
-          calculateDistance(newVertices[i], newVertices[j])
+          { distance: calculateDistance(newVertices[i], newVertices[j]) }
         );
         expectedGraph.setEdge(
           newVertices[j].gridItemName,
           newVertices[i].gridItemName,
-          calculateDistance(newVertices[j], newVertices[i])
+          { distance: calculateDistance(newVertices[j], newVertices[i]) }
         );
       }
     }
-    const expectedShortestdistances = alg.dijkstraAll(expectedGraph, getWeights(expectedGraph));
+    const expectedShortestdistances = alg.dijkstraAll(
+      expectedGraph,
+      getWeights(expectedGraph)
+    );
 
     // Create a graph from the system
     const state = new BiogridState(newVertices);
@@ -83,15 +95,15 @@ describe('classes', () => {
     expect(state.getAllVertices().length).toEqual(expectedGraph.nodes().length);
 
     // The expected object return from the shortest distances must be the same
-    expect(Object.keys(actualShortestDistances).length).toEqual(Object.keys(expectedShortestdistances).length);
+    expect(Object.keys(actualShortestDistances).length).toEqual(
+      Object.keys(expectedShortestdistances).length
+    );
     expect(actualShortestDistances).toEqual(expectedShortestdistances);
 
     // Check the shortest distances and verify that they are correct
     for (const source of Object.keys(actualShortestDistances)) {
-      for(const dest of Object.keys(actualShortestDistances[source])) {
-        expect(
-          actualShortestDistances[source][dest].distance
-        ).toEqual(
+      for (const dest of Object.keys(actualShortestDistances[source])) {
+        expect(actualShortestDistances[source][dest].distance).toEqual(
           expectedShortestdistances[source][dest].distance
         );
       }
@@ -128,7 +140,7 @@ function calculateDistance(v1: StateGraphVertex, v2: StateGraphVertex) {
  * Function takes in graph and returns the weights of the edges of the graph
  */
 function getWeights(graph: Graph) {
-  return function(edge: Edge) {
-    return graph.edge(edge);
-  }
+  return function (edge: Edge) {
+    return graph.edge(edge).distance;
+  };
 }

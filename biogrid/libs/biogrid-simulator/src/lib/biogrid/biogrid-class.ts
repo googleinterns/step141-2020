@@ -7,14 +7,20 @@ import {
   ItemPosition,
   Energy,
   Battery,
-  GridItem
+  GridItem,
 } from '@biogrid/grid-simulator';
-import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
+import {
+  LARGE_BATTERY,
+  SMALL_BATTERY,
+  SOLAR_PANEL,
+  GRID_ITEM_NAMES,
+  RESISTANCE,
+} from '../config';
 import {
   BioBattery,
   BiogridState,
   Building,
-  SolarPanel
+  SolarPanel,
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
 
@@ -40,12 +46,16 @@ export class Biogrid implements Grid {
   // All details for the source of energy
   private solarPanels: EnergySource[];
 
-
   constructor(town: Town, opts: BiogridOptions) {
-
     // Batteries
-    const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
-    const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
+    const smallBatteryPositions = this.createGridItemPositions(
+      town.getTownSize(),
+      opts.numberOfSmallBatteryCells
+    );
+    const largeBatteryPositions = this.createGridItemPositions(
+      town.getTownSize(),
+      opts.numberOfLargeBatteryCells
+    );
 
     this.smallBatteries = this.createBatteries(
       smallBatteryPositions,
@@ -61,11 +71,13 @@ export class Biogrid implements Grid {
 
     // Enery Source
     // TODO implement the solar panels
-    const solarPanelPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSolarPanels);
+    const solarPanelPositions = this.createGridItemPositions(
+      town.getTownSize(),
+      opts.numberOfSolarPanels
+    );
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
 
     this.state = new BiogridState(this.createGridItems());
-
   }
 
   private createGridItems(): GridItem[] {
@@ -74,11 +86,11 @@ export class Biogrid implements Grid {
       ...this.largeBatteries,
       ...this.town.getEnergyUsers(),
       ...this.solarPanels,
-    ]
+    ];
   }
 
   getTownSize() {
-    return this.town.getTownSize()
+    return this.town.getTownSize();
   }
 
   getSystemState() {
@@ -89,18 +101,32 @@ export class Biogrid implements Grid {
     return this.state.getJsonGraph();
   }
 
-  private createBatteries(positions: ItemPosition[], gridItemName: string): Battery[] {
-    const batteryResistance = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-      ? RESISTANCE.LARGE_BATTERY
-      : RESISTANCE.SMALL_BATTERY;
-    const maxCapacity = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-      ? LARGE_BATTERY.MAX_CAPACITY
-      : SMALL_BATTERY.MAX_CAPACITY;
-    const initEnergy = gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
-      ? LARGE_BATTERY.DEFAULT_START_ENERGY
-      : SMALL_BATTERY.DEFAULT_START_ENERGY;
+  private createBatteries(
+    positions: ItemPosition[],
+    gridItemName: string
+  ): Battery[] {
+    const batteryResistance =
+      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+        ? RESISTANCE.LARGE_BATTERY
+        : RESISTANCE.SMALL_BATTERY;
+    const maxCapacity =
+      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+        ? LARGE_BATTERY.MAX_CAPACITY
+        : SMALL_BATTERY.MAX_CAPACITY;
+    const initEnergy =
+      gridItemName === GRID_ITEM_NAMES.LARGE_BATTERY
+        ? LARGE_BATTERY.DEFAULT_START_ENERGY
+        : SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
-      (position, index) => new BioBattery(position.x, position.y, `${gridItemName}-${index}`, batteryResistance, initEnergy, maxCapacity)
+      (position, index) =>
+        new BioBattery(
+          position.x,
+          position.y,
+          `${gridItemName}-${index}`,
+          batteryResistance,
+          initEnergy,
+          maxCapacity
+        )
     );
   }
 
@@ -111,7 +137,13 @@ export class Biogrid implements Grid {
   // TODO pass a list of equal length to hold the area for the solar panels
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
     return positions.map(
-      (position, index) => new SolarPanel(position.x, position.y, SOLAR_PANEL.AREA, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`)
+      (position, index) =>
+        new SolarPanel(
+          position.x,
+          position.y,
+          SOLAR_PANEL.AREA,
+          `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
+        )
     );
   }
   /**
@@ -122,19 +154,26 @@ export class Biogrid implements Grid {
    */
   takeAction(action: GridAction) {
     // RETURN a new BiogridState
-    const allSupplyingPaths = action.getSupplyingPaths()
+    const allSupplyingPaths = action.getSupplyingPaths();
 
     const clonedGraph = this.state.cloneStateGraph();
 
     for (const supplyPath in allSupplyingPaths) {
       const oldGridItem = this.state.getGridItem(supplyPath);
-      const supplyingGridItem = this.state.getGridItem(allSupplyingPaths[supplyPath]);
+      // take energy from the supplying grid item and transfer it to the energy user
+      const supplyingGridItem = this.state.getGridItem(
+        allSupplyingPaths[supplyPath]
+      );
       const typeOldGridItem = this.getGridItemType(oldGridItem);
+      const energyUser = oldGridItem as Building | BioBattery;
+      const energyUserReq =
+        energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
+      const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
       if (typeOldGridItem === GRID_ITEM_NAMES.ENERGY_USER) {
-        const energyUser = oldGridItem as Building;
-        const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
-        const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
-        if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY || typeSupplyingGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
+        if (
+          typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY ||
+          typeSupplyingGridItem === GRID_ITEM_NAMES.SMALL_BATTERY
+        ) {
           const battery = supplyingGridItem as BioBattery;
           battery.supplyPower(energyUserReq);
           clonedGraph.setNode(battery.gridItemName, battery);
@@ -145,12 +184,9 @@ export class Biogrid implements Grid {
         } else {
           continue;
         }
-        energyUser.increaseEnergy(energyUserReq);
+        (energyUser as Building).increaseEnergy(energyUserReq);
         clonedGraph.setNode(energyUser.gridItemName, energyUser);
       } else if (typeOldGridItem === GRID_ITEM_NAMES.SMALL_BATTERY) {
-        const energyUser = oldGridItem as BioBattery;
-        const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
-        const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
           const battery = supplyingGridItem as BioBattery;
           battery.supplyPower(energyUserReq);
@@ -162,20 +198,16 @@ export class Biogrid implements Grid {
         } else {
           continue;
         }
-        energyUser.startCharging(energyUserReq);
+        (energyUser as BioBattery).startCharging(energyUserReq);
         clonedGraph.setNode(energyUser.gridItemName, energyUser);
       } else if (typeOldGridItem === GRID_ITEM_NAMES.LARGE_BATTERY) {
-        const energyUser = oldGridItem as BioBattery;
-        const energyUserReq =
-          energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
-        const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
         if (typeSupplyingGridItem === GRID_ITEM_NAMES.SOLAR_PANEL) {
           const solarpanel = supplyingGridItem as SolarPanel;
           solarpanel.supplyPower(energyUserReq);
         } else {
           continue;
         }
-        energyUser.startCharging(energyUserReq);
+        (energyUser as BioBattery).startCharging(energyUserReq);
         clonedGraph.setNode(energyUser.gridItemName, energyUser);
       }
     }
