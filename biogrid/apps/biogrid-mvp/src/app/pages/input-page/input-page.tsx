@@ -86,9 +86,9 @@ export const InputPage = () => {
 
         <p>If you would like to learn more about how we designed this project click <a href="" onClick={redirectToInfo}>here</a>.</p>
           
-        <div className="tooltipStartDate">
-          <span className="tooltiptextStartDate">The date where we will start collecting sunlight data from</span>
-          <div className="startDatePicker">
+        <div className="tooltip">
+          <span className="tooltiptext">The date where we will start collecting sunlight data from</span>
+          <div className="inputBox">
             <label>Start Date</label>
             <DatePicker
               showPopperArrow={false}
@@ -98,9 +98,9 @@ export const InputPage = () => {
           </div>
         </div>
 
-        <div className="tooltipEndDate">
-          <span className="tooltiptextEndDate">The date where we will stop collecting sunlight data</span>
-          <div className="endDatePicker">
+        <div className="tooltip">
+          <span className="tooltiptext">The date where we will stop collecting sunlight data</span>
+          <div className="inputBox">
             <label>End Date</label>
             <DatePicker
               showPopperArrow={false}
@@ -112,17 +112,17 @@ export const InputPage = () => {
 
         <br/>
 
-        <div className="tooltipSBC">
-          <span className="tooltiptextSBC">SBC's are used for quick sources of energy</span>
-          <div className="smallBatteryCells">
+        <div className="tooltip">
+          <span className="tooltiptext">SBC's are used for quick sources of energy</span>
+          <div className="inputBox">
             <label>Small Battery Cells</label>
             {smallBatteryCellInput}
           </div>
         </div>
 
-        <div className="tooltipLBC">
-          <span className="tooltiptextLBC">LBC's are used as backup energy sources to the solar panels</span>
-          <div className="largeBatteryCells">
+        <div className="tooltip">
+          <span className="tooltiptext">LBC's are used as backup energy sources to the solar panels</span>
+          <div className="inputBox">
             <label>Large Battery Cells</label>
             {largeBatteryCellInput}
           </div>
@@ -130,17 +130,17 @@ export const InputPage = () => {
 
         <br/>
 
-        <div className="tooltipBuild">
-          <span className="tooltiptextBuild">Buildings are reperesented as energy consumers in the grid</span>
-          <div className="buildings">
+        <div className="tooltip">
+          <span className="tooltiptext">Buildings are reperesented as energy consumers in the grid</span>
+          <div className="inputBox">
             <label>Buildings</label>
             {numBuildingsInput}
           </div>
         </div>
 
-        <div className="tooltipSolar">
-          <span className="tooltiptextSolar">Solar Panels are the main energy source in the grid</span>
-          <div className="solarPanels">
+        <div className="tooltip">
+          <span className="tooltiptext">Solar Panels are the main energy source in the grid</span>
+          <div className="inputBox">
             <label>Solar Panels</label>
             {numSolarPanelsInput}
           </div>
@@ -148,17 +148,17 @@ export const InputPage = () => {
 
         <br/>
 
-        <div className="tooltipWidth">
-          <span className="tooltiptextWidth">Used for even distribution of objects on the grid</span>
-          <div className="townWidth">
+        <div className="tooltip">
+          <span className="tooltiptext">Used for even distribution of objects on the grid</span>
+          <div className="inputBox">
             <label>Town Width (Kilometers)</label>
             {townWidthInput}
           </div>
         </div>
 
-        <div className="tooltipHeight">
-          <span className="tooltiptextHeight">Used for even distribution of objects on the grid</span>
-          <div className="townHeight">
+        <div className="tooltip">
+          <span className="tooltiptext">Used for even distribution of objects on the grid</span>
+          <div className="inputBox">
             <label>Town Height (Kilometers)</label>
             {townHeightInput}
           </div>
