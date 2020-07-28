@@ -28,7 +28,8 @@ describe('tests for the BioEnergySource', () => {
       efficiency = 0.125,
       latitude = 0,
       area = 10,
-      date = new Date('07/20/2020');
+      date = new Date();
+    date.setHours(0);
     const energySource = new SolarPanel(
       x,
       y,
@@ -41,8 +42,6 @@ describe('tests for the BioEnergySource', () => {
     );
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
-    const cloudCoverage = weather.getCloudCoverage(date);
-    const expected = (990 * (1 - 0.75 * Math.pow(cloudCoverage, 3))) / 1000;
     expect(await energySource.getPowerAmount(date)).toEqual(0);
   });
 
@@ -51,7 +50,8 @@ describe('tests for the BioEnergySource', () => {
       efficiency = 0.125,
       latitude = 0,
       area = 10,
-      date = new Date('07/20/2020');
+      date = new Date();
+    date.setHours(2);
     const energySource = new SolarPanel(
       x,
       y,
@@ -64,7 +64,8 @@ describe('tests for the BioEnergySource', () => {
     );
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
-    date.setHours(date.getHours() + 10);
-    expect(await energySource.getPowerAmount(date)).toEqual(1.212440625);
+    // 10 AM
+    date.setHours(10);
+    expect(await energySource.getPowerAmount(date)).toBeGreaterThan(0);
   });
 });
