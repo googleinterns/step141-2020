@@ -18,6 +18,7 @@ import {
   SolarPanelParams
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
+import { BatteryParams } from '../biobattery';
 
 export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
@@ -98,7 +99,14 @@ export class Biogrid implements Grid {
       ? LARGE_BATTERY.DEFAULT_START_ENERGY
       : SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
-      (position, index) => new BioBattery(position.x, position.y, `${gridItemName}-${index}`, batteryResistance, initEnergy, maxCapacity)
+      (position, index) => new BioBattery({
+        x: position.x,
+        y: position.y,
+        gridItemName: `${gridItemName}-${index}`,
+        gridItemResistance: batteryResistance,
+        energyInJoules: initEnergy,
+        maxCapacity
+      } as BatteryParams)
     );
   }
 

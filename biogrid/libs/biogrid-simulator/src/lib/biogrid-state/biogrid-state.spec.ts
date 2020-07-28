@@ -1,6 +1,6 @@
 import { BiogridState } from './';
 import { StateGraphVertex, GridItem } from '@biogrid/grid-simulator';
-import { Building } from '../building';
+import { Building, BuildingParams } from '../building';
 import { GRID_ITEM_NAMES, RESISTANCE } from '../config';
 import { Edge, Graph, alg } from "graphlib";
 
@@ -16,11 +16,11 @@ describe('classes', () => {
   const name4 = `${GRID_ITEM_NAMES.ENERGY_USER}-4`;
   const name5 = `${GRID_ITEM_NAMES.ENERGY_USER}-5`;
 
-  const building1 = new Building({energy: 32, x: 3, y: 4, gridItemName: name1});
-  const building2 = new Building({energy: 32, x: 7, y: 9, gridItemName: name2});
-  const building3 = new Building({energy: 32, x: 7, y: 8, gridItemName: name3});
-  const building4 = new Building({energy: 32, x: 2, y: 1, gridItemName: name4});
-  const building5 = new Building({energy: 32, x: 9, y: 9, gridItemName: name5});
+  const building1 = new Building({energy: 32, x: 3, y: 4, gridItemName: name1} as BuildingParams);
+  const building2 = new Building({energy: 32, x: 7, y: 9, gridItemName: name2} as BuildingParams);
+  const building3 = new Building({energy: 32, x: 7, y: 8, gridItemName: name3} as BuildingParams);
+  const building4 = new Building({energy: 32, x: 2, y: 1, gridItemName: name4} as BuildingParams);
+  const building5 = new Building({energy: 32, x: 9, y: 9, gridItemName: name5} as BuildingParams);
 
   const townSize = { height: 30, width: 30 };
 
@@ -36,8 +36,8 @@ describe('classes', () => {
 
   test('to create a BiogridState', () => {
     const newVertices: StateGraphVertex[] = [
-      new Building({energy: 32, x: x1, y: y1, gridItemName: name1}),
-      new Building({energy: 32, x: x2, y: y2, gridItemName: name2}),
+      new Building({energy: 32, x: x1, y: y1, gridItemName: name1} as BuildingParams),
+      new Building({energy: 32, x: x2, y: y2, gridItemName: name2} as BuildingParams),
     ];
     
     const state = new BiogridState(newVertices, townSize);
@@ -105,8 +105,8 @@ describe('classes', () => {
 
   test('getAllPositions returns the correct grid item positions', () => {
     const newVertices: StateGraphVertex[] = [
-      new Building({energy: 32, x: 3, y: 4, gridItemName: name1}),
-      new Building({energy: 32, x: 7, y: 9, gridItemName: name2}),
+      new Building({energy: 32, x: 3, y: 4, gridItemName: name1} as BuildingParams),
+      new Building({energy: 32, x: 7, y: 9, gridItemName: name2} as BuildingParams),
     ];
     const state = new BiogridState(newVertices, townSize);
     const positions = state.getAllPositions();

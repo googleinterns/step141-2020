@@ -1,7 +1,7 @@
 import { BioBrain } from "./";
 import { Biogrid } from "../biogrid";
 import { GRID_ITEM_NAMES, BUILDING } from "../config";
-import { Building } from "../building";
+import { Building, BuildingParams } from "../building";
 import { RuralArea } from "../community";
 
 let actualBrain: BioBrain;
@@ -13,9 +13,24 @@ const name3 = `${GRID_ITEM_NAMES.ENERGY_USER}-3`;
 beforeAll(() => {
   actualBrain = BioBrain.Instance;
   const ruralArea = [
-    new Building({energy: BUILDING.MAX_CAPACITY, x: 3, y: 4, gridItemName: name1}),
-    new Building({energy: 0, x: 7, y: 9, gridItemName: name2}),
-    new Building({energy: BUILDING.MAX_CAPACITY, x: 7, y: 8, gridItemName: name3}),
+    new Building({
+      energy: BUILDING.MAX_CAPACITY,
+      x: 3,
+      y: 4,
+      gridItemName: name1
+    } as BuildingParams),
+    new Building({
+      energy: 0,
+      x: 7,
+      y: 9,
+      gridItemName: name2
+    } as BuildingParams),
+    new Building({
+      energy: BUILDING.MAX_CAPACITY,
+      x: 7,
+      y: 8,
+      gridItemName: name3
+    } as BuildingParams),
   ];
   grid = new Biogrid(
     new RuralArea(ruralArea, /* townWidth = */ 10, /* townHeight = */ 10),
