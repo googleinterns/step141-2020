@@ -3,6 +3,7 @@ import {
   RuralArea,
   Building,
   BioBrain,
+  GRID_ITEM_NAMES,
 } from '@biogrid/biogrid-simulator';
 import { ItemPosition } from '@biogrid/grid-simulator';
 import { BUILDING } from 'libs/biogrid-simulator/src/lib/config';
@@ -48,7 +49,12 @@ export async function simulateNewBiogrid(
       body.townHeight
     );
     buildings.push(
-      new Building(BUILDING.DEFAULT_INITIAL_ENERGY, randomPos.x, randomPos.y)
+      new Building(
+        10,
+        randomPos.x,
+        randomPos.y,
+        `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`
+      )
     );
   }
   const town = new RuralArea(buildings, body.townWidth, body.townHeight);
