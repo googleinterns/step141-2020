@@ -8,27 +8,18 @@ import {
 } from '@biogrid/grid-simulator';
 import { SMALL_BATTERY } from '../config';
 
-interface BatteryParams {
-  xPos: number;
-  yPos: number;
-  id: string;
-  resistance: number;
-  initialEnergyInJoules?: Energy;
-  maxCapacityInJoules?: Energy;
+export interface BatteryParams {
+  x: Distance,
+  y: Distance,
+  gridItemName: string,
+  gridItemResistance: number,
+  energyInJoules: Energy,
+  maxCapacity?: Energy,
 }
-
-const BATTERY_PARAMS_DEFAULT: BatteryParams = {
-  xPos: 0,
-  yPos: 0,
-  id: '',
-  resistance: 0,
-  initialEnergyInJoules: SMALL_BATTERY.DEFAULT_START_ENERGY,
-  maxCapacityInJoules: SMALL_BATTERY.MAX_CAPACITY,
-};
 
 export class BioBattery implements Battery {
   private energyInJoules: Energy;
-  private readonly maxCapacity: Energy;
+  private readonly maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY;
   // name of the grid item is unique to the battery type, but they have a similar prefix
   gridItemName: string;
   // The resistance measured in ohms
@@ -42,27 +33,20 @@ export class BioBattery implements Battery {
    * @param x Distance from the left edge of the town
    * @param y Distance from the top edge of the town
    */
-  constructor(params: BatteryParams) {
-    const paramsWithDefault = { ...BATTERY_PARAMS_DEFAULT, ...params };
-    this.relativePosition = {
-      x: paramsWithDefault.xPos,
-      y: paramsWithDefault.yPos,
-    };
-    if (
-      !this.validateInputs(
-        paramsWithDefault.initialEnergyInJoules || 0,
-        paramsWithDefault.maxCapacityInJoules || 0
-      )
-    ) {
+  constructor(batteryParams: BatteryParams) {
+    this.relativePosition = { x: batteryParams.x, y: batteryParams.y };
+    if (!this.validateInputs(batteryParams.energyInJoules, batteryParams.maxCapacity)) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
       throw new Error(
-        `Cannot create a battery with values: (${paramsWithDefault.initialEnergyInJoules}, ${paramsWithDefault.maxCapacityInJoules})`
+        `Cannot create a battery with values: (${batteryParams.energyInJoules}, ${batteryParams.maxCapacity})`
       );
     }
-    this.energyInJoules = paramsWithDefault.initialEnergyInJoules || 0;
-    this.maxCapacity = paramsWithDefault.maxCapacityInJoules || 0;
-    this.gridItemName = paramsWithDefault.id;
-    this.gridItemResistance = paramsWithDefault.resistance;
+    this.energyInJoules = batteryParams.energyInJoules;
+    if (batteryParams.maxCapacity) {
+      this.maxCapacity = batteryParams.maxCapacity;
+    }
+    this.gridItemName = batteryParams.gridItemName;
+    this.gridItemResistance = batteryParams.gridItemResistance;
   }
 
   getRelativePosition() {

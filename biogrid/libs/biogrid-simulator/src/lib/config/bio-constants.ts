@@ -90,7 +90,7 @@ export const RESISTANCE = {
  */
 export const BUILDING = {
   DEFAULT_INITIAL_ENERGY: 1.3,
-  MAX_CAPACITY: 1.3,
+  MAX_CAPACITY: 32,
   MIN_CAPACITY: 0,
 };
 
