@@ -42,7 +42,7 @@ RUN nx build biogrid-mvp --prod || echo 'continuing'
 
 # Copy the contents of the frontend into the static serving file
 RUN mkdir -p /usr/src/repo/dist/apps/api/build/public
-RUN cp dist/apps/biogrid-mvp/* dist/apps/api/build/public
+RUN cp -r dist/apps/biogrid-mvp/* dist/apps/api/build/public
 
 # Remove dev deps
 # TODO: Pruning removes the node_modules and everything. This is going to be fixed
