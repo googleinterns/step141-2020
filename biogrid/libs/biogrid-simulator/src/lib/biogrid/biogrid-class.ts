@@ -10,8 +10,8 @@ import {
   GridItem
 } from '@biogrid/grid-simulator';
 import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
-import { 
-  BioBattery, 
+import {
+  BioBattery,
   BiogridState,
   Building,
   SolarPanel,
@@ -74,6 +74,10 @@ export class Biogrid implements Grid {
       ...this.town.getEnergyUsers(),
       ...this.solarPanels,
     ]
+  }
+
+  getTownSize() {
+    return this.town.getTownSize()
   }
 
   getSystemState() {
