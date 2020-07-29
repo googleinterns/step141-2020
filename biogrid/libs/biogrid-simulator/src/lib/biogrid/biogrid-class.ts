@@ -50,7 +50,6 @@ export class Biogrid implements Grid {
   private efficiency: number;
 
   constructor(private town: Town, opts: BiogridOptions) {
-
     // Batteries
     const smallBatteryPositions = this.createGridItemPositions(
       town.getTownSize(),
@@ -153,6 +152,16 @@ export class Biogrid implements Grid {
         )
     );
   }
+
+  /**
+   * Drain the energy users according to the time of day
+   */
+  drainEnergyUsers(date: Date) {
+    this.town.getEnergyUsers().forEach((energyUser) => {
+      energyUser.decreaseEnergyByTimeOfDay(date);
+    });
+  }
+
   /**
    * This method takes the results of th brain and then it changes the state graph as suggested by the brain.
    * The results of the brain are in form of an object key:value pair, with the receiver gridItemName as key and supplier gridItemName as value

@@ -1,5 +1,6 @@
 import { BioBattery, Building, SolarPanel } from '@biogrid/biogrid-simulator';
 import { Path } from 'graphlib';
+import { EnergyUsageByTimeOfDay } from '@biogrid/grid-simulator';
 
 /**
  * These values are for a small battery which store a maximum 48-volts 6.5kWh
@@ -86,6 +87,32 @@ export const BUILDING = {
   DEFAULT_INITIAL_ENERGY: 1.3,
   MAX_CAPACITY: 32,
   MIN_CAPACITY: 0,
+  ENERGY_USAGE_KILOJOULE_BY_TIME_OF_DAY: {
+    '0': 1,
+    '1': 1,
+    '2': 1,
+    '3': 1,
+    '4': 1,
+    '5': 1,
+    '6': 1,
+    '7': 1,
+    '8': 1,
+    '9': 1,
+    '10': 1,
+    '11': 1,
+    '12': 1,
+    '13': 1,
+    '14': 1,
+    '15': 1,
+    '16': 1,
+    '17': 1,
+    '18': 1,
+    '19': 1,
+    '20': 1,
+    '21': 1,
+    '22': 1,
+    '23': 1,
+  } as EnergyUsageByTimeOfDay
 };
 
 export type SupplyingAgents = BioBattery | SolarPanel;

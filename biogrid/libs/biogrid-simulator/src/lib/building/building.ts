@@ -12,6 +12,7 @@ import { GRID_ITEM_NAMES, BUILDING, RESISTANCE } from '../config';
  * A structure such as a building or house which uses energy to operate.
  */
 export class Building implements EnergyUser {
+
   private energyInJoules: number;
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
@@ -26,10 +27,13 @@ export class Building implements EnergyUser {
   /**
    * @param {number} energy Amount of energy the building will have in joules.
    */
-  constructor(energy: number, x: Distance, y: Distance,
-      gridItemName: string = GRID_ITEM_NAMES.ENERGY_USER,
-      private readonly minCapacity: Energy = BUILDING.MIN_CAPACITY,
-      private readonly maxCapacity:Energy = BUILDING.MAX_CAPACITY,
+  constructor(
+    energy: number,
+    x: Distance,
+    y: Distance,
+    gridItemName: string = GRID_ITEM_NAMES.ENERGY_USER,
+    private readonly minCapacity: Energy = BUILDING.MIN_CAPACITY,
+    private readonly maxCapacity: Energy = BUILDING.MAX_CAPACITY
   ) {
     this.relativePosition = { x, y };
     this.gridItemName = gridItemName;
@@ -68,6 +72,11 @@ export class Building implements EnergyUser {
     return this.energyInJoules;
   }
 
+  decreaseEnergyAccordingToTimeOfDay(date: Date) {
+    const energyUsed = this.getAverageEnergyUsagePerDay(date.getHours());
+    this.decreaseEnergy(energyUsed);
+  }
+
   /**
    * This method adds energy to the current building's power.
    */
@@ -92,5 +101,9 @@ export class Building implements EnergyUser {
     } else {
       this.energyInJoules -= energy;
     }
+  }
+
+  private getAverageEnergyUsagePerDay(hourOfDay: number): Energy {
+    return BUILDING.ENERGY_USAGE_KILOJOULE_BY_TIME_OF_DAY[hourOfDay.toString()]
   }
 }
