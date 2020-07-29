@@ -10,6 +10,11 @@ export type Distance = number;
 export type Energy = number;
 
 /**
+ * Resistance is represented in Ohms (Ω)
+ */
+export type Resistance = number;
+
+/**
  * In KiloWatts
  */
 export type Power = number;

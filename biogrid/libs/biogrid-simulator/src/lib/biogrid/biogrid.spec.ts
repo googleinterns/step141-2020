@@ -1,6 +1,6 @@
 import { Biogrid } from './';
 import { RuralArea } from '../community';
-import { Building } from '../building';
+import { Building, BuildingParams } from '../building';
 import { GRID_ITEM_NAMES, BUILDING } from '../config';
 import { BioBrain } from '../biobrain';
 
@@ -11,18 +11,45 @@ const name2 = `${GRID_ITEM_NAMES.ENERGY_USER}-2`;
 const name3 = `${GRID_ITEM_NAMES.ENERGY_USER}-3`;
 const name4 = `${GRID_ITEM_NAMES.ENERGY_USER}-4`;
 const name5 = `${GRID_ITEM_NAMES.ENERGY_USER}-5`;
+const townHeight = 10;
+const townWidth = 10;
 
 beforeAll(() => {
   brain = BioBrain.Instance;
   const ruralArea = [
-    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 3, 4, name1),
-    new Building(0, 7, 9, name2),
-    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 7, 8, name3),
-    new Building(0, 2, 1, name4),
-    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 9, 9, name5),
+    new Building({
+      energy: BUILDING.DEFAULT_INITIAL_ENERGY,
+      x: 3,
+      y: 4,
+      gridItemName: name1
+    } as BuildingParams),
+    new Building({
+      energy: 0,
+      x: 7,
+      y: 9,
+      gridItemName: name2
+    } as BuildingParams),
+    new Building({
+      energy: BUILDING.DEFAULT_INITIAL_ENERGY,
+      x: 7,
+      y: 8,
+      gridItemName: name3
+    } as BuildingParams),
+    new Building({
+      energy: 0,
+      x: 2,
+      y: 1,
+      gridItemName: name4
+    } as BuildingParams),
+    new Building({
+      energy: BUILDING.DEFAULT_INITIAL_ENERGY,
+      x: 9,
+      y: 9,
+      gridItemName: name5
+    } as BuildingParams),
   ];
   grid = new Biogrid(
-    new RuralArea(ruralArea, /* townWidth = */ 10, /* townHeight = */ 10),
+    new RuralArea(ruralArea, /* townWidth = */ townWidth, /* townHeight = */ townHeight),
     {
       numberOfLargeBatteryCells: 1,
       numberOfSmallBatteryCells: 0,
@@ -68,7 +95,7 @@ describe('classes', () => {
     // +1 to the expected positions because of the grid which is automatically added at position (0, 0)
     expect(positions.length).toEqual(2 + 6 + 4 + 1);
     expect(positions).toEqual([
-      { x: 0, y: 0 },
+      { x: Math.floor(townWidth / 2), y: Math.floor(townHeight / 2) },
       { x: 5, y: 0.8333333333333333 },
       { x: 5, y: 2.5 },
       { x: 5, y: 4.166666666666667 },
@@ -99,7 +126,6 @@ describe('classes', () => {
     // Check to make sure that the houses have been refiled
     const building2 = gridTakeAction.getGridItem(name2) as Building;
     const building4 = gridTakeAction.getGridItem(name4) as Building;
-    
     const actual = [building2.getEnergyInJoules(), building4.getEnergyInJoules()]
     expect(actual).toEqual(expected);
   });

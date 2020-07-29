@@ -30,22 +30,22 @@ export const InputPage = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [smallBatteryCells, smallBatteryCellInput] = useInput({
-    default: 0,
+    default: 5,
   });
   const [largeBatteryCells, largeBatteryCellInput] = useInput({
-    default: 0,
+    default: 5,
   });
   const [numBuildings, numBuildingsInput] = useInput({
-    default: 0,
+    default: 5,
   });
   const [numSolarPanels, numSolarPanelsInput] = useInput({
-    default: 0,
+    default: 5,
   });
   const [townWidth, townWidthInput] = useInput({
-    default: 0,
+    default: 5,
   });
   const [townHeight, townHeightInput] = useInput({
-    default: 0,
+    default: 5,
   });
   const history = useHistory();
 
