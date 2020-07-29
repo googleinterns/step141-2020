@@ -11,13 +11,14 @@ describe('tests for the BioEnergySource', () => {
     const efficiency = 0.125;
     const expected = `Cannot create a solar panel object with values of area ${area}`;
     expect(
-      () => new SolarPanel({
-        x,
-        y,
-        areaSquareMeters: area,
-        gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
-        efficiency
-      } as SolarPanelParams)
+      () =>
+        new SolarPanel({
+          x,
+          y,
+          areaSquareMeters: area,
+          gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
+          efficiency,
+        } as SolarPanelParams)
     ).toThrow(expected);
   });
 
@@ -26,13 +27,14 @@ describe('tests for the BioEnergySource', () => {
     const efficiency = 10;
     const expected = `Cannot create a solar panel object with values: (${efficiency})`;
     expect(
-      () => new SolarPanel({
-        x,
-        y,
-        areaSquareMeters: area,
-        gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
-        efficiency
-      } as SolarPanelParams)
+      () =>
+        new SolarPanel({
+          x,
+          y,
+          areaSquareMeters: area,
+          gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
+          efficiency,
+        } as SolarPanelParams)
     ).toThrow(expected);
   });
 
@@ -64,7 +66,6 @@ describe('tests for the BioEnergySource', () => {
       latitude = 0,
       area = 10,
       date = new Date();
-    date.setHours(2);
     const energySource = new SolarPanel({
       x,
       y,
@@ -73,11 +74,11 @@ describe('tests for the BioEnergySource', () => {
       efficiency,
       longitude,
       latitude,
-      date
+      date,
     } as SolarPanelParams);
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
-    // 10 AM
+    // 10 AM local time
     date.setHours(10);
     expect(await energySource.getPowerAmount(date)).toBeGreaterThan(0);
   });
