@@ -19,7 +19,7 @@ export interface BatteryParams {
 
 export class BioBattery implements Battery {
   private energyInJoules: Energy;
-  private readonly maxCapacity: Energy;
+  private readonly maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY;
   // name of the grid item is unique to the battery type, but they have a similar prefix
   gridItemName: string;
   // The resistance measured in ohms
@@ -42,7 +42,9 @@ export class BioBattery implements Battery {
       );
     }
     this.energyInJoules = batteryParams.energyInJoules;
-    this.maxCapacity = batteryParams.maxCapacity ? batteryParams.maxCapacity : SMALL_BATTERY.MAX_CAPACITY;
+    if (batteryParams.maxCapacity) {
+      this.maxCapacity = batteryParams.maxCapacity;
+    }
     this.gridItemName = batteryParams.gridItemName;
     this.gridItemResistance = batteryParams.gridItemResistance;
   }
