@@ -1,7 +1,7 @@
 import { Biogrid } from './';
 import { RuralArea } from '../community';
 import { Building } from '../building';
-import { GRID_ITEM_NAMES, BUILDING } from '../config';
+import { GRID_ITEM_NAMES, BUILDING, GRID_DISTANCES } from '../config';
 import { BioBrain } from '../biobrain';
 import { ItemPosition } from '@biogrid/grid-simulator';
 
@@ -139,7 +139,7 @@ describe('classes', () => {
           }
         )
     ).toThrow(
-      'There are too many items on the grid. New items could not be placed with a minimum distance of 0.5 km apart'
+      `There are too many items on the grid. New items could not be placed with a minimum distance of ${GRID_DISTANCES.INCREMENTS_KM} km apart`
     );
   });
 });

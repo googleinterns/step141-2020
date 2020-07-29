@@ -8,6 +8,24 @@ import {
 } from '@biogrid/grid-simulator';
 import { SMALL_BATTERY } from '../config';
 
+interface BatteryParams {
+  xPos: number;
+  yPos: number;
+  id: string;
+  resistance: number;
+  initialEnergyInJoules?: Energy;
+  maxCapacityInJoules?: Energy;
+}
+
+const BATTERY_PARAMS_DEFAULT: BatteryParams = {
+  xPos: 0,
+  yPos: 0,
+  id: '',
+  resistance: 0,
+  initialEnergyInJoules: SMALL_BATTERY.DEFAULT_START_ENERGY,
+  maxCapacityInJoules: SMALL_BATTERY.MAX_CAPACITY,
+};
+
 export class BioBattery implements Battery {
   private energyInJoules: Energy;
   private readonly maxCapacity: Energy;
@@ -24,25 +42,27 @@ export class BioBattery implements Battery {
    * @param x Distance from the left edge of the town
    * @param y Distance from the top edge of the town
    */
-  constructor(
-    x: Distance,
-    y: Distance,
-    gridItemName: string,
-    gridItemResistance: number,
-    energyInJoules: Energy = SMALL_BATTERY.DEFAULT_START_ENERGY,
-    maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY
-  ) {
-    this.relativePosition = { x, y };
-    if (!this.validateInputs(energyInJoules, maxCapacity)) {
+  constructor(params: BatteryParams) {
+    const paramsWithDefault = { ...BATTERY_PARAMS_DEFAULT, ...params };
+    this.relativePosition = {
+      x: paramsWithDefault.xPos,
+      y: paramsWithDefault.yPos,
+    };
+    if (
+      !this.validateInputs(
+        paramsWithDefault.initialEnergyInJoules || 0,
+        paramsWithDefault.maxCapacityInJoules || 0
+      )
+    ) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
       throw new Error(
-        `Cannot create a battery with values: (${energyInJoules}, ${maxCapacity})`
+        `Cannot create a battery with values: (${paramsWithDefault.initialEnergyInJoules}, ${paramsWithDefault.maxCapacityInJoules})`
       );
     }
-    this.energyInJoules = energyInJoules;
-    this.maxCapacity = maxCapacity;
-    this.gridItemName = gridItemName;
-    this.gridItemResistance = gridItemResistance;
+    this.energyInJoules = paramsWithDefault.initialEnergyInJoules || 0;
+    this.maxCapacity = paramsWithDefault.maxCapacityInJoules || 0;
+    this.gridItemName = paramsWithDefault.id;
+    this.gridItemResistance = paramsWithDefault.resistance;
   }
 
   getRelativePosition() {
