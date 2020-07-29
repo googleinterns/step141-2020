@@ -26,13 +26,13 @@ import {
 import { SOLAR_PANEL, RESISTANCE } from '../config';
 
 export interface SolarPanelParams extends EnergySourceParams {
-  sizeSqMtr: number,
+  areaSquareMeters: number,
   gridItemName: string,
   date?: Date,
 }
 
 export class SolarPanel extends EnergySource {
-  private sizeSqMtr: number;
+  private areaSquareMeters: number;
   // This is unique to every single solar panel but all have a same prefix name
   gridItemName: string;
   private date: Date;
@@ -43,12 +43,12 @@ export class SolarPanel extends EnergySource {
    */
   constructor(solarPanelParams: SolarPanelParams) {
     super(solarPanelParams);
-    if (!this.validateInputsSolarPanel(solarPanelParams.sizeSqMtr)) {
+    if (!this.validateInputsSolarPanel(solarPanelParams.areaSquareMeters)) {
       throw new Error(
-        `Cannot create a solar panel object with values of area ${solarPanelParams.sizeSqMtr}`
+        `Cannot create a solar panel object with values of area ${solarPanelParams.areaSquareMeters}`
       );
     }
-    this.sizeSqMtr = solarPanelParams.sizeSqMtr;
+    this.areaSquareMeters = solarPanelParams.areaSquareMeters;
     this.gridItemName = solarPanelParams.gridItemName;
     this.date = solarPanelParams.date ? solarPanelParams.date : new Date();
     this.weatherLib = new WeatherLib(this.date, this.longitude, this.latitude);
@@ -74,7 +74,7 @@ export class SolarPanel extends EnergySource {
     const powerPerSqrMeter = this.cloudCoverageToKiloWattsPerSquareMeter(
       cloudCoverage
     );
-    return powerPerSqrMeter * this.sizeSqMtr * this.efficiency;
+    return powerPerSqrMeter * this.areaSquareMeters * this.efficiency;
   }
 
   supplyPower(requiredPower: Power): Power {

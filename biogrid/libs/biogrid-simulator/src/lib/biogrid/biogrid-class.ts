@@ -28,8 +28,8 @@ import {
   GridItem
 } from '@biogrid/grid-simulator';
 import { LARGE_BATTERY, SMALL_BATTERY, SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
-import { 
-  BioBattery, 
+import {
+  BioBattery,
   BiogridState,
   Building,
   SolarPanel,
@@ -94,6 +94,10 @@ export class Biogrid implements Grid {
     ]
   }
 
+  getTownSize() {
+    return this.town.getTownSize()
+  }
+
   getSystemState() {
     return this.state;
   }
@@ -139,7 +143,7 @@ export class Biogrid implements Grid {
         x: position.x,
         y: position.y,
         efficiency: 0.75,
-        sizeSqMtr: SOLAR_PANEL.AREA,
+        areaSquareMeters: SOLAR_PANEL.AREA,
         gridItemName: `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
       } as SolarPanelParams)
     );

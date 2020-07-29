@@ -22,7 +22,7 @@ describe('tests for the BioEnergySource', () => {
       () => new SolarPanel({
         x,
         y,
-        sizeSqMtr: area,
+        areaSquareMeters: area,
         gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
         efficiency
       } as SolarPanelParams)
@@ -37,7 +37,7 @@ describe('tests for the BioEnergySource', () => {
       () => new SolarPanel({
         x,
         y,
-        sizeSqMtr: area,
+        areaSquareMeters: area,
         gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
         efficiency
       } as SolarPanelParams)
@@ -57,7 +57,7 @@ describe('tests for the BioEnergySource', () => {
       longitude,
       latitude,
       date,
-      sizeSqMtr: area,
+      areaSquareMeters: area,
       gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
     } as SolarPanelParams);
     const weather = new WeatherLib(date, longitude, latitude);
@@ -76,7 +76,7 @@ describe('tests for the BioEnergySource', () => {
     const energySource = new SolarPanel({
       x,
       y,
-      sizeSqMtr: area,
+      areaSquareMeters: area,
       gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
       efficiency,
       longitude,

@@ -6,3 +6,4 @@ export * from './lib/biogrid-action';
 export * from './lib/biogrid-state';
 export * from './lib/building';
 export * from './lib/community';
+export * from './lib/config'

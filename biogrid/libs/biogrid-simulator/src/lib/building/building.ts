@@ -28,8 +28,8 @@ export interface BuildingParams {
   x: Distance,
   y: Distance,
   gridItemName: string,
-  readonly minCapacity?: Energy,
-  readonly maxCapacity?: Energy,
+  minCapacity?: Energy,
+  maxCapacity?: Energy,
 }
 
 // TODO rename energy to power consumption
@@ -48,8 +48,8 @@ export class Building implements EnergyUser {
   /** Defines the resistance of the building due to the wiring */
   gridItemResistance = RESISTANCE.BUILDING;
 
-  private readonly minCapacity: Energy;
-  private readonly maxCapacity: Energy;
+  private readonly minCapacity: Energy = BUILDING.MIN_CAPACITY;
+  private readonly maxCapacity: Energy = BUILDING.MAX_CAPACITY;
 
   /**
    * @param {number} energy Amount of energy the building will have in joules.
@@ -62,8 +62,12 @@ export class Building implements EnergyUser {
     } else {
       throw new Error("Can't create a building with negative energy!");
     }
-    this.minCapacity = buildingParams.minCapacity ? buildingParams.minCapacity : BUILDING.MIN_CAPACITY;
-    this.maxCapacity = buildingParams.maxCapacity ? buildingParams.maxCapacity : BUILDING.MAX_CAPACITY;
+    if (buildingParams.minCapacity) {
+      this.minCapacity = buildingParams.minCapacity;
+    }
+    if (buildingParams.maxCapacity) {
+      this.maxCapacity = buildingParams.maxCapacity;
+    }
   }
 
   getMinCapacity(): Energy {

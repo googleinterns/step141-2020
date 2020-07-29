@@ -69,7 +69,7 @@ export function calculatePower(voltage: number, resistance: number) {
  *    2. V = I * R
  * where P is power, V is voltage, I is current and R is resistance
  * Since current is constant in circuits
- * Th final equation used is P = I^2 * R
+ * Th final equation implemented is P = I^2 * R
  * @param current is the current in the circuit at that particular time
  * @param resistance is the resistance of the wires
  * @return the power transport over the given @param resistance
@@ -80,6 +80,12 @@ export function calculatePowerWithCurrent(current: number, resistance: number) {
 
 /**
  * This function is used to calculate the current in the circuit using the given @param power
+ * It calculates the current based on these physics equations for electricity
+ *    1. P = V * I
+ *    2. V = I * R
+ * From these two equations, we can deduce that, 3. P = I^2 * R
+ * where P is power, V is voltage, I is current and R is resistance
+ * The final equation implemented is the reverse of equation 3, with I = sqrt(P * R)
  * @param power is the power coming in the circuit
  * @param resistance is the resistance of the circuit
  * @returns the current that is going through the circuit over the given @param resistance
