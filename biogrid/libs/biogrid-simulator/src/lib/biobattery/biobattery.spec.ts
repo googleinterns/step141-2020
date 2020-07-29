@@ -77,6 +77,6 @@ describe('test for BioBattery class', () => {
       maxCapacityInJoules: 10,
     });
     const expected = false;
-    expect(battery.isEmpty()).toEqual(expected);
+    expect(await battery.isEmpty()).toEqual(expected);
   });
 });

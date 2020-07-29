@@ -2,12 +2,12 @@ import { simulateNewBiogrid } from './Biogrid';
 import { GRID_ITEM_NAMES } from '@biogrid/biogrid-simulator';
 
 describe('weather', () => {
-  test('that simulateNewBiogrid placed the proper amount of items on the grid', async () => {
+  test('simulateNewBiogrid placed the proper amount of items on the grid', async () => {
     const startDate = new Date();
     const endDate = new Date();
     startDate.setDate(startDate.getDate() - 2);
     endDate.setDate(endDate.getDate() - 1);
-    let smallBatteryCells = 5,
+    const smallBatteryCells = 5,
       largeBatteryCells = 2,
       numBuildings = 5,
       numSolarPanels = 5,
