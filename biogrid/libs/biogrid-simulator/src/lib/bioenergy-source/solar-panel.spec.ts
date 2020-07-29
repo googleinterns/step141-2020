@@ -11,13 +11,14 @@ describe('tests for the BioEnergySource', () => {
     const efficiency = 0.125;
     const expected = `Cannot create a solar panel object with values of area ${area}`;
     expect(
-      () => new SolarPanel({
-        x,
-        y,
-        areaSquareMeters: area,
-        gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
-        efficiency
-      } as SolarPanelParams)
+      () =>
+        new SolarPanel({
+          x,
+          y,
+          areaSquareMeters: area,
+          gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
+          efficiency,
+        } as SolarPanelParams)
     ).toThrow(expected);
   });
 
@@ -26,13 +27,14 @@ describe('tests for the BioEnergySource', () => {
     const efficiency = 10;
     const expected = `Cannot create a solar panel object with values: (${efficiency})`;
     expect(
-      () => new SolarPanel({
-        x,
-        y,
-        areaSquareMeters: area,
-        gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
-        efficiency
-      } as SolarPanelParams)
+      () =>
+        new SolarPanel({
+          x,
+          y,
+          areaSquareMeters: area,
+          gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
+          efficiency,
+        } as SolarPanelParams)
     ).toThrow(expected);
   });
 
@@ -41,7 +43,8 @@ describe('tests for the BioEnergySource', () => {
       efficiency = 0.125,
       latitude = 0,
       area = 10,
-      date = new Date('07/20/2020');
+      date = new Date();
+    date.setHours(0);
     const energySource = new SolarPanel({
       x,
       y,
@@ -54,8 +57,6 @@ describe('tests for the BioEnergySource', () => {
     } as SolarPanelParams);
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
-    const cloudCoverage = weather.getCloudCoverage(date);
-    const expected = (990 * (1 - 0.75 * Math.pow(cloudCoverage, 3))) / 1000;
     expect(await energySource.getPowerAmount(date)).toEqual(0);
   });
 
@@ -64,7 +65,7 @@ describe('tests for the BioEnergySource', () => {
       efficiency = 0.125,
       latitude = 0,
       area = 10,
-      date = new Date('07/20/2020');
+      date = new Date();
     const energySource = new SolarPanel({
       x,
       y,
@@ -73,11 +74,12 @@ describe('tests for the BioEnergySource', () => {
       efficiency,
       longitude,
       latitude,
-      date
+      date,
     } as SolarPanelParams);
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
-    date.setHours(date.getHours() + 10);
-    expect(await energySource.getPowerAmount(date)).toEqual(1.212440625);
+    // 10 AM local time
+    date.setHours(10);
+    expect(await energySource.getPowerAmount(date)).toBeGreaterThan(0);
   });
 });
