@@ -51,7 +51,6 @@ describe('tests for the BioEnergySource', () => {
       latitude = 0,
       area = 10,
       date = new Date();
-    date.setHours(2);
     const energySource = new SolarPanel(
       x,
       y,
@@ -64,7 +63,7 @@ describe('tests for the BioEnergySource', () => {
     );
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
-    // 10 AM
+    // 10 AM local time
     date.setHours(10);
     expect(await energySource.getPowerAmount(date)).toBeGreaterThan(0);
   });
