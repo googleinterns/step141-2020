@@ -1,14 +1,16 @@
-import { Building } from '../building';
+import { Building, BuildingParams } from '../building';
 import { RuralArea } from './';
+import { GRID_ITEM_NAMES } from '../config';
 
 describe('tests for RuralArea class', () => {
   const x = 10,
     y = 10;
+    const gridItemName = GRID_ITEM_NAMES.ENERGY_USER;
   test('getBuildingById()', () => {
     const buildings: Building[] = [
-      new Building(/* energy = */ 5, /* x = */ 2, /* y = */ 3),
-      new Building(/* energy = */ 10, /* x = */ 3, /* y = */ 4),
-      new Building(/* energy = */ 20, /* x = */ 1, /* y = */ 2),
+      new Building({energy: 5, x: 2, y: 3, gridItemName} as BuildingParams),
+      new Building({energy: 10, x: 3, y: 4, gridItemName} as BuildingParams),
+      new Building({energy: 20, x: 1, y: 2, gridItemName} as BuildingParams),
     ];
     const ruralarea = new RuralArea(buildings, x, y);
     const aBuildingId = buildings[1].getBuildingId();
@@ -17,23 +19,23 @@ describe('tests for RuralArea class', () => {
 
   test('addBuilding()', () => {
     const buildings: Building[] = [
-      new Building(/* energy = */ 5, /* x = */ 2, /* y = */ 3),
-      new Building(10, 3, 4),
-      new Building(20, 1, 2),
+      new Building({energy: 5, x: 2, y: 3, gridItemName} as BuildingParams),
+      new Building({energy: 10, x: 3, y: 4, gridItemName} as BuildingParams),
+      new Building({energy: 20, x: 1, y: 2, gridItemName} as BuildingParams),
     ];
     const ruralarea = new RuralArea(buildings, 12, 12);
-    const newBuilding = new Building(40, x, y);
+    const newBuilding = new Building({energy: 40, x, y, gridItemName});
     ruralarea.addEnergyUser(newBuilding);
     expect(ruralarea.getEnergyUsers().length).toEqual(4);
   });
 
   test('addEnergyUser() unique Id', () => {
     const buildings: Building[] = [
-      new Building(/* energy = */ 5, /* x = */ 2, /* y = */ 3),
-      new Building(10, 3, 4),
+      new Building({energy: 5, x: 2, y: 3, gridItemName} as BuildingParams),
+      new Building({energy: 10, x: 3, y: 4, gridItemName} as BuildingParams),
     ];
     const ruralarea = new RuralArea(buildings, x, y);
-    const newBuilding = new Building(40, 9, 9);
+    const newBuilding = new Building({energy: 40, x: 9, y: 9, gridItemName});
     ruralarea.addEnergyUser(newBuilding);
     const isArrayUnique = (arr: number[]) => new Set(arr).size === arr.length;
     expect(
@@ -45,7 +47,7 @@ describe('tests for RuralArea class', () => {
 
   test('add an energy user out of bounds', () => {
     const buildings: Building[] = [
-      new Building(/* energy = */ 22, /* x = */ 113, /* y = */ 1114),
+      new Building({energy: 22, x: 113, y: 1114, gridItemName} as BuildingParams),
     ];
     expect(() => {
       const ruralarea = new RuralArea(buildings, x, y);

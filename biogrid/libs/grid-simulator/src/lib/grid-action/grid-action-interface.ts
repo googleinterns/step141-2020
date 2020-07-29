@@ -9,4 +9,5 @@ export interface SupplyingPath {
 
 export interface GridAction {
   getSupplyingPaths: () => SupplyingPath;
+  getEfficiency: () => number;
 }

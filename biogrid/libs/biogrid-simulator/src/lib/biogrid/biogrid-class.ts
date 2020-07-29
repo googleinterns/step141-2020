@@ -14,9 +14,11 @@ import {
   BioBattery,
   BiogridState,
   Building,
-  SolarPanel
+  SolarPanel,
+  SolarPanelParams
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
+import { BatteryParams } from '../biobattery';
 
 export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
@@ -34,14 +36,13 @@ export class Biogrid implements Grid {
   // The large batteries in the grid, will approximately have a maxCapacity of 540,000KJ
   private largeBatteries: Battery[];
 
-  // All details for the houses / energyUsers in the grid
-  private town: Town;
-
   // All details for the source of energy
   private solarPanels: EnergySource[];
 
+  // Holds the efficiency of the grid
+  private efficiency: number;
 
-  constructor(town: Town, opts: BiogridOptions) {
+  constructor(private town: Town, opts: BiogridOptions) {
 
     // Batteries
     const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
@@ -56,16 +57,14 @@ export class Biogrid implements Grid {
       GRID_ITEM_NAMES.LARGE_BATTERY
     );
 
-    // Towns
-    this.town = town;
-
     // Enery Source
     // TODO implement the solar panels
     const solarPanelPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSolarPanels);
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
 
-    this.state = new BiogridState(this.createGridItems());
-
+    this.state = new BiogridState(this.createGridItems(), town.getTownSize());
+    // Set the effieciency to 0 at the beginning
+    this.efficiency = 0;
   }
 
   private createGridItems(): GridItem[] {
@@ -85,6 +84,10 @@ export class Biogrid implements Grid {
     return this.state;
   }
 
+  getEfficiency() {
+    return this.efficiency;
+  }
+
   getJsonGraphDetails() {
     return this.state.getJsonGraph();
   }
@@ -100,7 +103,14 @@ export class Biogrid implements Grid {
       ? LARGE_BATTERY.DEFAULT_START_ENERGY
       : SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
-      (position, index) => new BioBattery(position.x, position.y, `${gridItemName}-${index}`, batteryResistance, initEnergy, maxCapacity)
+      (position, index) => new BioBattery({
+        x: position.x,
+        y: position.y,
+        gridItemName: `${gridItemName}-${index}`,
+        gridItemResistance: batteryResistance,
+        energyInJoules: initEnergy,
+        maxCapacity
+      } as BatteryParams)
     );
   }
 
@@ -111,7 +121,13 @@ export class Biogrid implements Grid {
   // TODO pass a list of equal length to hold the area for the solar panels
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
     return positions.map(
-      (position, index) => new SolarPanel(position.x, position.y, SOLAR_PANEL.AREA, `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`)
+      (position, index) => new SolarPanel({
+        x: position.x,
+        y: position.y,
+        efficiency: 0.75,
+        areaSquareMeters: SOLAR_PANEL.AREA,
+        gridItemName: `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
+      } as SolarPanelParams)
     );
   }
   /**
@@ -121,11 +137,12 @@ export class Biogrid implements Grid {
    * @returns a the current state with a new graph which includes the changes that were suggested by the brain
    */
   takeAction(action: GridAction) {
+    // Set new efficiency
+    this.efficiency = action.getEfficiency();
     // RETURN a new BiogridState
-    const allSupplyingPaths = action.getSupplyingPaths()
+    const allSupplyingPaths = action.getSupplyingPaths();
 
     const clonedGraph = this.state.cloneStateGraph();
-
     for (const supplyPath in allSupplyingPaths) {
       const oldGridItem = this.state.getGridItem(supplyPath);
       const supplyingGridItem = this.state.getGridItem(allSupplyingPaths[supplyPath]);
