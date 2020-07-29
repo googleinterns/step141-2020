@@ -5,6 +5,7 @@ import {
   SupplyingPath,
   GridItem,
   Power,
+  Energy,
 } from '@biogrid/grid-simulator';
 import {
   BiogridAction,
@@ -14,8 +15,9 @@ import {
 import * as config from '../config';
 import { Path, Graph } from 'graphlib';
 import { SolarPanel } from '../bioenergy-source';
+import { GRID_ITEM_NAMES } from '../config';
 
-interface gridItemsList {
+interface GridItemsList {
   [config.GRID_ITEM_NAMES.ENERGY_USER]: Building[];
   [config.GRID_ITEM_NAMES.SMALL_BATTERY]: BioBattery[];
   [config.GRID_ITEM_NAMES.LARGE_BATTERY]: BioBattery[];
@@ -55,16 +57,19 @@ export class BioBrain implements Brain {
 
     // Create an object of buildings with the energyProviders which supplied
     const buildingSuppliers: ResultingSupplyingPath = await this.chargeBuildings(
-      shortestDistances
+      shortestDistances,
+      date
     );
 
     // Create an object of smallBatteries with the energyProviders which supplied
     const smallBatterySupplier: ResultingSupplyingPath = await this.chargeSmallBatteries(
-      shortestDistances
+      shortestDistances,
+      date
     );
     // Create an object of largeBatteries with the energyProviders which supplied
     const largeBatterySupplier: ResultingSupplyingPath = await this.chargeLargebatteries(
-      shortestDistances
+      shortestDistances,
+      date
     );
     const totalPowerInput = this.calculateTotalInputPower(
       buildingSuppliers.inputPower,
@@ -116,11 +121,11 @@ export class BioBrain implements Brain {
    * an error as the item might not have energy in it
    * @returns an object of key-value pair @enum GRID_ITEM_NAMES : respective grid items list
    */
-  private getGridItems(): gridItemsList {
-    let buildings: Building[] = [];
-    let smallBatteries: BioBattery[] = [];
-    let largeBatteries: BioBattery[] = [];
-    let solarPanels: SolarPanel[] = [];
+  private getGridItems(): GridItemsList {
+    const buildings: Building[] = [];
+    const smallBatteries: BioBattery[] = [];
+    const largeBatteries: BioBattery[] = [];
+    const solarPanels: SolarPanel[] = [];
 
     const allGridItems = this.clonedGraph.nodes();
     // TODO: Implement with instanceof
@@ -158,13 +163,16 @@ export class BioBrain implements Brain {
    * @returns @interface ResultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
    * the one which can supplying, powerInput, and powerOutput
    */
-  private async chargeLargebatteries(shortestDistances: {
-    [source: string]: { [node: string]: Path };
-  }): Promise<ResultingSupplyingPath> {
+  private async chargeLargebatteries(
+    shortestDistances: {
+      [source: string]: { [node: string]: Path };
+    },
+    date: Date
+  ): Promise<ResultingSupplyingPath> {
     const gridItems = this.getGridItems();
     let largeBatteries: BioBattery[] =
       gridItems[config.GRID_ITEM_NAMES.LARGE_BATTERY];
-    let solarPanels: SolarPanel[] =
+    const solarPanels: SolarPanel[] =
       gridItems[config.GRID_ITEM_NAMES.SOLAR_PANEL];
     // Assuming the large battery is not fully charged
     largeBatteries = largeBatteries.filter((battery) => !battery.isFull());
@@ -180,7 +188,8 @@ export class BioBrain implements Brain {
     return await this.determineSupplyingPath(
       largeBatteries,
       allEnergyProviders,
-      shortestDistances
+      shortestDistances,
+      date
     );
   }
 
@@ -190,15 +199,18 @@ export class BioBrain implements Brain {
    * @returns @interface ResultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
    * the one which can supplying, powerInput, and powerOutput
    */
-  private async chargeSmallBatteries(shortestDistances: {
-    [source: string]: { [node: string]: Path };
-  }): Promise<ResultingSupplyingPath> {
+  private async chargeSmallBatteries(
+    shortestDistances: {
+      [source: string]: { [node: string]: Path };
+    },
+    date: Date
+  ): Promise<ResultingSupplyingPath> {
     const gridItems = this.getGridItems();
     let smallBatteries: BioBattery[] =
       gridItems[config.GRID_ITEM_NAMES.SMALL_BATTERY];
     let largeBatteries: BioBattery[] =
       gridItems[config.GRID_ITEM_NAMES.LARGE_BATTERY];
-    let solarPanels: SolarPanel[] =
+    const solarPanels: SolarPanel[] =
       gridItems[config.GRID_ITEM_NAMES.SOLAR_PANEL];
 
     // Assuming the small batteries are not fully charged
@@ -218,7 +230,8 @@ export class BioBrain implements Brain {
     return await this.determineSupplyingPath(
       smallBatteries,
       allEnergyProviders,
-      shortestDistances
+      shortestDistances,
+      date
     );
   }
 
@@ -228,16 +241,19 @@ export class BioBrain implements Brain {
    * @returns @interface ResultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
    * the one which can supplying, powerInput, and powerOutput
    */
-  private async chargeBuildings(shortestDistances: {
-    [source: string]: { [node: string]: Path };
-  }): Promise<ResultingSupplyingPath> {
+  private async chargeBuildings(
+    shortestDistances: {
+      [source: string]: { [node: string]: Path };
+    },
+    date: Date
+  ): Promise<ResultingSupplyingPath> {
     const gridItems = this.getGridItems();
     let buildings: Building[] = gridItems[config.GRID_ITEM_NAMES.ENERGY_USER];
     let smallBatteries: BioBattery[] =
       gridItems[config.GRID_ITEM_NAMES.SMALL_BATTERY];
     let largeBatteries: BioBattery[] =
       gridItems[config.GRID_ITEM_NAMES.LARGE_BATTERY];
-    let solarPanels: SolarPanel[] =
+    const solarPanels: SolarPanel[] =
       gridItems[config.GRID_ITEM_NAMES.SOLAR_PANEL];
 
     // Assuming that the houses asking for power will not have power in them.
@@ -266,7 +282,8 @@ export class BioBrain implements Brain {
     return await this.determineSupplyingPath(
       buildings,
       allEnergyProviders,
-      shortestDistances
+      shortestDistances,
+      date
     );
   }
 
@@ -284,10 +301,11 @@ export class BioBrain implements Brain {
   private async determineSupplyingPath(
     recievingAgents: config.RecievingAgents,
     supplyingAgents: config.SupplyingAgents[],
-    shortestDistances: config.ShortestDistances
+    shortestDistances: config.ShortestDistances,
+    date: Date
   ): Promise<ResultingSupplyingPath> {
     // Create an object of buildings with the energyProviders which supplied
-    let supplyToSupplyFromAgents: SupplyingPath = {};
+    const supplyToSupplyFromAgents: SupplyingPath = {};
     let totalPowerInput = 0;
     let totalPowerOutput = 0;
     // Look at each gridItem requesting for energy individually and keep track of the which grid item
@@ -342,9 +360,20 @@ export class BioBrain implements Brain {
             totalResistance
           );
           // Get the total energy which can be supplied by the supplying agent
-          const energyInSupplier = await Promise.resolve(
-            supplyingAgents[index].getEnergyInJoules()
-          );
+          let energyInSupplier: Energy;
+          if (
+            supplyingAgents[index].gridItemName.includes(
+              GRID_ITEM_NAMES.SOLAR_PANEL
+            )
+          ) {
+            energyInSupplier = await (supplyingAgents[
+              index
+            ] as SolarPanel).getEnergyInJoules(date);
+          } else {
+            energyInSupplier = await Promise.resolve(
+              supplyingAgents[index].getEnergyInJoules()
+            );
+          }
           if (energyInSupplier >= energyProvided) {
             shortestDistance = newShortestDistance;
             indexOfProvider = index;

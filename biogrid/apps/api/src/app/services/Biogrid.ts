@@ -4,7 +4,7 @@ import {
   Building,
   BioBrain,
   GRID_ITEM_NAMES,
-  BUILDING
+  BUILDING,
 } from '@biogrid/biogrid-simulator';
 import { ItemPosition, TownSize } from '@biogrid/grid-simulator';
 import constants from '../config/constants';
@@ -72,9 +72,12 @@ export async function simulateNewBiogrid(
   const biobrain = BioBrain.Instance;
   const initState = biogrid.getSystemState();
   const statesJson = [biogrid.getJsonGraphDetails()];
+  const currentDate = body.startDate;
   for (let i = 0; i < constants.simulation.NUMBER_OF_SIM_CYCLES; i++) {
-    biogrid.drainEnergyUsers()
-    const action = await biobrain.computeAction(initState);
+    // Start at midnight, increment hours until NUMBER_OF_SIM_CYCLES reached
+    currentDate.setHours(i);
+    biogrid.drainEnergyUsers(currentDate);
+    const action = await biobrain.computeAction(initState, currentDate);
     biogrid.takeAction(action);
     statesJson.push(biogrid.getJsonGraphDetails());
   }
