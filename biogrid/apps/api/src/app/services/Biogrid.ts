@@ -63,6 +63,7 @@ export async function simulateNewBiogrid(
     );
   }
   const town = new RuralArea(buildings, body.townWidth, body.townHeight);
+  // TODO pass in start date to biogrid and keep track of it somewhere!
   const biogrid = new Biogrid(town, {
     numberOfLargeBatteryCells: body.largeBatteryCells,
     numberOfSmallBatteryCells: body.smallBatteryCells,

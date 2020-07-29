@@ -158,7 +158,7 @@ export class Biogrid implements Grid {
    */
   drainEnergyUsers(date: Date) {
     this.town.getEnergyUsers().forEach((energyUser) => {
-      energyUser.decreaseEnergyByTimeOfDay(date);
+      energyUser.decreaseEnergyAccordingToTimeOfDay(date);
     });
   }
 
