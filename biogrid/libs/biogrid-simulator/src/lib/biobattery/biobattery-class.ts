@@ -8,9 +8,18 @@ import {
 } from '@biogrid/grid-simulator';
 import { SMALL_BATTERY } from '../config';
 
+export interface BatteryParams {
+  x: Distance,
+  y: Distance,
+  gridItemName: string,
+  gridItemResistance: number,
+  energyInJoules: Energy,
+  maxCapacity?: Energy,
+}
+
 export class BioBattery implements Battery {
   private energyInJoules: Energy;
-  private readonly maxCapacity: Energy;
+  private readonly maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY;
   // name of the grid item is unique to the battery type, but they have a similar prefix
   gridItemName: string;
   // The resistance measured in ohms
@@ -24,25 +33,20 @@ export class BioBattery implements Battery {
    * @param x Distance from the left edge of the town
    * @param y Distance from the top edge of the town
    */
-  constructor(
-    x: Distance,
-    y: Distance,
-    gridItemName: string,
-    gridItemResistance: number,
-    energyInJoules: Energy = SMALL_BATTERY.DEFAULT_START_ENERGY,
-    maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY
-  ) {
-    this.relativePosition = { x, y };
-    if (!this.validateInputs(energyInJoules, maxCapacity)) {
+  constructor(batteryParams: BatteryParams) {
+    this.relativePosition = { x: batteryParams.x, y: batteryParams.y };
+    if (!this.validateInputs(batteryParams.energyInJoules, batteryParams.maxCapacity)) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
       throw new Error(
-        `Cannot create a battery with values: (${energyInJoules}, ${maxCapacity})`
+        `Cannot create a battery with values: (${batteryParams.energyInJoules}, ${batteryParams.maxCapacity})`
       );
     }
-    this.energyInJoules = energyInJoules;
-    this.maxCapacity = maxCapacity;
-    this.gridItemName = gridItemName;
-    this.gridItemResistance = gridItemResistance;
+    this.energyInJoules = batteryParams.energyInJoules;
+    if (batteryParams.maxCapacity) {
+      this.maxCapacity = batteryParams.maxCapacity;
+    }
+    this.gridItemName = batteryParams.gridItemName;
+    this.gridItemResistance = batteryParams.gridItemResistance;
   }
 
   getRelativePosition() {

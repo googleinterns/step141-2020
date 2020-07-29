@@ -1,11 +1,19 @@
 import {
   EnergyUser,
-  Battery,
   ItemPosition,
   Distance,
   Energy,
 } from '@biogrid/grid-simulator';
-import { GRID_ITEM_NAMES, BUILDING, RESISTANCE } from '../config';
+import { BUILDING, RESISTANCE } from '../config';
+
+export interface BuildingParams {
+  energy: number,
+  x: Distance,
+  y: Distance,
+  gridItemName: string,
+  minCapacity?: Energy,
+  maxCapacity?: Energy,
+}
 
 // TODO rename energy to power consumption
 /**
@@ -24,23 +32,25 @@ export class Building implements EnergyUser {
   /** Defines the resistance of the building due to the wiring */
   gridItemResistance = RESISTANCE.BUILDING;
 
+  private readonly minCapacity: Energy = BUILDING.MIN_CAPACITY;
+  private readonly maxCapacity: Energy = BUILDING.MAX_CAPACITY;
+
   /**
    * @param {number} energy Amount of energy the building will have in joules.
    */
-  constructor(
-    energy: number,
-    x: Distance,
-    y: Distance,
-    gridItemName: string = GRID_ITEM_NAMES.ENERGY_USER,
-    private readonly minCapacity: Energy = BUILDING.MIN_CAPACITY,
-    private readonly maxCapacity: Energy = BUILDING.MAX_CAPACITY
-  ) {
-    this.relativePosition = { x, y };
-    this.gridItemName = gridItemName;
-    if (this.isPositive(energy)) {
-      this.energyInJoules = energy;
+  constructor(buildingParams: BuildingParams) {
+    this.relativePosition = { x: buildingParams.x, y: buildingParams.y };
+    this.gridItemName = buildingParams.gridItemName;
+    if (this.isPositive(buildingParams.energy)) {
+      this.energyInJoules = buildingParams.energy;
     } else {
       throw new Error("Can't create a building with negative energy!");
+    }
+    if (buildingParams.minCapacity) {
+      this.minCapacity = buildingParams.minCapacity;
+    }
+    if (buildingParams.maxCapacity) {
+      this.maxCapacity = buildingParams.maxCapacity;
     }
   }
 
