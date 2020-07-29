@@ -5,7 +5,7 @@
  * 1. @method computeAction which computes the decisions on how the power should be supplied. It takes in the state graph and 
  * determines which grid item requires power and which one can supply it. It does the computations while minimizing the distance to
  * be travelled to transport this power so that it minimizes power leakages
- * 2. It also calculates @param efficiency which how good the simulation is depending on the power loss
+ * 2. It also calculates @param efficiency, which is inversely proportional to power loss in the grid
  *
  * @summary is a class which defines the brain of the grid
  * @author Roland Naijuka <rnaijuka@google.com>
