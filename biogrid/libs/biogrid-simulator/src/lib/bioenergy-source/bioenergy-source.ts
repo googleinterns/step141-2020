@@ -5,29 +5,35 @@ import {
   EnergySourceInterface,
 } from '@biogrid/grid-simulator';
 
+export interface EnergySourceParams {
+  x: Distance,
+  y: Distance,
+  efficiency: number,
+  longitude?: number,
+  latitude?: number,
+}
+
 export abstract class EnergySource implements EnergySourceInterface {
   // Percentage between 0 and 1
   protected efficiency: number;
   // Long and latitude for the solar panel's position
-  protected longitude: number;
-  protected latitude: number;
+  protected longitude: number = 0;
+  protected latitude: number = 0;
   protected position: ItemPosition;
-  constructor(
-    x: Distance,
-    y: Distance,
-    efficiency: number,
-    longitude = 0,
-    latitude = 0
-  ) {
-    this.position = { x, y };
-    if (!this.validateInputs(efficiency)) {
+  constructor(energyParams: EnergySourceParams) {
+    this.position = { x: energyParams.x, y: energyParams.y };
+    if (!this.validateInputs(energyParams.efficiency)) {
       throw new Error(
-        `Cannot create a solar panel object with values: (${efficiency})`
+        `Cannot create a solar panel object with values: (${energyParams.efficiency})`
       );
     }
-    this.efficiency = efficiency;
-    this.longitude = longitude;
-    this.latitude = latitude;
+    this.efficiency = energyParams.efficiency;
+    if (energyParams.longitude) {
+      this.longitude = energyParams.longitude;
+    }
+    if (energyParams.latitude) {
+      this.latitude = energyParams.latitude;
+    }
   }
 
   private validateInputs(efficiency: number) {
@@ -44,7 +50,8 @@ export abstract class EnergySource implements EnergySourceInterface {
     return this.position;
   }
 
-  abstract getPowerAmount(date: Date): Power;
-  abstract getEnergyInJoules(): Power;
-  abstract name: string;
+  abstract getPowerAmount(date: Date): Promise<Power>;
+  abstract getEnergyInJoules(): Promise<Power>;
+  abstract gridItemName: string;
+  abstract gridItemResistance: number;
 }

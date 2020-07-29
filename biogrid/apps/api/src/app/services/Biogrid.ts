@@ -1,7 +1,21 @@
+import {
+  Biogrid,
+  RuralArea,
+  Building,
+  BioBrain,
+  GRID_ITEM_NAMES,
+  BUILDING
+} from '@biogrid/biogrid-simulator';
+import { ItemPosition, TownSize } from '@biogrid/grid-simulator';
 export interface BiogridSimulationResults {
-  energyWastedFromSource: number;
-  energyWastedInTransportation: number;
-  timeWithoutEnoughEnergy: number;
+  energyWastedFromSource?: number;
+  energyWastedInTransportation?: number;
+  timeWithoutEnoughEnergy?: number;
+  townSize: {
+    width: number,
+    height: number,
+  };
+  states: any[];
 }
 
 export interface NewBiogridOpts {
@@ -9,23 +23,61 @@ export interface NewBiogridOpts {
   endDate: Date;
   smallBatteryCells: number;
   largeBatteryCells: number;
+  numBuildings: number;
+  numSolarPanels: number;
+  townHeight: number;
+  townWidth: number;
 }
 
-export async function createNewBiogrid(body: NewBiogridOpts) {
-  // TODO implement
-  return "Fake"
+function createRandomBuildingPosition(
+  townWidth: number,
+  townHeight: number
+): ItemPosition {
+  const x = Math.floor(Math.random() * townWidth);
+  const y = Math.floor(Math.random() * townHeight);
+  return {
+    x,
+    y,
+  };
 }
 
-export async function runBiogridSimulation() {
-  // TODO implement
-  return "Fake"
-}
-
-export async function getSimulationResults(): Promise<BiogridSimulationResults> {
-  // TODO implement
+// TODO, allow users to specify where the buildings are on the grid rather than randomly scatter
+// The issue can be found on https://github.com/googleinterns/step141-2020/issues/59
+export async function simulateNewBiogrid(
+  body: NewBiogridOpts
+): Promise<BiogridSimulationResults> {
+  const buildings: Building[] = [];
+  for (let i = 0; i < body.numBuildings; i++) {
+    const randomPos = createRandomBuildingPosition(
+      body.townWidth,
+      body.townHeight
+    );
+    buildings.push(
+      new Building(
+        BUILDING.DEFAULT_INITIAL_ENERGY,
+        randomPos.x,
+        randomPos.y,
+        `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`
+      )
+    );
+  }
+  const town = new RuralArea(buildings, body.townWidth, body.townHeight);
+  const biogrid = new Biogrid(town, {
+    numberOfLargeBatteryCells: body.largeBatteryCells,
+    numberOfSmallBatteryCells: body.smallBatteryCells,
+    numberOfSolarPanels: body.numSolarPanels,
+  });
+  const biobrain = BioBrain.Instance;
+  const initState = biogrid.getSystemState();
+  const statesJson = [biogrid.getJsonGraphDetails()];
+  const action = biobrain.computeAction(initState);
+  biogrid.takeAction(action);
+  statesJson.push(biogrid.getJsonGraphDetails());
   return {
     energyWastedFromSource: 10,
     energyWastedInTransportation: 12,
-    timeWithoutEnoughEnergy: 24
-  }
+    timeWithoutEnoughEnergy: 24,
+    states: statesJson,
+    townSize: biogrid.getTownSize(),
+  };
 }

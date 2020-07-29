@@ -1,7 +1,7 @@
 import { BiogridState } from './';
 import { StateGraphVertex, GridItem } from '@biogrid/grid-simulator';
-import { Building } from '../building';
-import { GRID_ITEM_NAMES } from '../config';
+import { Building, BuildingParams } from '../building';
+import { GRID_ITEM_NAMES, RESISTANCE } from '../config';
 import { Edge, Graph, alg } from "graphlib";
 
 describe('classes', () => {
@@ -16,31 +16,37 @@ describe('classes', () => {
   const name4 = `${GRID_ITEM_NAMES.ENERGY_USER}-4`;
   const name5 = `${GRID_ITEM_NAMES.ENERGY_USER}-5`;
 
-  const building1 = new Building(32, 3, 4, name1);
-  const building2 = new Building(32, 7, 9, name2);
-  const building3 = new Building(32, 7, 8, name3);
-  const building4 = new Building(32, 2, 1, name4);
-  const building5 = new Building(32, 9, 9, name5);
+  const building1 = new Building({energy: 32, x: 3, y: 4, gridItemName: name1} as BuildingParams);
+  const building2 = new Building({energy: 32, x: 7, y: 9, gridItemName: name2} as BuildingParams);
+  const building3 = new Building({energy: 32, x: 7, y: 8, gridItemName: name3} as BuildingParams);
+  const building4 = new Building({energy: 32, x: 2, y: 1, gridItemName: name4} as BuildingParams);
+  const building5 = new Building({energy: 32, x: 9, y: 9, gridItemName: name5} as BuildingParams);
+
+  const townSize = { height: 30, width: 30 };
 
   const grid: GridItem = {
-    name: GRID_ITEM_NAMES.GRID,
+    gridItemName: GRID_ITEM_NAMES.GRID,
+    gridItemResistance: RESISTANCE.GRID,
     getRelativePosition() {
-      return { x: 0, y: 0 };
+      return { x: Math.floor(townSize.width / 2), y: Math.floor(townSize.height / 2) };
     },
   };
 
+
+
   test('to create a BiogridState', () => {
     const newVertices: StateGraphVertex[] = [
-      new Building(32, x1, y1, name1),
-      new Building(32, x2, y2, name2),
+      new Building({energy: 32, x: x1, y: y1, gridItemName: name1} as BuildingParams),
+      new Building({energy: 32, x: x2, y: y2, gridItemName: name2} as BuildingParams),
     ];
-    const state = new BiogridState(newVertices);
+    
+    const state = new BiogridState(newVertices, townSize);
     const graph = state.getGraph();
     // +1 to the expected vertices because of the grid which is automatically added
     expect(state.getAllVertices().length).toEqual(newVertices.length + 1);
     expect(graph.outEdges(name1)).toEqual([{v: name1, w: name2} as Edge]);
     // Expect another inEdge from the grid to the building
-    expect(graph.inEdges(name1)).toEqual([{v: grid.name, w: name1} as Edge, { v: name2, w: name1} as Edge]);
+    expect(graph.inEdges(name1)).toEqual([{v: grid.gridItemName, w: name1} as Edge, { v: name2, w: name1} as Edge]);
   });
 
   test('verify the shortest distances are correct', () => {
@@ -52,22 +58,30 @@ describe('classes', () => {
       building5,
     ];
     const expectedGraph = new Graph();
-    expectedGraph.setNode(grid.name, grid);
-    newVertices.map(vertex => expectedGraph.setNode(vertex.name, vertex));
+    expectedGraph.setNode(grid.gridItemName, grid);
+    newVertices.map(vertex => expectedGraph.setNode(vertex.gridItemName, vertex));
     // Add all possible edges
     // Add edges to the graph connecting the grid to the building
-    newVertices.map(vertex => expectedGraph.setEdge(grid.name, vertex.name, calculateDistance(grid, vertex)));
+    newVertices.map(vertex => expectedGraph.setEdge(grid.gridItemName, vertex.gridItemName, calculateDistance(grid, vertex)));
     // Add edges to the graph connecting the building to the other, and vice versa i.e A to B, B to A
     for (let i = 0; i < newVertices.length; i++) {
       for (let j = i + 1; j < newVertices.length; j++) {
-        expectedGraph.setEdge(newVertices[i].name, newVertices[j].name, calculateDistance(newVertices[i], newVertices[j]));
-        expectedGraph.setEdge(newVertices[j].name, newVertices[i].name, calculateDistance(newVertices[j], newVertices[i]));
+        expectedGraph.setEdge(
+          newVertices[i].gridItemName,
+          newVertices[j].gridItemName,
+          calculateDistance(newVertices[i], newVertices[j])
+        );
+        expectedGraph.setEdge(
+          newVertices[j].gridItemName,
+          newVertices[i].gridItemName,
+          calculateDistance(newVertices[j], newVertices[i])
+        );
       }
     }
     const expectedShortestdistances = alg.dijkstraAll(expectedGraph, getWeights(expectedGraph));
 
     // Create a graph from the system
-    const state = new BiogridState(newVertices);
+    const state = new BiogridState(newVertices, townSize);
     const actualShortestDistances = state.getShortestDistances();
 
     // The expected vertices of the graphs must be the same
@@ -91,16 +105,16 @@ describe('classes', () => {
 
   test('getAllPositions returns the correct grid item positions', () => {
     const newVertices: StateGraphVertex[] = [
-      new Building(/* energy = */ 32, /* x = */ 3, /* y = */ 4, name1),
-      new Building(32, 7, 9, name2),
+      new Building({energy: 32, x: 3, y: 4, gridItemName: name1} as BuildingParams),
+      new Building({energy: 32, x: 7, y: 9, gridItemName: name2} as BuildingParams),
     ];
-    const state = new BiogridState(newVertices);
+    const state = new BiogridState(newVertices, townSize);
     const positions = state.getAllPositions();
     // +1 to the expected vertices because of the grid which is automatically added
     expect(positions.length).toEqual(newVertices.length + 1);
     // index 0 contains the grid
-    expect(positions[0].x).toEqual(0);
-    expect(positions[0].y).toEqual(0);
+    expect(positions[0].x).toEqual(Math.floor(townSize.width / 2));
+    expect(positions[0].y).toEqual(Math.floor(townSize.height / 2));
     expect(positions[1].x).toEqual(3);
     expect(positions[1].y).toEqual(4);
     expect(positions[2].x).toEqual(7);

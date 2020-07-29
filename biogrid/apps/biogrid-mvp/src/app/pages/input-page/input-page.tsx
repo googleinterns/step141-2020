@@ -15,13 +15,21 @@ import DatePicker from 'react-datepicker';
 import { Client } from '../../client';
 import { useHistory } from 'react-router-dom';
 
-function useInput(opts: { type: string }) {
-  const [value, setValue] = useState('');
+function useInput<T>(opts: { default: T }) {
+  const [value, setValue] = useState(opts.default);
+  function valueToType(value: string): T {
+    if (typeof opts.default === 'number') {
+      return (parseInt(value) as unknown) as T;
+    } else if (typeof opts.default === 'boolean') {
+      return (Boolean(value) as unknown) as T;
+    }
+    return (JSON.stringify(value) as unknown) as T;
+  }
   const input = (
     <input
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      type={opts.type}
+      value={JSON.stringify(value)}
+      onChange={(e) => setValue(valueToType(e.target.value))}
+      type={typeof opts.default}
     />
   );
   return [value, input];
@@ -31,22 +39,22 @@ export const InputPage = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [smallBatteryCells, smallBatteryCellInput] = useInput({
-    type: 'number',
+    default: 5,
   });
   const [largeBatteryCells, largeBatteryCellInput] = useInput({
-    type: 'number',
+    default: 5,
   });
   const [numBuildings, numBuildingsInput] = useInput({
-    type: 'number',
+    default: 5,
   });
   const [numSolarPanels, numSolarPanelsInput] = useInput({
-    type: 'number',
+    default: 5,
   });
   const [townWidth, townWidthInput] = useInput({
-    type: 'number',
+    default: 5,
   });
   const [townHeight, townHeightInput] = useInput({
-    type: 'number',
+    default: 5,
   });
 
   const history = useHistory();
@@ -58,7 +66,20 @@ export const InputPage = () => {
 
   const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
-    const body = {
+    function serialize(obj: { [k: string]: unknown }) {
+      const str = [];
+      for (const p in obj)
+        str.push(
+          encodeURIComponent(p) +
+            '=' +
+            encodeURIComponent(
+              (obj[p] as { toString: () => string }).toString()
+            )
+        );
+      return str.join('&');
+    }
+
+    const params = {
       startDate,
       endDate,
       smallBatteryCells,
@@ -67,11 +88,8 @@ export const InputPage = () => {
       numSolarPanels,
       townWidth,
       townHeight,
-
     };
-    const client = Client.getInstance();
-    await client.api.newBiogrid({ body });
-    history.push('/simulate');
+    history.push(`/simulate?${serialize(params)}`);
   };
   return (
     <div className="input-page">
@@ -165,7 +183,11 @@ export const InputPage = () => {
         </div>
 
         <div className="submitButton">
-          <input type="submit" className="submitButton" value="Run the Simulation!"/>
+          <input
+            type="submit"
+            className="submitButton"
+            value="Run the Simulation!"
+          />
         </div>
       </form>
     </div>
