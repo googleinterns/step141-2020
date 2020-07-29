@@ -1,6 +1,7 @@
 import { WeatherLib } from '@biogrid/weather';
 import { SolarPanel } from './';
 import { GRID_ITEM_NAMES } from '../config';
+import { SolarPanelParams } from './solar-panel';
 
 describe('tests for the BioEnergySource', () => {
   const x = 2,
@@ -10,7 +11,13 @@ describe('tests for the BioEnergySource', () => {
     const efficiency = 0.125;
     const expected = `Cannot create a solar panel object with values of area ${area}`;
     expect(
-      () => new SolarPanel(x, y, area, GRID_ITEM_NAMES.SOLAR_PANEL, efficiency)
+      () => new SolarPanel({
+        x,
+        y,
+        areaSquareMeters: area,
+        gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
+        efficiency
+      } as SolarPanelParams)
     ).toThrow(expected);
   });
 
@@ -19,7 +26,13 @@ describe('tests for the BioEnergySource', () => {
     const efficiency = 10;
     const expected = `Cannot create a solar panel object with values: (${efficiency})`;
     expect(
-      () => new SolarPanel(x, y, area, GRID_ITEM_NAMES.SOLAR_PANEL, efficiency)
+      () => new SolarPanel({
+        x,
+        y,
+        areaSquareMeters: area,
+        gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
+        efficiency
+      } as SolarPanelParams)
     ).toThrow(expected);
   });
 
@@ -29,16 +42,16 @@ describe('tests for the BioEnergySource', () => {
       latitude = 0,
       area = 10,
       date = new Date('07/20/2020');
-    const energySource = new SolarPanel(
+    const energySource = new SolarPanel({
       x,
       y,
-      area,
-      GRID_ITEM_NAMES.SOLAR_PANEL,
       efficiency,
       longitude,
       latitude,
-      date
-    );
+      date,
+      areaSquareMeters: area,
+      gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
+    } as SolarPanelParams);
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
     const cloudCoverage = weather.getCloudCoverage(date);
@@ -52,16 +65,16 @@ describe('tests for the BioEnergySource', () => {
       latitude = 0,
       area = 10,
       date = new Date('07/20/2020');
-    const energySource = new SolarPanel(
+    const energySource = new SolarPanel({
       x,
       y,
-      area,
-      GRID_ITEM_NAMES.SOLAR_PANEL,
+      areaSquareMeters: area,
+      gridItemName: GRID_ITEM_NAMES.SOLAR_PANEL,
       efficiency,
       longitude,
       latitude,
       date
-    );
+    } as SolarPanelParams);
     const weather = new WeatherLib(date, longitude, latitude);
     await weather.setup();
     date.setHours(date.getHours() + 10);

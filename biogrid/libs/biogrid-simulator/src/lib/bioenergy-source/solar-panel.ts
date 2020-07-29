@@ -1,45 +1,40 @@
 import { WeatherLib } from '@biogrid/weather';
-import { EnergySource } from './bioenergy-source';
+import { EnergySource, EnergySourceParams } from './bioenergy-source';
 import {
   Validatable,
   validate,
   Power,
-  SunlightIntensity,
-  Distance,
   CloudCoverage,
 } from '@biogrid/grid-simulator';
-import { SOLAR_PANEL, GRID_ITEM_NAMES, RESISTANCE } from '../config';
+import { SOLAR_PANEL, RESISTANCE } from '../config';
+
+export interface SolarPanelParams extends EnergySourceParams {
+  areaSquareMeters: number,
+  gridItemName: string,
+  date?: Date,
+}
 
 export class SolarPanel extends EnergySource {
-  private sizeSqMtr: number;
+  private areaSquareMeters: number;
   // This is unique to every single solar panel but all have a same prefix name
   gridItemName: string;
-  date: Date;
+  private date: Date;
   private weatherLib: WeatherLib;
   gridItemResistance: number = RESISTANCE.SOLAR_PANEL;
   /**
    * @param efficiency - default to 17.5% efficiency as solar panels are often between 15% and 20% efficiency
    */
-  constructor(
-    x: Distance,
-    y: Distance,
-    sizeSqMtr: number,
-    gridItemName: string = GRID_ITEM_NAMES.SOLAR_PANEL,
-    efficiency = 0.175,
-    longitude = 0,
-    latitude = 0,
-    date: Date = new Date()
-  ) {
-    super(x, y, efficiency, longitude, latitude);
-    if (!this.validateInputsSolarPanel(sizeSqMtr)) {
+  constructor(solarPanelParams: SolarPanelParams) {
+    super(solarPanelParams);
+    if (!this.validateInputsSolarPanel(solarPanelParams.areaSquareMeters)) {
       throw new Error(
-        `Cannot create a solar panel object with values of area ${sizeSqMtr}`
+        `Cannot create a solar panel object with values of area ${solarPanelParams.areaSquareMeters}`
       );
     }
-    this.sizeSqMtr = sizeSqMtr;
-    this.gridItemName = gridItemName;
-    this.date = date;
-    this.weatherLib = new WeatherLib(date, longitude, latitude);
+    this.areaSquareMeters = solarPanelParams.areaSquareMeters;
+    this.gridItemName = solarPanelParams.gridItemName;
+    this.date = solarPanelParams.date ? solarPanelParams.date : new Date();
+    this.weatherLib = new WeatherLib(this.date, this.longitude, this.latitude);
   }
 
   private validateInputsSolarPanel(area: number) {
@@ -62,7 +57,7 @@ export class SolarPanel extends EnergySource {
     const powerPerSqrMeter = this.cloudCoverageToKiloWattsPerSquareMeter(
       cloudCoverage
     );
-    return powerPerSqrMeter * this.sizeSqMtr * this.efficiency;
+    return powerPerSqrMeter * this.areaSquareMeters * this.efficiency;
   }
 
   supplyPower(requiredPower: Power): Power {

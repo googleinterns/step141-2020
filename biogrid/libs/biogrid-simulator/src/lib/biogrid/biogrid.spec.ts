@@ -1,6 +1,6 @@
 import { Biogrid } from './';
 import { RuralArea } from '../community';
-import { Building } from '../building';
+import { Building, BuildingParams } from '../building';
 import { GRID_ITEM_NAMES, BUILDING } from '../config';
 import { BioBrain } from '../biobrain';
 
@@ -17,11 +17,36 @@ const townWidth = 10;
 beforeAll(() => {
   brain = BioBrain.Instance;
   const ruralArea = [
-    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 3, 4, name1),
-    new Building(0, 7, 9, name2),
-    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 7, 8, name3),
-    new Building(0, 2, 1, name4),
-    new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 9, 9, name5),
+    new Building({
+      energy: BUILDING.DEFAULT_INITIAL_ENERGY,
+      x: 3,
+      y: 4,
+      gridItemName: name1
+    } as BuildingParams),
+    new Building({
+      energy: 0,
+      x: 7,
+      y: 9,
+      gridItemName: name2
+    } as BuildingParams),
+    new Building({
+      energy: BUILDING.DEFAULT_INITIAL_ENERGY,
+      x: 7,
+      y: 8,
+      gridItemName: name3
+    } as BuildingParams),
+    new Building({
+      energy: 0,
+      x: 2,
+      y: 1,
+      gridItemName: name4
+    } as BuildingParams),
+    new Building({
+      energy: BUILDING.DEFAULT_INITIAL_ENERGY,
+      x: 9,
+      y: 9,
+      gridItemName: name5
+    } as BuildingParams),
   ];
   grid = new Biogrid(
     new RuralArea(ruralArea, /* townWidth = */ townWidth, /* townHeight = */ townHeight),
