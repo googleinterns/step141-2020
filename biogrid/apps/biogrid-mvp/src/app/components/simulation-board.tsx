@@ -66,6 +66,7 @@ const SolarPanel = () => {
   );
 };
 
+// TODO: elements overlap and this needs to be fixed. Issue found on: https://github.com/googleinterns/step141-2020/issues/65
 export const SimulationBoard = (props: SimBoardProps) => {
   const itemsByName: ItemsByName = props.items.reduce(
     (map: ItemsByName, item) => {

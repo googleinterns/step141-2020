@@ -82,7 +82,7 @@ describe('classes', () => {
   test("Biogrid works with the brain's compute action", () => {
     // Expect the two buildings to be at maxCapacity
     const expected = [BUILDING.MAX_CAPACITY, BUILDING.MAX_CAPACITY];
-    const action = brain.computeAction(grid.getSystemState());
+    const action = await brain.computeAction(grid.getSystemState());
     // Ensure that take action returned
     // There are two non full buildings, and the battery has to be refilled however
     // the components are placed on the grid randomly thus we cannot guarantee the battery is refilled
