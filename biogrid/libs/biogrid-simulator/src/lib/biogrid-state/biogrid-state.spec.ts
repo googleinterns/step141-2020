@@ -22,20 +22,25 @@ describe('classes', () => {
   const building4 = new Building(32, 2, 1, name4);
   const building5 = new Building(32, 9, 9, name5);
 
+  const townSize = { height: 30, width: 30 };
+
   const grid: GridItem = {
     gridItemName: GRID_ITEM_NAMES.GRID,
     gridItemResistance: RESISTANCE.GRID,
     getRelativePosition() {
-      return { x: 0, y: 0 };
+      return { x: Math.floor(townSize.width / 2), y: Math.floor(townSize.height / 2) };
     },
   };
+
+
 
   test('to create a BiogridState', () => {
     const newVertices: StateGraphVertex[] = [
       new Building(32, x1, y1, name1),
       new Building(32, x2, y2, name2),
     ];
-    const state = new BiogridState(newVertices);
+    
+    const state = new BiogridState(newVertices, townSize);
     const graph = state.getGraph();
     // +1 to the expected vertices because of the grid which is automatically added
     expect(state.getAllVertices().length).toEqual(newVertices.length + 1);
@@ -76,7 +81,7 @@ describe('classes', () => {
     const expectedShortestdistances = alg.dijkstraAll(expectedGraph, getWeights(expectedGraph));
 
     // Create a graph from the system
-    const state = new BiogridState(newVertices);
+    const state = new BiogridState(newVertices, townSize);
     const actualShortestDistances = state.getShortestDistances();
 
     // The expected vertices of the graphs must be the same
@@ -103,13 +108,13 @@ describe('classes', () => {
       new Building(/* energy = */ 32, /* x = */ 3, /* y = */ 4, name1),
       new Building(32, 7, 9, name2),
     ];
-    const state = new BiogridState(newVertices);
+    const state = new BiogridState(newVertices, townSize);
     const positions = state.getAllPositions();
     // +1 to the expected vertices because of the grid which is automatically added
     expect(positions.length).toEqual(newVertices.length + 1);
     // index 0 contains the grid
-    expect(positions[0].x).toEqual(0);
-    expect(positions[0].y).toEqual(0);
+    expect(positions[0].x).toEqual(Math.floor(townSize.width / 2));
+    expect(positions[0].y).toEqual(Math.floor(townSize.height / 2));
     expect(positions[1].x).toEqual(3);
     expect(positions[1].y).toEqual(4);
     expect(positions[2].x).toEqual(7);

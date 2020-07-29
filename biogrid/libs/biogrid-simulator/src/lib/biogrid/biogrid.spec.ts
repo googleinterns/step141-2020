@@ -11,6 +11,8 @@ const name2 = `${GRID_ITEM_NAMES.ENERGY_USER}-2`;
 const name3 = `${GRID_ITEM_NAMES.ENERGY_USER}-3`;
 const name4 = `${GRID_ITEM_NAMES.ENERGY_USER}-4`;
 const name5 = `${GRID_ITEM_NAMES.ENERGY_USER}-5`;
+const townHeight = 10;
+const townWidth = 10;
 
 beforeAll(() => {
   brain = BioBrain.Instance;
@@ -22,7 +24,7 @@ beforeAll(() => {
     new Building(BUILDING.DEFAULT_INITIAL_ENERGY, 9, 9, name5),
   ];
   grid = new Biogrid(
-    new RuralArea(ruralArea, /* townWidth = */ 10, /* townHeight = */ 10),
+    new RuralArea(ruralArea, /* townWidth = */ townWidth, /* townHeight = */ townHeight),
     {
       numberOfLargeBatteryCells: 1,
       numberOfSmallBatteryCells: 0,
@@ -68,7 +70,7 @@ describe('classes', () => {
     // +1 to the expected positions because of the grid which is automatically added at position (0, 0)
     expect(positions.length).toEqual(2 + 6 + 4 + 1);
     expect(positions).toEqual([
-      { x: 0, y: 0 },
+      { x: Math.floor(townWidth / 2), y: Math.floor(townHeight / 2) },
       { x: 5, y: 0.8333333333333333 },
       { x: 5, y: 2.5 },
       { x: 5, y: 4.166666666666667 },
