@@ -1,3 +1,12 @@
+/**
+ * @summary Styles page where user sees results from the simulation.
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ * 
+ * Created at    : 2020-06-23 10:12:21
+ * Last modified : 2020-07-28 10:43:35
+ */
+
 .redirect {
   margin-top: 1.25rem;
 }
@@ -8,7 +17,7 @@
 
 .simulation {
   background-color: #f2f2f2;
-  border-radius: 0.3125rem;
+  border-radius: 1.25rem;
   font-family: sans-serif;
   margin: auto;
   padding: 1.25rem;
