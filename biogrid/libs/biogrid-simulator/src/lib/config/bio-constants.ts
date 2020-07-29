@@ -87,6 +87,10 @@ export const BUILDING = {
   DEFAULT_INITIAL_ENERGY: 1.3,
   MAX_CAPACITY: 32,
   MIN_CAPACITY: 0,
+  /**
+   * Source is from Research Gate
+   * @see https://www.researchgate.net/publication/326358349/figure/fig2/AS:647731865477122@1531442719619/Average-daily-energy-consumption-during-the-weekdays-and-the-variation-throughout-the.png
+   */
   ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY: {
     '0': 8,
     '1': 6,
