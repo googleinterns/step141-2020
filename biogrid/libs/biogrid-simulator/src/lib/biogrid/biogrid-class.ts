@@ -33,11 +33,14 @@ export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
   numberOfLargeBatteryCells: number;
   numberOfSolarPanels: number;
+  startDate?: Date;
 }
 
 export class Biogrid implements Grid {
   // TODO create a singleton for the Biogrid not BiogridState
   private state: BiogridState;
+
+  private startDate: Date;
 
   // All details for the batteries in the grid
   // The small batteries in the grid, will approximately have a maxCapacity of 13,500KJ
@@ -52,6 +55,9 @@ export class Biogrid implements Grid {
   private efficiency: number;
 
   constructor(private town: Town, opts: BiogridOptions) {
+    const todayMidnight = new Date();
+    todayMidnight.setHours(0);
+    this.startDate = opts.startDate || todayMidnight;
     // Batteries
     const smallBatteryPositions = this.createGridItemPositions(
       town.getTownSize(),
@@ -152,6 +158,7 @@ export class Biogrid implements Grid {
           efficiency: 0.75,
           areaSquareMeters: SOLAR_PANEL.AREA,
           gridItemName: `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`,
+          date: this.startDate,
         } as SolarPanelParams)
     );
   }

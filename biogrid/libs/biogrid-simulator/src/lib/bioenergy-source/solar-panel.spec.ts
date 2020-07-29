@@ -43,7 +43,7 @@ describe('tests for the BioEnergySource', () => {
       area = 10,
       date = new Date();
     date.setHours(0);
-    const energySource = new SolarPanel(
+    const energySource = new SolarPanel({
       x,
       y,
       efficiency,
@@ -65,7 +65,7 @@ describe('tests for the BioEnergySource', () => {
       area = 10,
       date = new Date();
     date.setHours(2);
-    const energySource = new SolarPanel(
+    const energySource = new SolarPanel({
       x,
       y,
       areaSquareMeters: area,
