@@ -241,8 +241,8 @@ export class Biogrid implements Grid {
       powerEdges.push({
         v: supplyingGridItem.gridItemName,
         w: energyUser.gridItemName,
-        // convert kilojoules into kilowatts
-        power: energyUserReq / (TIME.DISCRETE_UNIT_HOURS * 60 * 60),
+        // convert kilowatthours into kilowatts
+        power: energyUserReq / TIME.DISCRETE_UNIT_HOURS,
       });
     }
     this.state.setnewStateGraph(clonedGraph);

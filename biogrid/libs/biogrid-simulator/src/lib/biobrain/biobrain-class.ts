@@ -393,18 +393,10 @@ export class BioBrain implements Brain {
       // Update the supplier so that it cannot be asked for power again when it shouldn't be asked
       const provideFrom = supplyingAgents[indexOfProvider];
       const provideTo = recievingAgent;
-      if (provideTo instanceof BioBattery) {
-        provideTo.startCharging(energyReq);
-      } else {
-        provideTo.increaseEnergy(energyReq);
-      }
-      provideFrom.supplyPower(powerSupplied);
 
       this.clonedGraph.setNode(provideFrom.gridItemName, provideFrom);
       this.clonedGraph.setNode(provideTo.gridItemName, provideTo);
 
-      // Remove the power from the supplier
-      supplyingAgents[indexOfProvider].supplyPower(energyReq);
       // Add the pair of receiver : supplier in supplyToSupplyFromAgents
       supplyToSupplyFromAgents[recievingAgent.gridItemName] =
         supplyingAgents[indexOfProvider].gridItemName;

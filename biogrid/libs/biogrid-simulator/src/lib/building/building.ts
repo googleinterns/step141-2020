@@ -21,7 +21,7 @@ export interface BuildingParams {
  */
 export class Building implements EnergyUser {
 
-  private energyInJoules: number;
+  private energyKilowatt: number;
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
   // Label to be used in the graph
@@ -42,7 +42,7 @@ export class Building implements EnergyUser {
     this.relativePosition = { x: buildingParams.x, y: buildingParams.y };
     this.gridItemName = buildingParams.gridItemName;
     if (this.isPositive(buildingParams.energy)) {
-      this.energyInJoules = buildingParams.energy;
+      this.energyKilowatt = buildingParams.energy;
     } else {
       throw new Error("Can't create a building with negative energy!");
     }
@@ -79,11 +79,12 @@ export class Building implements EnergyUser {
   }
 
   getEnergyInJoules(): number {
-    return this.energyInJoules;
+    return this.energyKilowatt;
   }
 
   decreaseEnergyAccordingToTimeOfDay(date: Date) {
     const energyUsed = this.getAverageEnergyUsagePerDay(date.getHours());
+    console.log(this.gridItemName, this.energyKilowatt, energyUsed)
     this.decreaseEnergy(energyUsed);
   }
 
@@ -92,7 +93,7 @@ export class Building implements EnergyUser {
    */
   increaseEnergy(energy: number) {
     if (this.isPositive(energy)) {
-      this.energyInJoules += energy;
+      this.energyKilowatt += energy;
     } else {
       throw new Error("Can't add negative energy!");
     }
@@ -106,10 +107,10 @@ export class Building implements EnergyUser {
       throw new Error("Can't use a negative amount of energy!");
     }
     // Building can't have a negative amount of energy in store.
-    if (energy >= this.energyInJoules) {
-      this.energyInJoules = 0;
+    if (energy >= this.energyKilowatt) {
+      this.energyKilowatt = 0;
     } else {
-      this.energyInJoules -= energy;
+      this.energyKilowatt -= energy;
     }
   }
 
