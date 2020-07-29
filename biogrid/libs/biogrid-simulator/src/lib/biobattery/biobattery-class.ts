@@ -4,7 +4,7 @@
  * This class implements:
  * 1. @param relativePosition which is the position of the battery on the grid. This is defines by @param x and @param y
  * 2. @param gridItemName which is the unique name that identifies the battery on the state graph
- * 3. It also implements the methods for charging the battery and supplying power of the battery
+ * 3. methods for charging the battery and supplying power of the battery
  *
  * @summary is the battery used in the grid
  * @author Lev Stambler <levst@google.com>
