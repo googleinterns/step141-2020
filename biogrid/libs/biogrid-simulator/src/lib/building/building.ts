@@ -114,6 +114,6 @@ export class Building implements EnergyUser {
   }
 
   private getAverageEnergyUsagePerDay(hourOfDay: number): Energy {
-    return BUILDING.ENERGY_USAGE_KILOJOULE_BY_TIME_OF_DAY[hourOfDay.toString()]
+    return BUILDING.ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY[hourOfDay.toString()]
   }
 }

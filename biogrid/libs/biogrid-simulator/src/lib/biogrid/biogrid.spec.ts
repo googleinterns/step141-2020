@@ -119,12 +119,16 @@ describe('classes', () => {
   test('drainEnergyUser removes energy from all users', async () => {
     const midnight = new Date();
     midnight.setHours(0);
-    const energyUsers: EnergyUser[] = grid
-      .getSystemState()
-      .getGridItem()
+    const state = grid.getSystemState();
+    const energyUsers: EnergyUser[] = state
+      .getAllVertices()
+      .map((vertex: string) => state.getGridItem(vertex))
       .filter((item: GridItem) =>
         item.gridItemName.includes(GRID_ITEM_NAMES.ENERGY_USER)
       ) as EnergyUser[];
+    energyUsers.forEach((energyUser) =>
+      energyUser.increaseEnergy(/* energy in kilowatts = */ 8)
+    );
     const energyBeforeDrain: number[] = energyUsers.map((user) =>
       user.getEnergyInJoules()
     );
