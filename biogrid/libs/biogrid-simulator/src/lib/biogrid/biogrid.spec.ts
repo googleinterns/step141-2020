@@ -79,7 +79,7 @@ describe('classes', () => {
     ]);
   });
 
-  test("Biogrid works with the brain's compute action", () => {
+  test("Biogrid works with the brain's compute action", async () => {
     // Expect the two buildings to be at maxCapacity
     const expected = [BUILDING.MAX_CAPACITY, BUILDING.MAX_CAPACITY];
     const action = await brain.computeAction(grid.getSystemState());
@@ -92,9 +92,9 @@ describe('classes', () => {
     ).toBeGreaterThanOrEqual(2);
   });
 
-  test("takeAction works on a returned brain's action", () => {
+  test("takeAction works on a returned brain's action", async () => {
     const expected = [BUILDING.MAX_CAPACITY, BUILDING.MAX_CAPACITY];
-    const action = brain.computeAction(grid.getSystemState());
+    const action = await brain.computeAction(grid.getSystemState());
     const gridTakeAction = grid.takeAction(action);
     // Make sure that the old grid and new grid are different after dispersion of energy
     // Check to make sure that the houses have been refiled
