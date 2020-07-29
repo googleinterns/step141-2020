@@ -7,6 +7,7 @@ import {
   ItemPosition,
   GridItem,
   Power,
+  TownSize,
 } from '@biogrid/grid-simulator';
 import { GRID_ITEM_NAMES, ShortestDistances, RESISTANCE } from '../config';
 
@@ -19,7 +20,7 @@ export class BiogridState implements StateGraph {
   private graph: graphlib.Graph;
 
   // TODO think about implement it StateGraphVertex[] as an object of key: name -> value: StateGraphVertex
-  constructor(vertices: StateGraphVertex[]) {
+  constructor(vertices: StateGraphVertex[], private townSize: TownSize) {
     // Directed so as to have two edges between A and B, but in opposite directions
     this.graph = new graphlib.Graph({ directed: true });
 
@@ -27,11 +28,15 @@ export class BiogridState implements StateGraph {
     const grid: GridItem = {
       gridItemName: GRID_ITEM_NAMES.GRID,
       gridItemResistance: RESISTANCE.GRID,
+      // Add the grid in the center of the town based on the townSize
       getRelativePosition() {
-        return { x: 0, y: 0 };
-      },
-    };
-    this.graph.setNode(grid.gridItemName, grid as GridItem);
+        return {
+          x: Math.floor(townSize.width / 2),
+          y: Math.floor(townSize.height / 2),
+        };
+      }
+    }
+    this.graph.setNode(grid.gridItemName, (grid as GridItem));
 
     // Add all the vertices as nodes/vertices of the graph, with a name for
     // the particular grid item and label which is data for the particular vertex as the GridItem itself

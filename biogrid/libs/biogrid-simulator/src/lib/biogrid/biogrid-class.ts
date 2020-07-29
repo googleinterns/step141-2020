@@ -23,9 +23,10 @@ import {
   BiogridState,
   Building,
   SolarPanel,
+  SolarPanelParams
 } from '@biogrid/biogrid-simulator';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
-import { Graph } from 'graphlib';
+import { BatteryParams } from '../biobattery';
 
 export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
@@ -78,7 +79,7 @@ export class Biogrid implements Grid {
     );
     this.solarPanels = this.createSolarPanels(solarPanelPositions);
 
-    this.state = new BiogridState(this.createGridItems());
+    this.state = new BiogridState(this.createGridItems(), town.getTownSize());
     // Set the effieciency to 0 at the beginning
     this.efficiency = 0;
   }
@@ -125,15 +126,14 @@ export class Biogrid implements Grid {
         ? LARGE_BATTERY.DEFAULT_START_ENERGY
         : SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
-      (position, index) =>
-        new BioBattery(
-          position.x,
-          position.y,
-          `${gridItemName}-${index}`,
-          batteryResistance,
-          initEnergy,
-          maxCapacity
-        )
+      (position, index) => new BioBattery({
+        x: position.x,
+        y: position.y,
+        gridItemName: `${gridItemName}-${index}`,
+        gridItemResistance: batteryResistance,
+        energyInJoules: initEnergy,
+        maxCapacity
+      } as BatteryParams)
     );
   }
 
@@ -144,13 +144,13 @@ export class Biogrid implements Grid {
   // TODO pass a list of equal length to hold the area for the solar panels
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
     return positions.map(
-      (position, index) =>
-        new SolarPanel(
-          position.x,
-          position.y,
-          SOLAR_PANEL.AREA,
-          `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
-        )
+      (position, index) => new SolarPanel({
+        x: position.x,
+        y: position.y,
+        efficiency: 0.75,
+        areaSquareMeters: SOLAR_PANEL.AREA,
+        gridItemName: `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
+      } as SolarPanelParams)
     );
   }
   /**
