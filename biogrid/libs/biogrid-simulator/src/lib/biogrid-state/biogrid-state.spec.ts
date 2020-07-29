@@ -1,3 +1,11 @@
+/**
+ * @summary defines the unit tests for the @class BiogridState
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/29/2020, 11:46:07 AM
+ * Last modified  : 7/29/2020, 10:36:44 AM
+ */
 import { BiogridState } from './';
 import { StateGraphVertex, GridItem } from '@biogrid/grid-simulator';
 import { Building, BuildingParams } from '../building';

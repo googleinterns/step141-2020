@@ -1,3 +1,11 @@
+/**
+ * @summary defines the unit tests for the @class Building
+ * @author Awad Osman <awado@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 7/1/2020, 5:27:50 PM
+ * Last modified  : 7/29/2020, 10:33:54 AM
+ */
 import { Building, BuildingParams } from './';
 import { GRID_ITEM_NAMES } from '../config';
 

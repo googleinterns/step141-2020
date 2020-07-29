@@ -1,3 +1,12 @@
+/**
+ * @summary defines the unit tests for the @class RuralArea
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 7/1/2020, 5:27:50 PM
+ * Last modified  : 7/29/2020, 10:34:24 AM
+ */
 import { Building, BuildingParams } from '../building';
 import { RuralArea } from './';
 import { GRID_ITEM_NAMES } from '../config';

@@ -1,3 +1,10 @@
+/**
+ * @summary defines the unit tests for the @class BioBrain
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 7/16/2020, 7:01:09 AM
+ * Last modified  : 7/29/2020, 10:41:10 AM
+ */*/
 import { BioBrain } from "./";
 import { Biogrid } from "../biogrid";
 import { GRID_ITEM_NAMES, BUILDING } from "../config";
