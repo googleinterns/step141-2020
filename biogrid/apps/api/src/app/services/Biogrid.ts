@@ -4,9 +4,9 @@ import {
   Building,
   BioBrain,
   GRID_ITEM_NAMES,
+  BUILDING
 } from '@biogrid/biogrid-simulator';
 import { ItemPosition } from '@biogrid/grid-simulator';
-import { BUILDING } from 'libs/biogrid-simulator/src/lib/config';
 export interface BiogridSimulationResults {
   energyWastedFromSource?: number;
   energyWastedInTransportation?: number;
@@ -50,7 +50,7 @@ export async function simulateNewBiogrid(
     );
     buildings.push(
       new Building(
-        10,
+        BUILDING.DEFAULT_INITIAL_ENERGY,
         randomPos.x,
         randomPos.y,
         `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`
