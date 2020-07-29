@@ -61,7 +61,7 @@ export class SolarPanel extends EnergySource {
     const cloudCoverage = this.weatherLib.getCloudCoverage(date);
     const powerPerSqrMeter = this.cloudCoverageToKiloWattsPerSquareMeter(
       cloudCoverage
-    );
+    );l
     return powerPerSqrMeter * this.sizeSqMtr * this.efficiency;
   }
 
