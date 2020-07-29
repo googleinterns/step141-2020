@@ -1,3 +1,21 @@
+/**
+ * @file defines the @class Biogrid which describes the microgrid.
+ * This class @implements @interface Grid which add the functionalities microgrid
+ * The microgrid defines the following components:
+ * 1. @param smallBatteries which is the small batteries storing power in the grid
+ * 2. @param largeBatteries which is the large batteries storing power in the grid
+ * 3. @param solarPanels which is the solar panels in supplying power in the grid
+ * 4. @param state which defines the state graph for the grid items
+ * @class Biogrid also implements the @method takeAction in the @interface Grid and it takes in the 
+ * @interface GridAction from the Brain and implements the suggestions of the brain
+ *
+ * @summary defines the main grid or control centre in the microgrid
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/26/2020, 3:33:10 PM
+ * Last modified  : 7/29/2020, 9:43:17 AM
+ */
 import {
   Grid,
   GridAction,

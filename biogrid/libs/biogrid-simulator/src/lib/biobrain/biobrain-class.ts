@@ -1,3 +1,18 @@
+/**
+ * @file defines the @class BioBrain which describes the brain of the grid responsible for deciding what action the grid should take.
+ * It @implements @interface Brain which add the functionalities the brain
+ * This class implements a singleton of the Brain since the grid only has one brain. it also implements:
+ * 1. @method computeAction which computes the decisions on how the power should be supplied. It takes in the state graph and 
+ * determines which grid item requires power and which one can supply it. It does the computations while minimizing the distance to
+ * be travelled to transport this power so that it minimizes power leakages
+ * 2. It also calculates @param efficiency which how good the simulation is depending on the power loss
+ *
+ * @summary is a class which defines the brain of the grid
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/29/2020, 4:33:42 PM
+ * Last modified  : 7/29/2020, 10:21:17 AM
+ */
 import {
   Brain,
   GridAction,
