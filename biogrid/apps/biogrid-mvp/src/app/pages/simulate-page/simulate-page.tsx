@@ -59,15 +59,19 @@ export const SimulatePage = () => {
     });
   };
 
-  const playSimulation = () => {
+  const playSimulation = async () => {
     const simResultsStateLen = simulationResults?.states.length || 0;
     if (currentStateFrame >= simResultsStateLen) {
       return;
     }
-    setTimeout(() => {
-      setCurrentStateFrame(currentStateFrame + 1);
-      playSimulation();
-    }, 1000);
+    for (let i = 0; i < simulationResults?.states?.length || 0; i++) {
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          setCurrentStateFrame(i);
+          resolve();
+        }, 1000);
+      });
+    }
   };
 
   useEffect(() => {
@@ -127,7 +131,7 @@ export const SimulatePage = () => {
             <h2>Simulation Board</h2>
             <div className="simboard-controls">
               <button onClick={() => playSimulation()}>Play</button>
-              <button onClick={() => setCurrentStateFrame(0)}>Stop</button>
+              <button onClick={() => setCurrentStateFrame(0)}>Reset</button>
             </div>
             <SimulationBoard
               grid_height_km={simulationResults.townSize.height}
@@ -135,10 +139,18 @@ export const SimulatePage = () => {
               // TODO add changing indices to show the progression of time for each subsequent state
               // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
               items={stateToGridItemRet(
-                simulationResults.states[currentStateFrame < simulationResults.states.length ? currentStateFrame : 0]
+                simulationResults.states[
+                  currentStateFrame < simulationResults.states.length
+                    ? currentStateFrame
+                    : 0
+                ]
               )}
               lines={stateToGridItemLines(
-                simulationResults.states[currentStateFrame < simulationResults.states.length ? currentStateFrame : 0]
+                simulationResults.states[
+                  currentStateFrame < simulationResults.states.length
+                    ? currentStateFrame
+                    : 0
+                ]
               )}
             />
           </div>

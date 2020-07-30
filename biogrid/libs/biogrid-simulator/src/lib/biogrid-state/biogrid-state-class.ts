@@ -84,7 +84,15 @@ export class BiogridState implements StateGraph {
     const labelFromV: EdgeLabel = this.graph.edge(v, GRID_ITEM_NAMES.GRID);
     const labelToW: EdgeLabel = this.graph.edge(GRID_ITEM_NAMES.GRID, w);
     this.graph.setEdge(v, GRID_ITEM_NAMES.GRID, { distance: labelFromV.distance, power });
-    this.graph.setEdge("grid", w, { distance: labelToW.distance, power });
+    this.graph.setEdge(GRID_ITEM_NAMES.GRID, w, { distance: labelToW.distance, power });
+  }
+
+  /**
+   * Set all edge power to 0
+   */
+  public resetPowerOnEdges() {
+    const edges = this.graph.edges()
+    edges.forEach((edge) => this.resetEdge(edge))
   }
 
   /**
@@ -127,6 +135,17 @@ export class BiogridState implements StateGraph {
     return function (edge: graphlib.Edge): Distance {
       return graph.edge(edge).distance;
     };
+  }
+
+  /**
+   * Reset an edge by changing its power to 0
+   */
+  private resetEdge(edge: graphlib.Edge): void {
+    const labels = this.graph.edge(edge);
+    this.graph.setEdge(edge.v, edge.w, {
+      distance: labels.distance,
+      power: 0
+    })
   }
 
   /**

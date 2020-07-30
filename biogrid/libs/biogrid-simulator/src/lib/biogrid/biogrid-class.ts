@@ -184,7 +184,7 @@ export class Biogrid implements Grid {
     this.efficiency = action.getEfficiency();
     // RETURN a new BiogridState
     const allSupplyingPaths = action.getSupplyingPaths();
-
+    this.state.resetPowerOnEdges();
     const clonedGraph = this.state.cloneStateGraph();
     for (const supplyPath in allSupplyingPaths) {
       const oldGridItem = this.state.getGridItem(supplyPath);

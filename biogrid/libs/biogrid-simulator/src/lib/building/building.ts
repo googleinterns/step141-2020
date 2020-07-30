@@ -7,12 +7,12 @@ import {
 import { BUILDING, RESISTANCE } from '../config';
 
 export interface BuildingParams {
-  energy: number,
-  x: Distance,
-  y: Distance,
-  gridItemName: string,
-  minCapacity?: Energy,
-  maxCapacity?: Energy,
+  energy: number;
+  x: Distance;
+  y: Distance;
+  gridItemName: string;
+  minCapacity?: Energy;
+  maxCapacity?: Energy;
 }
 
 // TODO rename energy to power consumption
@@ -20,7 +20,6 @@ export interface BuildingParams {
  * A structure such as a building or house which uses energy to operate.
  */
 export class Building implements EnergyUser {
-
   private energyKilowatt: number;
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
@@ -84,7 +83,6 @@ export class Building implements EnergyUser {
 
   decreaseEnergyAccordingToTimeOfDay(date: Date) {
     const energyUsed = this.getAverageEnergyUsagePerDay(date.getHours());
-    console.log(this.gridItemName, this.energyKilowatt, energyUsed)
     this.decreaseEnergy(energyUsed);
   }
 
@@ -115,6 +113,6 @@ export class Building implements EnergyUser {
   }
 
   private getAverageEnergyUsagePerDay(hourOfDay: number): Energy {
-    return BUILDING.ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY[hourOfDay.toString()]
+    return BUILDING.ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY[hourOfDay.toString()];
   }
 }

@@ -11,12 +11,13 @@ export interface NewStateGraphVertex {
 }
 
 export interface StateGraphEdge {
-  v: string,
-  w: string,
+  v: string;
+  w: string;
   weight: number;
 }
 
 export interface StateGraph {
+  resetPowerOnEdges: () => void;
   getAllPositions: () => ItemPosition[];
   getGridItem: (gridItemName: string) => GridItem;
   getGraph: () => Graph;
@@ -24,6 +25,6 @@ export interface StateGraph {
   cloneStateGraph(): Graph;
   getAllVertices: () => string[];
   getShortestDistances: () => { [source: string]: { [node: string]: Path } };
-  setPowerBetweenNodes: (v: string, w: string, power: Power) => void
+  setPowerBetweenNodes: (v: string, w: string, power: Power) => void;
   getWeightEdge: (edge: Edge) => Distance;
 }
