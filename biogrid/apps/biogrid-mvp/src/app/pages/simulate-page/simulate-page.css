@@ -26,6 +26,10 @@
   min-width: 56.25rem;
 }
 
+.simulation .table-results-container {
+  overflow-y: auto;
+}
+
 table {
   margin: auto;
   margin-top: 1.25rem;
