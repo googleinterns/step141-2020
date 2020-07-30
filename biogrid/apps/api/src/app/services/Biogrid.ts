@@ -21,7 +21,6 @@ export interface BiogridSimulationResults {
 
 export interface NewBiogridOpts {
   startDate: Date;
-  endDate: Date;
   smallBatteryCells: number;
   largeBatteryCells: number;
   numBuildings: number;

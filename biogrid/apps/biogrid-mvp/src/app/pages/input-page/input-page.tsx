@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './input-page.css';
 import './input-page.scss';
-import DatePicker from 'react-datepicker';
+import ReactSlider from 'react-slider';
 import { Client } from '../../client';
 import { useHistory } from 'react-router-dom';
 import Visual from './BioGridVisual.jpg';
@@ -27,8 +27,11 @@ function useInput<T>(opts: { default: T }) {
 }
 
 export const InputPage = () => {
+  const LATEST_DATE = new Date();
+  LATEST_DATE.setHours(0);
+  const EARLIEST_DATE = new Date();
+  EARLIEST_DATE.setDate(LATEST_DATE.getDate() - 7);
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [smallBatteryCells, smallBatteryCellInput] = useInput({
     default: 5,
   });
@@ -66,7 +69,6 @@ export const InputPage = () => {
 
     const params = {
       startDate,
-      endDate,
       smallBatteryCells,
       largeBatteryCells,
       numBuildings,
@@ -103,20 +105,21 @@ export const InputPage = () => {
           <b>throughout the town</b> so that our buildings can have an immediate
           energy source when they have a spike in energy consumption.
         </p>
-        <div className="startDatePicker">
-          <label>Start Date</label>
-          <DatePicker
-            showPopperArrow={false}
-            selected={startDate}
-            onChange={(date: Date) => setStartDate(date)}
-          />
-        </div>
-        <div className="endDatePicker">
-          <label>End Date</label>
-          <DatePicker
-            showPopperArrow={false}
-            selected={endDate}
-            onChange={(date: Date) => setEndDate(date)}
+        <div className="datePicker">
+          <label>Simulation Date Slider</label>
+          <ReactSlider
+            className="horizontal-slider"
+            onChange={(val) => {
+              const daysFromStart = (val as unknown) as number;
+              const newDate = new Date();
+              newDate.setDate(EARLIEST_DATE.getDate() + daysFromStart);
+              setStartDate(newDate);
+            }}
+            renderThumb={(props, state) => (
+              <div {...props}>{`${startDate.getMonth()}/${startDate.getDay()}/${startDate.getFullYear()}`}</div>
+            )}
+            min={0}
+            max={7}
           />
         </div>
         <br></br>
