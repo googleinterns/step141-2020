@@ -40,6 +40,8 @@ export class Biogrid implements Grid {
   // TODO create a singleton for the Biogrid not BiogridState
   private state: BiogridState;
 
+  // The date for when the simulation begins
+  // Used in initializing the Solar Panels
   private startDate: Date;
 
   // All details for the batteries in the grid
@@ -166,7 +168,7 @@ export class Biogrid implements Grid {
   /**
    * Drain the energy users according to the time of day
    */
-  drainEnergyUsers(date: Date) {
+  updateEnergyUsage(date: Date) {
     this.town.getEnergyUsers().forEach((energyUser) => {
       energyUser.decreaseEnergyAccordingToTimeOfDay(date);
     });

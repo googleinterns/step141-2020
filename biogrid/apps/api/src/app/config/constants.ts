@@ -32,7 +32,7 @@ export default {
     },
   },
   simulation: {
-    NUMBER_OF_SIM_CYCLES: 10,
+    NUMBER_OF_SIM_HOURS: 10,
   },
 
   get errorMap() {

@@ -17,7 +17,7 @@ const townWidth = 10;
 
 beforeAll(() => {
   brain = BioBrain.Instance;
-  const ruralArea = [
+  const buildingList = [
     new Building({
       energy: BUILDING.DEFAULT_INITIAL_ENERGY,
       x: 3,
@@ -51,7 +51,7 @@ beforeAll(() => {
   ];
   grid = new Biogrid(
     new RuralArea(
-      ruralArea,
+      buildingList,
       /* townWidth = */ townWidth,
       /* townHeight = */ townHeight
     ),
@@ -151,7 +151,7 @@ describe('classes', () => {
     // Energy may come from the solar panels but two buildings must be refiled
     expect(
       Object.keys(action.getSupplyingPaths()).length
-    ).toBeGreaterThanOrEqual(2);
+    ).toEqual(2);
 
     const gridTakeAction = grid.takeAction(action);
     // Make sure that the old grid and new grid are different after dispersion of emergy
