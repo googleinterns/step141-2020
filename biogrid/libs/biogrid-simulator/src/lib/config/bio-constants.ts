@@ -47,6 +47,12 @@ export const enum GRID_ITEM_NAMES {
   SOLAR_PANEL = 'solar_panel',
 }
 
+export const GRID_DISTANCES = {
+  // The discrete unit of distance for laying items apart, both vertically and horizontally
+  // So, every item is 1 * INCREMENTS_KM, 2 * INCREMENTS_KM, 3 * INCREMENTS_KM, etc... km apart on the x and y plane
+  INCREMENTS_KM: 0.5,
+};
+
 /**
  * Resistance of the differents components used in the grid
  * For transportation of power, wire 16 of awg is used for transmission lines

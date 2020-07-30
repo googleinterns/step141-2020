@@ -70,7 +70,7 @@ export async function simulateNewBiogrid(
   const biobrain = BioBrain.Instance;
   const initState = biogrid.getSystemState();
   const statesJson = [biogrid.getJsonGraphDetails()];
-  const action = biobrain.computeAction(initState);
+  const action = await biobrain.computeAction(initState);
   biogrid.takeAction(action);
   statesJson.push(biogrid.getJsonGraphDetails());
   return {
