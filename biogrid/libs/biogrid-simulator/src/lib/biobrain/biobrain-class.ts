@@ -179,7 +179,8 @@ export class BioBrain implements Brain {
 
     // Filter the solar panels and remove the ones with the minimum energy or empty
     const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(
-      solarPanels
+      solarPanels,
+      date
     );
 
     // Create an array of the possible energy givers
@@ -221,7 +222,8 @@ export class BioBrain implements Brain {
 
     // Filter the solar panels and remove the ones with the minimum energy or empty
     const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(
-      solarPanels
+      solarPanels,
+      date
     );
 
     // Create an array of the possible energy givers
@@ -259,7 +261,7 @@ export class BioBrain implements Brain {
     // Assuming that the houses asking for power will not have power in them.
     // Do not consider building with full power capacity
     buildings = buildings.filter((building) => {
-      return building.getEnergyInJoules() === building.getMinCapacity();
+      return building.getEnergyInKilowattHour() === building.getMinCapacity();
     });
 
     // Filter the batteries and removes the ones which do not have power in them
@@ -269,7 +271,8 @@ export class BioBrain implements Brain {
 
     // Filter the solar panels and remove the ones with the minimum energy or empty
     const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(
-      solarPanels
+      solarPanels,
+      date
     );
 
     // Create an array of the possible energy givers
@@ -315,7 +318,8 @@ export class BioBrain implements Brain {
       // TODO: advancement For now implement all or nothing. If battery doesn't have all the energy required, ignore it
       // @see https://github.com/googleinterns/step141-2020/issues/54
       const energyReq =
-        recievingAgent.getMaxCapacity() - recievingAgent.getEnergyInJoules();
+        recievingAgent.getMaxCapacity() -
+        recievingAgent.getEnergyInKilowattHour();
       let powerSupplied = 0;
       // Get the voltage to be received
       const voltageReq = config.calculateVoltageFromPower(
@@ -361,6 +365,7 @@ export class BioBrain implements Brain {
           );
           // Get the total energy which can be supplied by the supplying agent
           let energyInSupplier: Energy;
+
           if (
             supplyingAgents[index].gridItemName.includes(
               GRID_ITEM_NAMES.SOLAR_PANEL
@@ -368,10 +373,10 @@ export class BioBrain implements Brain {
           ) {
             energyInSupplier = await (supplyingAgents[
               index
-            ] as SolarPanel).getEnergyInJoules(date);
+            ] as SolarPanel).getEnergyInKilowattHour(date);
           } else {
             energyInSupplier = await Promise.resolve(
-              supplyingAgents[index].getEnergyInJoules()
+              supplyingAgents[index].getEnergyInKilowattHour()
             );
           }
           if (energyInSupplier >= energyProvided) {
@@ -459,12 +464,13 @@ export class BioBrain implements Brain {
   }
 
   private async filterSolarPanelsByEnergyAmount(
-    solarPanels: SolarPanel[]
+    solarPanels: SolarPanel[],
+    date: Date
   ): Promise<SolarPanel[]> {
     const solarPanelsFiltered = [];
     for (let i = 0; i < solarPanels.length; i++) {
       const solarPanel = solarPanels[i];
-      if (!(await solarPanel.isEmpty())) {
+      if (!(await solarPanel.isEmpty(date))) {
         solarPanelsFiltered.push(solarPanel);
       }
     }

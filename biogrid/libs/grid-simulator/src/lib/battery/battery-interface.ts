@@ -2,7 +2,7 @@ import { Energy } from '../measurements';
 import { GridItem } from '../grid-item';
 
 export interface Battery extends GridItem {
-  getEnergyInJoules(): Energy;
+  getEnergyInKilowattHour(): Energy;
   isEmpty(): boolean;
   isFull(): boolean;
   startCharging(inputPower: Energy): void;

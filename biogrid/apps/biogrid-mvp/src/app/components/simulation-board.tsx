@@ -92,7 +92,7 @@ export const SimulationBoard = (props: SimBoardProps) => {
   )}vw`;
 
   const kiloWattToThickness = (kilowatts: number) => {
-    return `${Math.ceil(kilowatts * SIZES.KILOWATT_TO_PIXELS)}px`;
+    return Math.ceil(kilowatts * SIZES.KILOWATT_TO_PIXELS)
   };
 
   return (
@@ -127,46 +127,51 @@ export const SimulationBoard = (props: SimBoardProps) => {
       ))}
       <div className="grid-line-wrapper">
         <svg width={boardWidth} height={boardHeight}>
-          {props.lines.map((line) => (
-            <>
-              <defs>
-                <marker
-                  id="arrowhead"
-                  markerWidth="10"
-                  markerHeight="7"
-                  refX="0"
-                  refY="3.5"
-                  orient="auto"
-                >
-                  <polygon points="0 0, 10 3.5, 0 7" />
-                </marker>
-              </defs>
-              <line
-                // Add half of the icon width in order to center the lines
-                x1={`${kilometersToCSSWidth(
-                  itemsByName[line.fromItem].x,
-                  SIZES.ICON_WIDTH_PERCENT / 2
-                )}`}
-                y1={`${kilometersToCSSHeight(
-                  itemsByName[line.fromItem].y,
-                  SIZES.ICON_WIDTH_PERCENT / 2
-                )}`}
-                x2={`${kilometersToCSSWidth(
-                  itemsByName[line.toItem].x,
-                  SIZES.ICON_WIDTH_PERCENT / 2
-                )}`}
-                y2={`${kilometersToCSSHeight(
-                  itemsByName[line.toItem].y,
-                  SIZES.ICON_WIDTH_PERCENT / 2
-                )}`}
-                markerEnd="url(#arrowhead)"
-                stroke={(line.powerThroughLinesKiloWatts || 0) > 0 ? 'blue' : 'grey'}
-                strokeWidth={kiloWattToThickness(
-                  line.powerThroughLinesKiloWatts || 1
-                )}
-              />
-            </>
-          ))}
+          {props.lines.map((line) => {
+            const lineThickness = kiloWattToThickness(
+              line.powerThroughLinesKiloWatts || 1
+            );
+            return (
+              <>
+                <defs>
+                  <marker
+                    id="arrowhead"
+                    markerWidth="10"
+                    markerHeight="7"
+                    refX="0"
+                    refY="3.5"
+                    orient="auto"
+                  >
+                    <polygon points="0 0, 10 3.5, 0 7" />
+                  </marker>
+                </defs>
+                <line
+                  // Add half of the icon width in order to center the lines
+                  x1={`${kilometersToCSSWidth(
+                    itemsByName[line.fromItem].x,
+                    SIZES.ICON_WIDTH_PERCENT / 2 - lineThickness
+                  )}`}
+                  y1={`${kilometersToCSSHeight(
+                    itemsByName[line.fromItem].y,
+                    SIZES.ICON_WIDTH_PERCENT / 2 - lineThickness
+                  )}`}
+                  x2={`${kilometersToCSSWidth(
+                    itemsByName[line.toItem].x,
+                    SIZES.ICON_WIDTH_PERCENT / 2 - lineThickness
+                  )}`}
+                  y2={`${kilometersToCSSHeight(
+                    itemsByName[line.toItem].y,
+                    SIZES.ICON_WIDTH_PERCENT / 2 - lineThickness
+                  )}`}
+                  markerEnd="url(#arrowhead)"
+                  stroke={
+                    (line.powerThroughLinesKiloWatts || 0) > 0 ? 'blue' : 'grey'
+                  }
+                  strokeWidth={`${lineThickness}px`}
+                />
+              </>
+            );
+          })}
         </svg>
       </div>
     </div>

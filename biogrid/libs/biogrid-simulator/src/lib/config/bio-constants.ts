@@ -21,7 +21,7 @@ export const SMALL_BATTERY = {
  * New large batteries have a capacity smaller than the maximum implemented as default start energy
  */
 export const LARGE_BATTERY = {
-  DEFAULT_START_ENERGY: 600,
+  DEFAULT_START_ENERGY: 30,
   MAX_CAPACITY: 950,
 };
 

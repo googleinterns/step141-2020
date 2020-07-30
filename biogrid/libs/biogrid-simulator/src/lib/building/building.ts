@@ -77,7 +77,7 @@ export class Building implements EnergyUser {
     this.buildingId = Id;
   }
 
-  getEnergyInJoules(): number {
+  getEnergyInKilowattHour(): number {
     return this.energyKilowatt;
   }
 

@@ -86,7 +86,7 @@ export class BioBattery implements Battery {
     return validate(batteryValidator);
   }
 
-  getEnergyInJoules(): Energy {
+  getEnergyInKilowattHour(): Energy {
     return this.energyInJoules;
   }
 

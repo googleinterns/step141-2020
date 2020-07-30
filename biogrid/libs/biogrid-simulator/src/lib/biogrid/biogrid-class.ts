@@ -192,7 +192,7 @@ export class Biogrid implements Grid {
       const typeOldGridItem = this.getGridItemType(oldGridItem);
       const energyUser = oldGridItem as Building | BioBattery;
       const energyUserReq =
-        energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
+        energyUser.getMaxCapacity() - energyUser.getEnergyInKilowattHour();
       const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
       if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.ENERGY_USER) {
         if (
