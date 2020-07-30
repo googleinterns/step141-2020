@@ -140,7 +140,7 @@ describe('classes', () => {
 
   test('new Biogrid does not overlap items', () => {
     const grid = new Biogrid(
-      new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+      new RuralArea(/* buildings = */ [], /* townWidth = */ 10, /* townHeight = */ 10),
       {
         numberOfLargeBatteryCells: 2,
         numberOfSmallBatteryCells: 6,
@@ -161,7 +161,7 @@ describe('classes', () => {
     expect(
       () =>
         new Biogrid(
-          new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+          new RuralArea(/* buildings = */ [], /* townWidth = */ 10, /* townHeight = */ 10),
           {
             numberOfLargeBatteryCells: 200,
             numberOfSmallBatteryCells: 600,

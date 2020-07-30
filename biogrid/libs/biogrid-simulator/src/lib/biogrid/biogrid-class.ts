@@ -68,7 +68,6 @@ export class Biogrid implements Grid {
     );
 
     // Enery Source
-    // TODO implement the solar panels
     const solarPanelPositions = this.createGridItemPositions(
       town.getTownSize(),
       opts.numberOfSolarPanels
