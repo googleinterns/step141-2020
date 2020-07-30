@@ -309,7 +309,7 @@ export class BioBrain implements Brain {
           // Using the current, calculate the power in the entire circuit
           const energyProvided = config.calculatePowerWithCurrent(currentInCircuit, totalResistance);
           // Get the total energy which can be supplied by the supplying agent
-          const energyInSupplier = supplyingAgents[index].getEnergyInJoules();
+          const energyInSupplier = await supplyingAgents[index].getEnergyInJoules();
           if (energyInSupplier >= energyProvided) {
             shortestDistance = newShortestDistance;
             indexOfProvider = index;
