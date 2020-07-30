@@ -39,7 +39,7 @@ describe('classes', () => {
       new Building({energy: 32, x: x1, y: y1, gridItemName: name1} as BuildingParams),
       new Building({energy: 32, x: x2, y: y2, gridItemName: name2} as BuildingParams),
     ];
-    
+
     const state = new BiogridState(newVertices, townSize);
     const graph = state.getGraph();
     // +1 to the expected vertices because of the grid which is automatically added
@@ -99,10 +99,6 @@ describe('classes', () => {
     // The expected vertices of the graphs must be the same
     expect(state.getAllVertices().length).toEqual(expectedGraph.nodes().length);
 
-    // The expected object return from the shortest distances must be the same
-    expect(Object.keys(actualShortestDistances).length).toEqual(
-      Object.keys(expectedShortestdistances).length
-    );
     expect(actualShortestDistances).toEqual(expectedShortestdistances);
 
     // Check the shortest distances and verify that they are correct
