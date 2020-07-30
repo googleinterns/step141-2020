@@ -7,7 +7,7 @@ describe('test for BioBattery class', () => {
     const maxCapacity = 5;
     expect(() => new BioBattery({
       x: 10,
-      y: 5, 
+      y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
       energyInJoules: currentpower,
@@ -22,7 +22,7 @@ describe('test for BioBattery class', () => {
     const maxCapacity = 1;
     expect(() => new BioBattery({
       x: 10,
-      y: 5, 
+      y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
       energyInJoules: currentpower,
@@ -37,7 +37,7 @@ describe('test for BioBattery class', () => {
     const maxCapacity = 30;
     const battery = new BioBattery({
       x: 10,
-      y: 5, 
+      y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
       energyInJoules: currentpower,
@@ -51,7 +51,7 @@ describe('test for BioBattery class', () => {
   test('battery is full when it is at capacity', () => {
     const battery = new BioBattery({
       x: 10,
-      y: 5, 
+      y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
       energyInJoules: 20,
@@ -64,13 +64,13 @@ describe('test for BioBattery class', () => {
   test('battery is empty when its currentpower is at zero', async () => {
     const battery = new BioBattery({
       x: 10,
-      y: 5, 
+      y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
       energyInJoules: 1,
       maxCapacity: 10
     } as BatteryParams);
     const expected = false;
-    expect(await battery.isEmpty()).toEqual(expected);
+    expect(battery.isEmpty()).toEqual(expected);
   });
 });

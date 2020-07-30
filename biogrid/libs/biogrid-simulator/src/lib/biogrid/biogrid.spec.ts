@@ -1,9 +1,9 @@
 import { Biogrid } from './';
 import { RuralArea } from '../community';
 import { Building, BuildingParams } from '../building';
-import { GRID_ITEM_NAMES, BUILDING } from '../config';
+import { GRID_ITEM_NAMES, BUILDING, GRID_DISTANCES } from '../config';
 import { BioBrain } from '../biobrain';
-import { EnergyUser, GridItem } from '@biogrid/grid-simulator';
+import { EnergyUser, GridItem, ItemPosition } from '@biogrid/grid-simulator';
 
 let grid: Biogrid;
 let brain: BioBrain;
@@ -91,28 +91,22 @@ describe('classes', () => {
     const gridTemp = new Biogrid(
       new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
       {
-        numberOfLargeBatteryCells: 2,
-        numberOfSmallBatteryCells: 6,
-        numberOfSolarPanels: 4,
+        numberOfLargeBatteryCells: 1,
+        numberOfSmallBatteryCells: 3,
+        numberOfSolarPanels: 2,
       }
     );
     const positions = gridTemp.getSystemState().getAllPositions();
     // +1 to the expected positions because of the grid which is automatically added at position (0, 0)
-    expect(positions.length).toEqual(2 + 6 + 4 + 1);
+    expect(positions.length).toEqual(2 + 3 + 1 + 1);
     expect(positions).toEqual([
       { x: Math.floor(townWidth / 2), y: Math.floor(townHeight / 2) },
-      { x: 5, y: 0.8333333333333333 },
-      { x: 5, y: 2.5 },
-      { x: 5, y: 4.166666666666667 },
-      { x: 5, y: 5.833333333333334 },
-      { x: 5, y: 7.5 },
-      { x: 5, y: 9.166666666666666 },
+      { x: 5, y: 1.5 },
+      { x: 5, y: 5 },
+      { x: 5, y: 8 },
+      { x: 5.5, y: 5 },
       { x: 5, y: 2.5 },
       { x: 5, y: 7.5 },
-      { x: 5, y: 1.25 },
-      { x: 5, y: 3.75 },
-      { x: 5, y: 6.25 },
-      { x: 5, y: 8.75 },
     ]);
   });
 
@@ -152,9 +146,13 @@ describe('classes', () => {
     expect(
       Object.keys(action.getSupplyingPaths()).length
     ).toBeGreaterThanOrEqual(2);
+  });
 
+  test("takeAction works on a returned brain's action", async () => {
+    const expected = [BUILDING.MAX_CAPACITY, BUILDING.MAX_CAPACITY];
+    const action = await brain.computeAction(grid.getSystemState());
     const gridTakeAction = grid.takeAction(action);
-    // Make sure that the old grid and new grid are different after dispersion of emergy
+    // Make sure that the old grid and new grid are different after dispersion of energy
     // Check to make sure that the houses have been refiled
     const building2 = gridTakeAction.getGridItem(name2) as Building;
     const building4 = gridTakeAction.getGridItem(name4) as Building;
@@ -163,5 +161,40 @@ describe('classes', () => {
       building4.getEnergyInJoules(),
     ];
     expect(actual).toEqual(expected);
+  });
+
+  test('new Biogrid does not overlap items', () => {
+    const grid = new Biogrid(
+      new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+      {
+        numberOfLargeBatteryCells: 2,
+        numberOfSmallBatteryCells: 6,
+        numberOfSolarPanels: 4,
+      }
+    );
+    function posToString(pos: ItemPosition) {
+      return `${pos.x}, ${pos.y}`;
+    }
+    const positions = grid.getSystemState().getAllPositions().map(posToString);
+    const distinctPositions = positions.filter(
+      (pos, ind) => positions.indexOf(pos) === ind
+    );
+    expect(distinctPositions.length).toEqual(positions.length);
+  });
+
+  test('new Biogrid throws error when it cannot fit all items into the grid', () => {
+    expect(
+      () =>
+        new Biogrid(
+          new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+          {
+            numberOfLargeBatteryCells: 200,
+            numberOfSmallBatteryCells: 600,
+            numberOfSolarPanels: 4,
+          }
+        )
+    ).toThrow(
+      `There are too many items on the grid. New items could not be placed with a minimum distance of ${GRID_DISTANCES.INCREMENTS_KM} km apart`
+    );
   });
 });
