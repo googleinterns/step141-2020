@@ -134,7 +134,11 @@ export const SimulatePage = () => {
               <button onClick={() => playSimulation()}>Play</button>
               <button onClick={() => setCurrentStateFrame(0)}>Reset</button>
             </div>
-            <div>Time of day: {currentStateFrame}:00</div>
+            <div>
+              Time of day:{' '}
+              {currentStateFrame % 12 === 0 ? 12 : currentStateFrame % 12}:00{' '}
+              {currentStateFrame >= 12 ? 'PM' : 'AM'}
+            </div>
             <SimulationBoard
               grid_height_km={simulationResults.townSize.height}
               grid_width_km={simulationResults.townSize.width}
