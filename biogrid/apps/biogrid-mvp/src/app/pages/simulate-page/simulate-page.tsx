@@ -64,7 +64,8 @@ export const SimulatePage = () => {
     if (currentStateFrame >= simResultsStateLen) {
       return;
     }
-    for (let i = 0; i < simulationResults?.states?.length || 0; i++) {
+    const simResultsLen = simulationResults?.states.length || 0;
+    for (let i = 0; i < simResultsStateLen; i++) {
       await new Promise((resolve, reject) => {
         setTimeout(() => {
           setCurrentStateFrame(i);
