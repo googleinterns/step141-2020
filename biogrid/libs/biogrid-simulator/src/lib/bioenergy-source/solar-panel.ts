@@ -72,7 +72,6 @@ export class SolarPanel extends EnergySource {
    * the solar panel at that given time
    */
   async getEnergyInKilowattHour(date?: Date): Promise<Power> {
-    console.log(date, await this.getPowerAmount(date || this.date))
     return await this.getPowerAmount(date || this.date);
   }
 
