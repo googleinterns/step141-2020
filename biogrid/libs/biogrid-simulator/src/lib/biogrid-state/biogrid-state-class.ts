@@ -9,7 +9,8 @@ import {
   Power,
   TownSize,
 } from '@biogrid/grid-simulator';
-import { GRID_ITEM_NAMES, ShortestDistances, RESISTANCE, MAIN_GRID } from '../config';
+import { GRID_ITEM_NAMES, ShortestDistances, RESISTANCE } from '../config';
+import { MAIN_GRID } from './main-grid-item';
 
 interface EdgeLabel {
   distance: number;

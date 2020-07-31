@@ -136,20 +136,3 @@ export interface ShortestDistances {
 export const TIME = {
   DISCRETE_UNIT_HOURS: 1,
 };
-
-export class MAIN_GRID implements GridItem {
-  gridItemName: string = GRID_ITEM_NAMES.GRID;
-  gridItemResistance: number = RESISTANCE.GRID;
-  // 
-  private readonly relativePosition: ItemPosition
-  constructor(townSize: TownSize) {
-    this.relativePosition = {
-      x: Math.floor(townSize.width / 2),
-      y: Math.floor(townSize.height / 2),
-    }
-  }
-  // Add the grid in the center of the town based on the townSize
-  getRelativePosition() {
-    return this.relativePosition;
-  }
-}
