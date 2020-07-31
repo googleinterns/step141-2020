@@ -1,5 +1,5 @@
 /**
- * @summary is a class which defines the brain of the grid
+ * @summary is a class which defines the grid which is always in the middle of the town
  * @author Roland Naijuka <rnaijuka@google.com>
  *
  * Created at     : 7/31/2020, 11:50:42 AM
@@ -15,12 +15,13 @@ export class MAIN_GRID implements GridItem {
   // 
   private readonly relativePosition: ItemPosition
   constructor(townSize: TownSize) {
+    // Add the grid in the center of the town based on the townSize
     this.relativePosition = {
       x: Math.floor(townSize.width / 2),
       y: Math.floor(townSize.height / 2),
     }
   }
-  // Add the grid in the center of the town based on the townSize
+
   getRelativePosition() {
     return this.relativePosition;
   }
