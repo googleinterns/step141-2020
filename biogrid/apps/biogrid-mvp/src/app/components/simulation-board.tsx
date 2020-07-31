@@ -139,7 +139,7 @@ export const SimulationBoard = (props: SimBoardProps) => {
                     markerWidth="5"
                     markerHeight="4"
                     refX="0"
-                    refY="3.5"
+                    refY="2"
                     orient="auto"
                   >
                     <polygon points="0 0, 5 2, 0 4" />
