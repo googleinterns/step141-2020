@@ -2,10 +2,6 @@
  * @file defines the @class Building which describes the buildings in the rural area where the microgrid is implemented
  * This class @implements @interface EnergyUser which add the functionalities for an energy user. This makes the building
  * a gridItem that is responsible for depleting the energy in the grid.
- * The @class Building has 3 main paramaters
- * 1. @param relativePosition which is position of the building in the town / rural area represented by @param x and @param y
- * 2. @param energyInJoules which is the energy / power of the building at any specified time
- * 3. @param gridItemName which is the unique name that identifies the building on the state graph
  *
  * @summary defines the energy user class for a building
  * @author Awad Osman <awado@google.com>
