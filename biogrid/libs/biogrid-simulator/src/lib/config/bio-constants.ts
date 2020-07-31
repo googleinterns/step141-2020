@@ -1,6 +1,6 @@
 import { BioBattery, Building, SolarPanel } from '@biogrid/biogrid-simulator';
 import { Path } from 'graphlib';
-import { EnergyUsageByTimeOfDay } from '@biogrid/grid-simulator';
+import { EnergyUsageByTimeOfDay, GridItem, ItemPosition, TownSize } from '@biogrid/grid-simulator';
 
 /**
  * These values are for a small battery which store a maximum 48-volts 6.5kWh
@@ -136,3 +136,20 @@ export interface ShortestDistances {
 export const TIME = {
   DISCRETE_UNIT_HOURS: 1,
 };
+
+export class MAIN_GRID implements GridItem {
+  gridItemName: string = GRID_ITEM_NAMES.GRID;
+  gridItemResistance: number = RESISTANCE.GRID;
+  // 
+  private readonly relativePosition: ItemPosition
+  constructor(townSize: TownSize) {
+    this.relativePosition = {
+      x: Math.floor(townSize.width / 2),
+      y: Math.floor(townSize.height / 2),
+    }
+  }
+  // Add the grid in the center of the town based on the townSize
+  getRelativePosition() {
+    return this.relativePosition;
+  }
+}
