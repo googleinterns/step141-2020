@@ -16,8 +16,6 @@
   flex-grow: 1;
 }
 
-
-
 .simulation {
   background-color: #f2f2f2;
   border-radius: 0.3125rem;
@@ -26,6 +24,10 @@
   padding: 1.25rem;
   text-align: center;
   min-width: 56.25rem;
+}
+
+.simulation .table-results-container {
+  overflow-y: auto;
 }
 
 table {

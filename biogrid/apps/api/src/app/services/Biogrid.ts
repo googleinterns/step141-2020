@@ -58,7 +58,7 @@ export async function simulateNewBiogrid(
         energy: BUILDING.DEFAULT_INITIAL_ENERGY,
         x: randomPos.x,
         y: randomPos.y,
-        gridItemName: `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`
+        gridItemName: `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`,
       })
     );
   }

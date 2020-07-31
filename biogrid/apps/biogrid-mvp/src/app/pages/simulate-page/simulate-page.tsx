@@ -53,7 +53,6 @@ export const SimulatePage = () => {
       return {
         fromItem: edge.v,
         toItem: edge.w,
-        // TODO this is not a correct value
         powerThroughLinesKiloWatts: edge.value.power,
       };
     });
