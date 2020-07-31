@@ -1,9 +1,5 @@
 /**
- * @file defines the @class BioBrain which describes the brain of the grid responsible for deciding what action the grid should take.
- * It @implements @interface Brain which add the functionalities the brain
- * This class implements a singleton of the Brain since the grid only has one brain. 
- *
- * @summary is a class which defines the brain of the grid
+ * @summary defines the brain of the grid responsible for deciding what action the grid should take.
  * @author Roland Naijuka <rnaijuka@google.com>
  *
  * Created at     : 6/29/2020, 4:33:42 PM

@@ -1,8 +1,5 @@
 /**
- * @file defines the @class BioBattery which represents the batteries used for storing energy
- * It @implements @interface Battery which add the functionalities the battery
- *
- * @summary is the battery used in the grid
+ * @summary defines the @class BioBattery which represents the batteries used for storing energy
  * @author Lev Stambler <levst@google.com>
  * @author Roland Naijuka <rnaijuka@google.com>
  *

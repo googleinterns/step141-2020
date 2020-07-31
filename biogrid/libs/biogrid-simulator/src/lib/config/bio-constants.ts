@@ -1,9 +1,5 @@
 /**
- * This files defines the constants which are used in calculations in the algorithms. These constants include
- * the resistance for the different comments, the default power values for the batteries, solar panels, and buildings
- * It also defines enums which hold names which are used for the gridItems
- *
- * @summary exports all the constants values used in the microgrid implementation
+ * @summary defines the constants which are used in calculations in the algorithms.
  * @author Lev Stambler <levst@google.com>
  * @author Roland Naijuka <rnaijuka@google.com>
  * 

@@ -1,10 +1,5 @@
 /**
- * @file defines the @class BiogridState which describes the state graph for the grid.
- * This class @implements @interface StateGraph which add the functionalities for the graph.
- * The @class BiogridState defines how the gridItems are connected to each other in its @method connectNewVertex
- * It has a specifial vertex which represents the grid and is always found in the middle of the town / rural area
- *
- * @summary defines the graph for all the items in the grid
+ * @summary defines the graph which connects all the items of the grid
  * @author Lev Stambler <levst@google.com>
  * @author Roland Naijuka <rnaijuka@google.com>
  *

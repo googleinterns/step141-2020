@@ -1,8 +1,6 @@
 /**
- * @file defines the @class Biogrid which describes the microgrid.
- * This class @implements @interface Grid which add the functionalities microgrid
- * It implements the action from the brain by supplying the power requests
- * @summary defines the main grid or control centre in the microgrid
+ * @summary defines the main grid or control centre in the microgrid where all components of the grid
+ * are connected to the grid.
  * @author Lev Stambler <levst@google.com>
  * @author Roland Naijuka <rnaijuka@google.com>
  *

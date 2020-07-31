@@ -1,9 +1,5 @@
 /**
- * @file defines the @class Building which describes the buildings in the rural area where the microgrid is implemented
- * This class @implements @interface EnergyUser which add the functionalities for an energy user. This makes the building
- * a gridItem that is responsible for depleting the energy in the grid.
- *
- * @summary defines the energy user class for a building
+ * @summary defines the buildings which are found in the town
  * @author Awad Osman <awado@google.com>
  * @author Lev Stambler <levst@google.com>
  * @author Roland Naijuka <rnaijuka@google.com>
