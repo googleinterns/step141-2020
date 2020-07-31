@@ -9,16 +9,10 @@ import SimulationBoard, {
   GridItemLines,
 } from '../../components/simulation-board';
 
-interface SimBoardPlayableState {
-  stateFrame: number;
-  isPlaying: boolean;
-}
-
 const SimBoardPlayable = (props: {
   simulationResults: BiogridSimulationResults;
   stateFrame: number;
 }) => {
-
   const stateToGridItemRet = (state: any): GridItemRet[] => {
     return state.nodes.map((node: any) => {
       return {
@@ -33,7 +27,6 @@ const SimBoardPlayable = (props: {
       return {
         fromItem: edge.v,
         toItem: edge.w,
-        // TODO this is not a correct value
         powerThroughLinesKiloWatts: edge.value.power,
       };
     });
@@ -71,7 +64,9 @@ const SimBoardPlayable = (props: {
 
 export const SimulatePage = () => {
   const [stateFrame, setStateFrame] = useState(0);
-  const [controlSimulation, setControlSimultation] = useState<{ pauseFN: () => void }>();
+  const [controlSimulation, setControlSimultation] = useState<{
+    pauseFN: () => void;
+  }>();
   const [simulationResults, setSimulationResults] = useState<
     BiogridSimulationResults
   >();
@@ -100,7 +95,7 @@ export const SimulatePage = () => {
   };
 
   const pauseSimulation = async () => {
-    controlSimulation?.pauseFN()
+    controlSimulation?.pauseFN();
   };
 
   const play = () => {

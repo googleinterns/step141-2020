@@ -30,8 +30,8 @@ export const InputPage = () => {
   const LATEST_DATE = new Date();
   LATEST_DATE.setHours(0);
   const EARLIEST_DATE = new Date();
-  EARLIEST_DATE.setDate(LATEST_DATE.getDate() - 7);
-  const [startDate, setStartDate] = useState(new Date());
+  EARLIEST_DATE.setDate(LATEST_DATE.getDate() - 6);
+  const [startDate, setStartDate] = useState(EARLIEST_DATE);
   const [smallBatteryCells, smallBatteryCellInput] = useInput({
     default: 5,
   });
@@ -113,13 +113,14 @@ export const InputPage = () => {
               const daysFromStart = (val as unknown) as number;
               const newDate = new Date();
               newDate.setDate(EARLIEST_DATE.getDate() + daysFromStart);
+          console.log(EARLIEST_DATE, daysFromStart)
               setStartDate(newDate);
             }}
             renderThumb={(props, state) => (
-              <div {...props}>{`${startDate.getMonth()}/${startDate.getDay()}/${startDate.getFullYear()}`}</div>
+              <div {...props}>{`${startDate.getMonth() + 1}/${startDate.getDate()}/${startDate.getFullYear()}`}</div>
             )}
             min={0}
-            max={7}
+            max={6}
           />
         </div>
         <br></br>
