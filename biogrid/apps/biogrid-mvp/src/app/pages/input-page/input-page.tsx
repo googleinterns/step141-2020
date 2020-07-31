@@ -113,7 +113,6 @@ export const InputPage = () => {
               const daysFromStart = (val as unknown) as number;
               const newDate = new Date();
               newDate.setDate(EARLIEST_DATE.getDate() + daysFromStart);
-          console.log(EARLIEST_DATE, daysFromStart)
               setStartDate(newDate);
             }}
             renderThumb={(props, state) => (
