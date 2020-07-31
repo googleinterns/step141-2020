@@ -1,5 +1,5 @@
 /**
- * @file defines the @class BioBattery which describes the grid item representing batteries used for storing energy.
+ * @file defines the @class BioBattery which represents the batteries used for storing energy
  * It @implements @interface Battery which add the functionalities the battery
  * This class implements:
  * 1. @param relativePosition which is the position of the battery on the grid. This is defined by @param x and @param y
