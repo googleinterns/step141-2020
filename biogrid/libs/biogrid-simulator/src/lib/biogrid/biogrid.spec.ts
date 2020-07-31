@@ -124,11 +124,11 @@ describe('classes', () => {
       energyUser.increaseEnergy(/* energy in kilowatts = */ 8)
     );
     const energyBeforeDrain: number[] = energyUsers.map((user) =>
-      user.getEnergyInJoules()
+      user.getEnergyInKilowattHour()
     );
     grid.updateEnergyUsage(midnight);
     const energyAfterDrain: number[] = energyUsers.map((user) =>
-      user.getEnergyInJoules()
+      user.getEnergyInKilowattHour()
     );
     energyBeforeDrain.forEach((energyIndividualUserBefore, i) => {
       expect(energyIndividualUserBefore).toBeGreaterThan(energyAfterDrain[i]);
@@ -157,8 +157,8 @@ describe('classes', () => {
     const building2 = gridTakeAction.getGridItem(name2) as Building;
     const building4 = gridTakeAction.getGridItem(name4) as Building;
     const actual = [
-      building2.getEnergyInJoules(),
-      building4.getEnergyInJoules(),
+      building2.getEnergyInKilowattHour(),
+      building4.getEnergyInKilowattHour(),
     ];
     expect(actual).toEqual(expected);
   });

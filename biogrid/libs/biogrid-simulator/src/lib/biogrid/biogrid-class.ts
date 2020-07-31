@@ -136,7 +136,7 @@ export class Biogrid implements Grid {
           y: position.y,
           gridItemName: `${gridItemName}-${index}`,
           gridItemResistance: batteryResistance,
-          energyInJoules: initEnergy,
+          energyInKiloWattHour: initEnergy,
           maxCapacity,
         } as BatteryParams)
     );
@@ -182,7 +182,7 @@ export class Biogrid implements Grid {
     this.efficiency = action.getEfficiency();
     // RETURN a new BiogridState
     const allSupplyingPaths = action.getSupplyingPaths();
-
+    this.state.resetPowerOnEdges();
     const clonedGraph = this.state.cloneStateGraph();
     for (const supplyPath in allSupplyingPaths) {
       const oldGridItem = this.state.getGridItem(supplyPath);
@@ -193,7 +193,7 @@ export class Biogrid implements Grid {
       const typeOldGridItem = this.getGridItemType(oldGridItem);
       const energyUser = oldGridItem as Building | BioBattery;
       const energyUserReq =
-        energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
+        energyUser.getMaxCapacity() - energyUser.getEnergyInKilowattHour();
       const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
       if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.ENERGY_USER) {
         if (
@@ -243,8 +243,8 @@ export class Biogrid implements Grid {
       powerEdges.push({
         v: supplyingGridItem.gridItemName,
         w: energyUser.gridItemName,
-        // convert kilojoules into kilowatts
-        power: energyUserReq / (bioconstants.TIME.DISCRETE_UNIT_HOURS * 60 * 60),
+        // Convert kilowatthours into kilowatts
+        power: energyUserReq / bioconstants.TIME.DISCRETE_UNIT_HOURS,
       });
     }
     this.state.setnewStateGraph(clonedGraph);
