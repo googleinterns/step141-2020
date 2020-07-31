@@ -64,6 +64,14 @@ label {
   display: inline-block;
 }
 
+.tooltip.slider {
+  width: 100%;
+}
+
+.tooltip.slider .inputBox {
+  width: 100%;
+}
+
 .tooltip .tooltiptext {
   visibility: hidden;
   width: 28.125rem;

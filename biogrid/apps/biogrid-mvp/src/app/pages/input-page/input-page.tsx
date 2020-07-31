@@ -126,12 +126,12 @@ export const InputPage = () => {
           .
         </p>
 
-        <div className="tooltip">
+        <div className="tooltip slider">
           <span className="tooltiptext">
             The date where we will start collecting sunlight data from
           </span>
           <div className="inputBox">
-            <label>Start Date</label>
+            <label>Start Date Slider </label>
             <ReactSlider
               className="horizontal-slider"
               onChange={(val) => {
