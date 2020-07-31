@@ -72,7 +72,7 @@ export class SolarPanel extends EnergySource {
    * the solar panel at that given time
    */
   async getEnergyInJoules(date?: Date): Promise<Power> {
-    return await this.getPowerAmount(this.date || date);
+    return await this.getPowerAmount(date || this.date);
   }
 
   async isEmpty() {
