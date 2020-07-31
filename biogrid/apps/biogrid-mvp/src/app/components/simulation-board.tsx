@@ -92,7 +92,7 @@ export const SimulationBoard = (props: SimBoardProps) => {
   )}vw`;
 
   const kiloWattToThickness = (kilowatts: number) => {
-    return Math.ceil(Math.pow(kilowatts * SIZES.KILOWATT_TO_PIXELS, 0.5));
+    return Math.ceil(Math.sqrt(kilowatts * SIZES.KILOWATT_TO_PIXELS));
   };
 
   return (
