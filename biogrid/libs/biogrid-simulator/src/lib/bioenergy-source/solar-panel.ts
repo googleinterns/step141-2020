@@ -1,12 +1,6 @@
 /**
  * @file defines the @class SolarPanel which describes solar panels that are considered as the primary source of energy considered in this microgrid.
  * It @extends EnergySource which add the functionalities the energy source
- * In addition to the functionalities of the super class, this class implements:
- * 1. @param sizeSqMtr which is the area of the solar panels
- * 2. @param gridItemName which is the unique name that identifies the solar panel on the state graph
- * 3. @param weatherLib which is an @instance of the @class WeatherLib
- * 4. @method getPowerAmount which is the power produced by the energy source at a given date
- * 5. @method getEnergyInJoules which is the current power of the energy source
  *
  * @summary is abstract class for an energy source
  * @author Lev Stambler <levst@google.com>
