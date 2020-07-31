@@ -1,12 +1,7 @@
 /**
  * @file defines the @abstract @class EnergySource which describes energy sources.
  * It @implements @interface EnergySourceInterface which add the functionalities the energy source
- * The class defines:
- * 1. @param position which describes the position of the energy source relative to the town
- * 2. @param latitude and @param longitude which define the position of the energy source on a map. This is used by the
- * weather api to get the sunlight data
- * 3. @abstract @method getPowerAmount which is the power produced by the energy source at a given date
- * 4. @abstract @method getEnergyInJoules which is the current power of the energy source
+ * The class defines the psosition of the energy source relative to the town as well as relative to the earth using longititude and latitudes
  *
  * @summary is abstract class for an energy source
  * @author Lev Stambler <levst@google.com>
