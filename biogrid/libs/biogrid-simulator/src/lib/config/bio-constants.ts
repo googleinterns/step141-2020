@@ -13,6 +13,7 @@
 
 import { BioBattery, Building, SolarPanel } from '@biogrid/biogrid-simulator';
 import { Path } from 'graphlib';
+import { EnergyUsageByTimeOfDay } from '@biogrid/grid-simulator';
 
 /**
  * These values are for a small battery which store a maximum 48-volts 6.5kWh
@@ -60,6 +61,12 @@ export const enum GRID_ITEM_NAMES {
   SOLAR_PANEL = 'solar_panel',
 }
 
+export const GRID_DISTANCES = {
+  // The discrete unit of distance for laying items apart, both vertically and horizontally
+  // So, every item is 1 * INCREMENTS_KM, 2 * INCREMENTS_KM, 3 * INCREMENTS_KM, etc... km apart on the x and y plane
+  INCREMENTS_KM: 0.5,
+};
+
 /**
  * Resistance of the differents components used in the grid
  * For transportation of power, wire 16 of awg is used for transmission lines
@@ -99,6 +106,36 @@ export const BUILDING = {
   DEFAULT_INITIAL_ENERGY: 1.3,
   MAX_CAPACITY: 32,
   MIN_CAPACITY: 0,
+  /**
+   * Source is from Research Gate
+   * @see https://www.researchgate.net/publication/326358349/figure/fig2/AS:647731865477122@1531442719619/Average-daily-energy-consumption-during-the-weekdays-and-the-variation-throughout-the.png
+   */
+  ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY: {
+    '0': 8,
+    '1': 6,
+    '2': 4.25,
+    '3': 4,
+    '4': 4.25,
+    '5': 4,
+    '6': 5,
+    '7': 6.2,
+    '8': 5,
+    '9': 5,
+    '10': 5,
+    '11': 4.75,
+    '12': 4.75,
+    '13': 4.5,
+    '14': 4.75,
+    '15': 5,
+    '16': 5.5,
+    '17': 6,
+    '18': 7,
+    '19': 10,
+    '20': 9.5,
+    '21': 9,
+    '22': 11,
+    '23': 11,
+  } as EnergyUsageByTimeOfDay
 };
 
 export type SupplyingAgents = BioBattery | SolarPanel;
@@ -108,3 +145,7 @@ export type RecievingAgents = BioBattery[] | Building[];
 export interface ShortestDistances {
   [source: string]: { [node: string]: Path };
 }
+
+export const TIME = {
+  DISCRETE_UNIT_HOURS: 1,
+};

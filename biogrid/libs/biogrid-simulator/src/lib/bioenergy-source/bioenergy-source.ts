@@ -29,8 +29,8 @@ export abstract class EnergySource implements EnergySourceInterface {
   // Percentage between 0 and 1
   protected efficiency: number;
   // Long and latitude for the solar panel's position
-  protected longitude: number = 0;
-  protected latitude: number = 0;
+  protected longitude = 0;
+  protected latitude = 0;
   protected position: ItemPosition;
   constructor(energyParams: EnergySourceParams) {
     this.position = { x: energyParams.x, y: energyParams.y };
@@ -63,7 +63,7 @@ export abstract class EnergySource implements EnergySourceInterface {
   }
 
   abstract getPowerAmount(date: Date): Promise<Power>;
-  abstract getEnergyInJoules(): Promise<Power>;
+  abstract getEnergyInJoules(date?: Date): Promise<Power>;
   abstract gridItemName: string;
   abstract gridItemResistance: number;
 }

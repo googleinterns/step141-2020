@@ -14,7 +14,7 @@
 
 import { Graph, Edge, Path } from 'graphlib';
 import { GridItem } from '../grid-item';
-import { ItemPosition, Distance } from '../measurements';
+import { ItemPosition, Distance, Power } from '../measurements';
 
 export type StateGraphVertex = GridItem;
 
@@ -32,5 +32,6 @@ export interface StateGraph {
   cloneStateGraph(): Graph;
   getAllVertices: () => string[];
   getShortestDistances: () => { [source: string]: { [node: string]: Path } };
+  setPowerBetweenNodes: (v: string, w: string, power: Power) => void
   getWeightEdge: (edge: Edge) => Distance;
 }
