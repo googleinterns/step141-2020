@@ -106,6 +106,8 @@ export const SimulatePage = () => {
 
   const pauseSimulation = async () => {
     controlSimulation?.pauseFN();
+  };
+
   const stateToGridItemRet = (state: any): GridItemRet[] => {
     return state.nodes.map((node: any) => {
       return {
@@ -223,11 +225,11 @@ export const SimulatePage = () => {
           </div>
         </div>
       )}
-      {!simulationResults &&
-      <div className="loading-container">
-        <PacmanLoader />
-      </div>
-      }
+      {!simulationResults && (
+        <div className="loading-container">
+          <PacmanLoader />
+        </div>
+      )}
     </div>
   );
 };
