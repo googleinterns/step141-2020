@@ -20,7 +20,7 @@ export interface BuildingParams {
  * A structure such as a building or house which uses energy to operate.
  */
 export class Building implements EnergyUser {
-  private energyKilowatt: number;
+  private energyInKilowattHour: number;
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
   // Label to be used in the graph
@@ -41,7 +41,7 @@ export class Building implements EnergyUser {
     this.relativePosition = { x: buildingParams.x, y: buildingParams.y };
     this.gridItemName = buildingParams.gridItemName;
     if (this.isPositive(buildingParams.energy)) {
-      this.energyKilowatt = buildingParams.energy;
+      this.energyInKilowattHour = buildingParams.energy;
     } else {
       throw new Error("Can't create a building with negative energy!");
     }
@@ -78,7 +78,7 @@ export class Building implements EnergyUser {
   }
 
   getEnergyInKilowattHour(): number {
-    return this.energyKilowatt;
+    return this.energyInKilowattHour;
   }
 
   decreaseEnergyAccordingToTimeOfDay(date: Date) {
@@ -91,7 +91,7 @@ export class Building implements EnergyUser {
    */
   increaseEnergy(energy: number) {
     if (this.isPositive(energy)) {
-      this.energyKilowatt += energy;
+      this.energyInKilowattHour += energy;
     } else {
       throw new Error("Can't add negative energy!");
     }
@@ -105,10 +105,10 @@ export class Building implements EnergyUser {
       throw new Error("Can't use a negative amount of energy!");
     }
     // Building can't have a negative amount of energy in store.
-    if (energy >= this.energyKilowatt) {
-      this.energyKilowatt = 0;
+    if (energy >= this.energyInKilowattHour) {
+      this.energyInKilowattHour = 0;
     } else {
-      this.energyKilowatt -= energy;
+      this.energyInKilowattHour -= energy;
     }
   }
 

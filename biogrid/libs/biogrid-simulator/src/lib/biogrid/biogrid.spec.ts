@@ -17,7 +17,7 @@ const townWidth = 10;
 
 beforeAll(() => {
   brain = BioBrain.Instance;
-  const ruralArea = [
+  const buildingList = [
     new Building({
       energy: BUILDING.DEFAULT_INITIAL_ENERGY,
       x: 3,
@@ -51,7 +51,7 @@ beforeAll(() => {
   ];
   grid = new Biogrid(
     new RuralArea(
-      ruralArea,
+      buildingList,
       /* townWidth = */ townWidth,
       /* townHeight = */ townHeight
     ),
@@ -126,7 +126,7 @@ describe('classes', () => {
     const energyBeforeDrain: number[] = energyUsers.map((user) =>
       user.getEnergyInKilowattHour()
     );
-    grid.drainEnergyUsers(midnight);
+    grid.updateEnergyUsage(midnight);
     const energyAfterDrain: number[] = energyUsers.map((user) =>
       user.getEnergyInKilowattHour()
     );
@@ -135,7 +135,7 @@ describe('classes', () => {
     });
   });
 
-  test('ensure that the Biogrid take action works', async () => {
+  test("Biogrid works with the brain's compute action", async () => {
     // Expect the two buildings to be at maxCapacity
     const expected = [BUILDING.MAX_CAPACITY, BUILDING.MAX_CAPACITY];
     const action = await brain.computeAction(grid.getSystemState());
@@ -145,7 +145,7 @@ describe('classes', () => {
     // Energy may come from the solar panels but two buildings must be refiled
     expect(
       Object.keys(action.getSupplyingPaths()).length
-    ).toBeGreaterThanOrEqual(2);
+    ).toEqual(2);
   });
 
   test("takeAction works on a returned brain's action", async () => {
@@ -165,7 +165,7 @@ describe('classes', () => {
 
   test('new Biogrid does not overlap items', () => {
     const grid = new Biogrid(
-      new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+      new RuralArea(/* buildings = */ [], /* townWidth = */ 10, /* townHeight = */ 10),
       {
         numberOfLargeBatteryCells: 2,
         numberOfSmallBatteryCells: 6,
@@ -186,7 +186,7 @@ describe('classes', () => {
     expect(
       () =>
         new Biogrid(
-          new RuralArea([], /* townWidth = */ 10, /* townHeight = */ 10),
+          new RuralArea(/* buildings = */ [], /* townWidth = */ 10, /* townHeight = */ 10),
           {
             numberOfLargeBatteryCells: 200,
             numberOfSmallBatteryCells: 600,

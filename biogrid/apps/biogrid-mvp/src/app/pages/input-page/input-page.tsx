@@ -1,10 +1,19 @@
+/**
+ * @summary Designs the page where user will enter inputs to run simulation.
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at    : 2020-07-01 11:53:16
+ * Last modified : 2020-07-28 11:27:22
+ */
+
 import React, { useState } from 'react';
 import './input-page.css';
 import './input-page.scss';
 import ReactSlider from 'react-slider';
 import { Client } from '../../client';
 import { useHistory } from 'react-router-dom';
-import Visual from './BioGridVisual.jpg';
 
 function useInput<T>(opts: { default: T }) {
   const [value, setValue] = useState(opts.default);
@@ -50,7 +59,13 @@ export const InputPage = () => {
   const [townHeight, townHeightInput] = useInput({
     default: 5,
   });
+
   const history = useHistory();
+
+  const redirectToInfo = (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault();
+    history.push('/info');
+  };
 
   const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
@@ -73,8 +88,8 @@ export const InputPage = () => {
       largeBatteryCells,
       numBuildings,
       numSolarPanels,
-      townHeight,
       townWidth,
+      townHeight,
     };
     history.push(`/simulate?${serialize(params)}`);
   };
@@ -82,7 +97,7 @@ export const InputPage = () => {
     <div className="input-page">
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
         <h1>Welcome to the Biogrid Simulator!</h1>
-        <img src={Visual} id="biogridVisual"></img>
+
         <p>
           This website will simulate how a{' '}
           <a
@@ -95,60 +110,113 @@ export const InputPage = () => {
           <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">
             biomimicry
           </a>{' '}
-          to mimic the natural energy storage of the human body given a range of
-          sunlight data, number of small and large battery cells, buildings,
-          solar panels, and town size. In the <b>visual</b> above, the{' '}
-          <b>large battery cells</b> are centered in the{' '}
-          <b>middle of the town</b> so our grid can take energy from it in the
-          event that no energy is coming from our renewable sources. Outside of
-          our large battery cells, we have <b>small battery cells</b> spread{' '}
-          <b>throughout the town</b> so that our buildings can have an immediate
-          energy source when they have a spike in energy consumption.
+          to imitate the human body's glucose regulation procedures.{' '}
         </p>
-        <div className="datePicker">
-          <label>Simulation Date Slider</label>
-          <ReactSlider
-            className="horizontal-slider"
-            onChange={(val) => {
-              const daysFromStart = (val as unknown) as number;
-              const newDate = new Date();
-              newDate.setDate(EARLIEST_DATE.getDate() + daysFromStart);
-              setStartDate(newDate);
-            }}
-            renderThumb={(props, state) => (
-              <div {...props}>{`${startDate.getMonth() + 1}/${startDate.getDate()}/${startDate.getFullYear()}`}</div>
-            )}
-            min={0}
-            max={6}
-          />
+
+        <p>
+          Hover over the inputs to learn how they're used in the simulation!
+        </p>
+
+        <p>
+          If you would like to learn more about how we designed this project
+          click{' '}
+          <a href="" onClick={redirectToInfo}>
+            here
+          </a>
+          .
+        </p>
+
+        <div className="tooltip">
+          <span className="tooltiptext">
+            The date where we will start collecting sunlight data from
+          </span>
+          <div className="inputBox">
+            <label>Start Date</label>
+            <ReactSlider
+              className="horizontal-slider"
+              onChange={(val) => {
+                const daysFromStart = (val as unknown) as number;
+                const newDate = new Date();
+                newDate.setDate(EARLIEST_DATE.getDate() + daysFromStart);
+                setStartDate(newDate);
+              }}
+              renderThumb={(props, state) => (
+                <div {...props}>{`${
+                  startDate.getMonth() + 1
+                }/${startDate.getDate()}/${startDate.getFullYear()}`}</div>
+              )}
+              min={0}
+              max={6}
+            />
+          </div>
         </div>
-        <br></br>
-        <div className="smallBatteryCells">
-          <label>Small Battery Cells</label>
-          {smallBatteryCellInput}
+
+        <br />
+
+        <div className="tooltip">
+          <span className="tooltiptext">
+            SBC's are used for quick sources of energy
+          </span>
+          <div className="inputBox">
+            <label>Small Battery Cells</label>
+            {smallBatteryCellInput}
+          </div>
         </div>
-        <div className="largeBatteryCells">
-          <label>Large Battery Cells</label>
-          {largeBatteryCellInput}
+
+        <div className="tooltip">
+          <span className="tooltiptext">
+            LBC's are used as backup energy sources to the solar panels
+          </span>
+          <div className="inputBox">
+            <label>Large Battery Cells</label>
+            {largeBatteryCellInput}
+          </div>
         </div>
-        <br></br>
-        <div className="buildings">
-          <label>Buildings</label>
-          {numBuildingsInput}
+
+        <br />
+
+        <div className="tooltip">
+          <span className="tooltiptext">
+            Buildings are reperesented as energy consumers in the grid
+          </span>
+          <div className="inputBox">
+            <label>Buildings</label>
+            {numBuildingsInput}
+          </div>
         </div>
-        <div className="solarPanels">
-          <label>Solar Panels</label>
-          {numSolarPanelsInput}
+
+        <div className="tooltip">
+          <span className="tooltiptext">
+            Solar Panels are the main energy source in the grid
+          </span>
+          <div className="inputBox">
+            <label>Solar Panels</label>
+            {numSolarPanelsInput}
+          </div>
         </div>
-        <br></br>
-        <div className="townWidth">
-          <label>Town Width (Kilometers)</label>
-          {townWidthInput}
+
+        <br />
+
+        <div className="tooltip">
+          <span className="tooltiptext">
+            Used for even distribution of objects on the grid
+          </span>
+          <div className="inputBox">
+            <label>Town Width (Kilometers)</label>
+            {townWidthInput}
+          </div>
         </div>
-        <div className="townHeight">
-          <label>Town Height (Kilometers)</label>
-          {townHeightInput}
+
+        <div className="tooltip">
+          <span className="tooltiptext">
+            Used for even distribution of objects on the grid
+          </span>
+          <div className="inputBox">
+            <label>Town Height (Kilometers)</label>
+            {townHeightInput}
+          </div>
         </div>
+
         <div className="submitButton">
           <input
             type="submit"

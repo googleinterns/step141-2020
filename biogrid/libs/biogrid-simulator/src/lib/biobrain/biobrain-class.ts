@@ -386,7 +386,7 @@ export class BioBrain implements Brain {
           }
         }
       }
-      // In case there is no supplier for that receiver, ignore the reciever
+      // In case there is no supplier for that receiver, ignore the receiver
       // TODO advancement, tell the grid about these cases of receiver asking for more than it can be given
       // @see https://github.com/googleinterns/step141-2020/issues/54
       if (indexOfProvider === -1) {

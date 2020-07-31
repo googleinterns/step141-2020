@@ -1,3 +1,12 @@
+/**
+ * @summary Designs page where user sees results from the simulation.
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ *
+ * Created at    : 2020-07-07 09:31:49
+ * Last modified : 2020-07-21 16:34:17
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
@@ -97,6 +106,23 @@ export const SimulatePage = () => {
 
   const pauseSimulation = async () => {
     controlSimulation?.pauseFN();
+  const stateToGridItemRet = (state: any): GridItemRet[] => {
+    return state.nodes.map((node: any) => {
+      return {
+        gridItemName: node.value.gridItemName,
+        relativePosition: node.value.position ||
+          node.value.relativePosition || { x: 0, y: 0 },
+      };
+    });
+  };
+  const stateToGridItemLines = (state: any): GridItemLines[] => {
+    return state.edges.map((edge: any) => {
+      return {
+        fromItem: edge.v,
+        toItem: edge.w,
+        powerThroughLinesKiloWatts: edge.value.power,
+      };
+    });
   };
 
   const play = () => {

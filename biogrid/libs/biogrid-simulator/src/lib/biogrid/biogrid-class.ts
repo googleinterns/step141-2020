@@ -8,8 +8,8 @@ import {
   Energy,
   Battery,
   GridItem,
+  Distance,
   Power,
-  Distance
 } from '@biogrid/grid-simulator';
 import * as bioconstants from '../config/bio-constants';
 import {
@@ -34,6 +34,8 @@ export class Biogrid implements Grid {
   // TODO create a singleton for the Biogrid not BiogridState
   private state: BiogridState;
 
+  // The date for when the simulation begins
+  // Used in initializing the Solar Panels
   private startDate: Date;
 
   // All details for the batteries in the grid
@@ -74,8 +76,7 @@ export class Biogrid implements Grid {
       bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY
     );
 
-    // Energy Source
-    // TODO implement the solar panels
+    // Enery Source
     const solarPanelPositions = this.createGridItemPositions(
       town.getTownSize(),
       opts.numberOfSolarPanels
@@ -135,7 +136,7 @@ export class Biogrid implements Grid {
           y: position.y,
           gridItemName: `${gridItemName}-${index}`,
           gridItemResistance: batteryResistance,
-          energyInJoules: initEnergy,
+          energyInKiloWattHour: initEnergy,
           maxCapacity,
         } as BatteryParams)
     );
@@ -163,7 +164,7 @@ export class Biogrid implements Grid {
   /**
    * Drain the energy users according to the time of day
    */
-  drainEnergyUsers(date: Date) {
+  updateEnergyUsage(date: Date) {
     this.town.getEnergyUsers().forEach((energyUser) => {
       energyUser.decreaseEnergyAccordingToTimeOfDay(date);
     });
@@ -242,7 +243,7 @@ export class Biogrid implements Grid {
       powerEdges.push({
         v: supplyingGridItem.gridItemName,
         w: energyUser.gridItemName,
-        // convert kilowatthours into kilowatts
+        // Convert kilowatthours into kilowatts
         power: energyUserReq / bioconstants.TIME.DISCRETE_UNIT_HOURS,
       });
     }
