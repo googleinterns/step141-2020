@@ -149,19 +149,19 @@ export const SimulationBoard = (props: SimBoardProps) => {
                   // Add half of the icon width in order to center the lines
                   x1={`${kilometersToCSSWidth(
                     itemsByName[line.fromItem].x,
-                    SIZES.ICON_WIDTH_PERCENT / 2 - lineThickness
+                    (SIZES.ICON_WIDTH_PERCENT / 2) - lineThickness
                   )}`}
                   y1={`${kilometersToCSSHeight(
                     itemsByName[line.fromItem].y,
-                    SIZES.ICON_WIDTH_PERCENT / 2 - lineThickness
+                    (SIZES.ICON_WIDTH_PERCENT / 2) - lineThickness
                   )}`}
                   x2={`${kilometersToCSSWidth(
                     itemsByName[line.toItem].x,
-                    SIZES.ICON_WIDTH_PERCENT / 2 - lineThickness
+                    (SIZES.ICON_WIDTH_PERCENT / 2) - lineThickness
                   )}`}
                   y2={`${kilometersToCSSHeight(
                     itemsByName[line.toItem].y,
-                    SIZES.ICON_WIDTH_PERCENT / 2 - lineThickness
+                    (SIZES.ICON_WIDTH_PERCENT / 2) - lineThickness
                   )}`}
                   markerEnd="url(#arrowhead)"
                   stroke={
