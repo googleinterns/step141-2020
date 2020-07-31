@@ -34,9 +34,9 @@ export class BiogridState implements StateGraph {
           x: Math.floor(townSize.width / 2),
           y: Math.floor(townSize.height / 2),
         };
-      }
-    }
-    this.graph.setNode(grid.gridItemName, (grid as GridItem));
+      },
+    };
+    this.graph.setNode(grid.gridItemName, grid as GridItem);
 
     // Add all the vertices as nodes/vertices of the graph, with a name for
     // the particular grid item and label which is data for the particular vertex as the GridItem itself
@@ -83,16 +83,22 @@ export class BiogridState implements StateGraph {
   public setPowerBetweenNodes(v: string, w: string, power: Power) {
     const labelFromV: EdgeLabel = this.graph.edge(v, GRID_ITEM_NAMES.GRID);
     const labelToW: EdgeLabel = this.graph.edge(GRID_ITEM_NAMES.GRID, w);
-    this.graph.setEdge(v, GRID_ITEM_NAMES.GRID, { distance: labelFromV.distance, power });
-    this.graph.setEdge(GRID_ITEM_NAMES.GRID, w, { distance: labelToW.distance, power });
+    this.graph.setEdge(v, GRID_ITEM_NAMES.GRID, {
+      distance: labelFromV.distance,
+      power,
+    });
+    this.graph.setEdge(GRID_ITEM_NAMES.GRID, w, {
+      distance: labelToW.distance,
+      power,
+    });
   }
 
   /**
    * Set all edge power to 0
    */
   public resetPowerOnEdges() {
-    const edges = this.graph.edges()
-    edges.forEach((edge) => this.resetEdge(edge))
+    const edges = this.graph.edges();
+    edges.forEach((edge) => this.resetEdge(edge));
   }
 
   /**
@@ -144,8 +150,8 @@ export class BiogridState implements StateGraph {
     const labels = this.graph.edge(edge);
     this.graph.setEdge(edge.v, edge.w, {
       distance: labels.distance,
-      power: 0
-    })
+      power: 0,
+    });
   }
 
   /**

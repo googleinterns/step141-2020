@@ -136,7 +136,7 @@ export class Biogrid implements Grid {
           y: position.y,
           gridItemName: `${gridItemName}-${index}`,
           gridItemResistance: batteryResistance,
-          energyInJoules: initEnergy,
+          energyInKiloWattHour: initEnergy,
           maxCapacity,
         } as BatteryParams)
     );
@@ -243,7 +243,7 @@ export class Biogrid implements Grid {
       powerEdges.push({
         v: supplyingGridItem.gridItemName,
         w: energyUser.gridItemName,
-        // convert kilowatthours into kilowatts
+        // Convert kilowatthours into kilowatts
         power: energyUserReq / bioconstants.TIME.DISCRETE_UNIT_HOURS,
       });
     }
