@@ -136,13 +136,13 @@ export const SimulationBoard = (props: SimBoardProps) => {
                 <defs>
                   <marker
                     id="arrowhead"
-                    markerWidth="10"
-                    markerHeight="7"
+                    markerWidth="5"
+                    markerHeight="4"
                     refX="0"
-                    refY="3.5"
+                    refY="2"
                     orient="auto"
                   >
-                    <polygon points="0 0, 10 3.5, 0 7" />
+                    <polygon points="0 0, 5 2, 0 4" />
                   </marker>
                 </defs>
                 <line
