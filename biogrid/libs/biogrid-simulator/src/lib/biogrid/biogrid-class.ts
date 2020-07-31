@@ -23,8 +23,9 @@ import {
   BiogridState,
   Building,
   SolarPanel,
-  SolarPanelParams
+  SolarPanelParams,
 } from '@biogrid/biogrid-simulator';
+import { Graph } from 'graphlib';
 import { EnergySource } from '../bioenergy-source/bioenergy-source';
 import { BatteryParams } from '../biobattery';
 
@@ -32,11 +33,16 @@ export interface BiogridOptions extends GridOptions {
   numberOfSmallBatteryCells: number;
   numberOfLargeBatteryCells: number;
   numberOfSolarPanels: number;
+  startDate?: Date;
 }
 
 export class Biogrid implements Grid {
   // TODO create a singleton for the Biogrid not BiogridState
   private state: BiogridState;
+
+  // The date for when the simulation begins
+  // Used in initializing the Solar Panels
+  private startDate: Date;
 
   // All details for the batteries in the grid
   // The small batteries in the grid, will approximately have a maxCapacity of 13,500KJ
@@ -51,7 +57,9 @@ export class Biogrid implements Grid {
   private efficiency: number;
 
   constructor(private town: Town, opts: BiogridOptions) {
-
+    const todayMidnight = new Date();
+    todayMidnight.setHours(0);
+    this.startDate = opts.startDate || todayMidnight;
     // Batteries
     const smallBatteryPositions = this.createGridItemPositions(
       town.getTownSize(),
@@ -71,7 +79,7 @@ export class Biogrid implements Grid {
       GRID_ITEM_NAMES.LARGE_BATTERY
     );
 
-    // Enery Source
+    // Energy Source
     // TODO implement the solar panels
     const solarPanelPositions = this.createGridItemPositions(
       town.getTownSize(),
@@ -126,14 +134,15 @@ export class Biogrid implements Grid {
         ? LARGE_BATTERY.DEFAULT_START_ENERGY
         : SMALL_BATTERY.DEFAULT_START_ENERGY;
     return positions.map(
-      (position, index) => new BioBattery({
-        x: position.x,
-        y: position.y,
-        gridItemName: `${gridItemName}-${index}`,
-        gridItemResistance: batteryResistance,
-        energyInJoules: initEnergy,
-        maxCapacity
-      } as BatteryParams)
+      (position, index) =>
+        new BioBattery({
+          x: position.x,
+          y: position.y,
+          gridItemName: `${gridItemName}-${index}`,
+          gridItemResistance: batteryResistance,
+          energyInJoules: initEnergy,
+          maxCapacity,
+        } as BatteryParams)
     );
   }
 
@@ -144,15 +153,27 @@ export class Biogrid implements Grid {
   // TODO pass a list of equal length to hold the area for the solar panels
   private createSolarPanels(positions: ItemPosition[]): EnergySource[] {
     return positions.map(
-      (position, index) => new SolarPanel({
-        x: position.x,
-        y: position.y,
-        efficiency: 0.75,
-        areaSquareMeters: SOLAR_PANEL.AREA,
-        gridItemName: `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`
-      } as SolarPanelParams)
+      (position, index) =>
+        new SolarPanel({
+          x: position.x,
+          y: position.y,
+          efficiency: 0.75,
+          areaSquareMeters: SOLAR_PANEL.AREA,
+          gridItemName: `${GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`,
+          date: this.startDate,
+        } as SolarPanelParams)
     );
   }
+
+  /**
+   * Drain the energy users according to the time of day
+   */
+  updateEnergyUsage(date: Date) {
+    this.town.getEnergyUsers().forEach((energyUser) => {
+      energyUser.decreaseEnergyAccordingToTimeOfDay(date);
+    });
+  }
+
   /**
    * This method takes the results of th brain and then it changes the state graph as suggested by the brain.
    * The results of the brain are in form of an object key:value pair, with the receiver gridItemName as key and supplier gridItemName as value

@@ -71,8 +71,12 @@ export async function simulateNewBiogrid(
   const biobrain = BioBrain.Instance;
   const initState = biogrid.getSystemState();
   const statesJson = [biogrid.getJsonGraphDetails()];
-  for (let i = 0; i < constants.simulation.NUMBER_OF_SIM_CYCLES; i++) {
-    const action = await biobrain.computeAction(initState);
+  const currentDate = body.startDate;
+  for (let i = 0; i < constants.simulation.NUMBER_OF_SIM_HOURS; i++) {
+    // Start at midnight, increment hours until NUMBER_OF_SIM_HOURS reached
+    currentDate.setHours(i);
+    biogrid.updateEnergyUsage(currentDate);
+    const action = await biobrain.computeAction(initState, currentDate);
     biogrid.takeAction(action);
     statesJson.push(biogrid.getJsonGraphDetails());
   }

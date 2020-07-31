@@ -3,6 +3,7 @@ import { RuralArea } from '../community';
 import { Building, BuildingParams } from '../building';
 import { GRID_ITEM_NAMES, BUILDING } from '../config';
 import { BioBrain } from '../biobrain';
+import { EnergyUser, GridItem } from '@biogrid/grid-simulator';
 
 let grid: Biogrid;
 let brain: BioBrain;
@@ -16,40 +17,44 @@ const townWidth = 10;
 
 beforeAll(() => {
   brain = BioBrain.Instance;
-  const ruralArea = [
+  const buildingList = [
     new Building({
       energy: BUILDING.DEFAULT_INITIAL_ENERGY,
       x: 3,
       y: 4,
-      gridItemName: name1
+      gridItemName: name1,
     } as BuildingParams),
     new Building({
       energy: 0,
       x: 7,
       y: 9,
-      gridItemName: name2
+      gridItemName: name2,
     } as BuildingParams),
     new Building({
       energy: BUILDING.DEFAULT_INITIAL_ENERGY,
       x: 7,
       y: 8,
-      gridItemName: name3
+      gridItemName: name3,
     } as BuildingParams),
     new Building({
       energy: 0,
       x: 2,
       y: 1,
-      gridItemName: name4
+      gridItemName: name4,
     } as BuildingParams),
     new Building({
       energy: BUILDING.DEFAULT_INITIAL_ENERGY,
       x: 9,
       y: 9,
-      gridItemName: name5
+      gridItemName: name5,
     } as BuildingParams),
   ];
   grid = new Biogrid(
-    new RuralArea(ruralArea, /* townWidth = */ townWidth, /* townHeight = */ townHeight),
+    new RuralArea(
+      buildingList,
+      /* townWidth = */ townWidth,
+      /* townHeight = */ townHeight
+    ),
     {
       numberOfLargeBatteryCells: 1,
       numberOfSmallBatteryCells: 0,
@@ -111,6 +116,31 @@ describe('classes', () => {
     ]);
   });
 
+  test('drainEnergyUser removes energy from all users', async () => {
+    const midnight = new Date();
+    midnight.setHours(0);
+    const state = grid.getSystemState();
+    const energyUsers: EnergyUser[] = state
+      .getAllVertices()
+      .map((vertex: string) => state.getGridItem(vertex))
+      .filter((item: GridItem) =>
+        item.gridItemName.includes(GRID_ITEM_NAMES.ENERGY_USER)
+      ) as EnergyUser[];
+    energyUsers.forEach((energyUser) =>
+      energyUser.increaseEnergy(/* energy in kilowatts = */ 8)
+    );
+    const energyBeforeDrain: number[] = energyUsers.map((user) =>
+      user.getEnergyInJoules()
+    );
+    grid.drainEnergyUsers(midnight);
+    const energyAfterDrain: number[] = energyUsers.map((user) =>
+      user.getEnergyInJoules()
+    );
+    energyBeforeDrain.forEach((energyIndividualUserBefore, i) => {
+      expect(energyIndividualUserBefore).toBeGreaterThan(energyAfterDrain[i]);
+    });
+  });
+
   test('ensure that the Biogrid take action works', async () => {
     // Expect the two buildings to be at maxCapacity
     const expected = [BUILDING.MAX_CAPACITY, BUILDING.MAX_CAPACITY];
@@ -119,14 +149,19 @@ describe('classes', () => {
     // There are two non full buildings, and the battery has to be refilled however
     // the components are placed on the grid randomly thus we cannot guarantee the battery is refilled
     // Energy may come from the solar panels but two buildings must be refiled
-    expect(Object.keys(action.getSupplyingPaths()).length).toBeGreaterThanOrEqual(2);
+    expect(
+      Object.keys(action.getSupplyingPaths()).length
+    ).toEqual(2);
 
     const gridTakeAction = grid.takeAction(action);
     // Make sure that the old grid and new grid are different after dispersion of emergy
     // Check to make sure that the houses have been refiled
     const building2 = gridTakeAction.getGridItem(name2) as Building;
     const building4 = gridTakeAction.getGridItem(name4) as Building;
-    const actual = [building2.getEnergyInJoules(), building4.getEnergyInJoules()]
+    const actual = [
+      building2.getEnergyInJoules(),
+      building4.getEnergyInJoules(),
+    ];
     expect(actual).toEqual(expected);
   });
 });

@@ -15,6 +15,7 @@ describe('weather', () => {
     const cloudCoverage = weatherLib.getCloudCoverage(addHours(2, new Date()));
     expect(cloudCoverage >= 0 && 1 >= cloudCoverage).toBeTruthy();
   }, 30000);
+
   test('getIntensity throws an error for an out of range date', async () => {
     const startDate = new Date();
     const weatherLib = new WeatherLib(startDate, /* long = */ 0, /* lat = */ 0);
