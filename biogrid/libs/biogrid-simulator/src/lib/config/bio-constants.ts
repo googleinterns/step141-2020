@@ -1,6 +1,6 @@
 import { BioBattery, Building, SolarPanel } from '@biogrid/biogrid-simulator';
 import { Path } from 'graphlib';
-import { EnergyUsageByTimeOfDay, GridItem, ItemPosition, TownSize } from '@biogrid/grid-simulator';
+import { EnergyUsageByTimeOfDay } from '@biogrid/grid-simulator';
 
 /**
  * These values are for a small battery which store a maximum 48-volts 6.5kWh
