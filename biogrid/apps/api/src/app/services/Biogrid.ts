@@ -58,7 +58,7 @@ export async function simulateNewBiogrid(
         energy: BUILDING.DEFAULT_INITIAL_ENERGY,
         x: randomPos.x,
         y: randomPos.y,
-        gridItemName: `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`
+        gridItemName: `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`,
       })
     );
   }
@@ -72,10 +72,10 @@ export async function simulateNewBiogrid(
   const initState = biogrid.getSystemState();
   const statesJson = [biogrid.getJsonGraphDetails()];
   const currentDate = body.startDate;
-  for (let i = 0; i < constants.simulation.NUMBER_OF_SIM_CYCLES; i++) {
-    // Start at midnight, increment hours until NUMBER_OF_SIM_CYCLES reached
+  for (let i = 0; i < constants.simulation.NUMBER_OF_SIM_HOURS; i++) {
+    // Start at midnight, increment hours until NUMBER_OF_SIM_HOURS reached
     currentDate.setHours(i);
-    biogrid.drainEnergyUsers(currentDate);
+    biogrid.updateEnergyUsage(currentDate);
     const action = await biobrain.computeAction(initState, currentDate);
     biogrid.takeAction(action);
     statesJson.push(biogrid.getJsonGraphDetails());

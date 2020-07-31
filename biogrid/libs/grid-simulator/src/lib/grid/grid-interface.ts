@@ -9,5 +9,5 @@ export interface GridOptions {
 export interface Grid {
   getSystemState: () => StateGraph;
   takeAction: (action: GridAction) => void;
-  drainEnergyUsers: (date: Date) => void;
+  updateEnergyUsage: (date: Date) => void;
 }

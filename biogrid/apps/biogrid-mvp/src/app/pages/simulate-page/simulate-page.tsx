@@ -1,3 +1,12 @@
+/**
+ * @summary Designs page where user sees results from the simulation.
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ * 
+ * Created at    : 2020-07-07 09:31:49
+ * Last modified : 2020-07-21 16:34:17
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
@@ -53,7 +62,6 @@ export const SimulatePage = () => {
       return {
         fromItem: edge.v,
         toItem: edge.w,
-        // TODO this is not a correct value
         powerThroughLinesKiloWatts: edge.value.power,
       };
     });
