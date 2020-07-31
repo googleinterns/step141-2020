@@ -8,6 +8,7 @@ import SimulationBoard, {
   GridItemRet,
   GridItemLines,
 } from '../../components/simulation-board';
+import PacmanLoader from 'react-spinners/PacmanLoader';
 
 const SimBoardPlayable = (props: {
   simulationResults: BiogridSimulationResults;
@@ -196,6 +197,11 @@ export const SimulatePage = () => {
           </div>
         </div>
       )}
+      {!simulationResults &&
+      <div className="loading-container">
+        <PacmanLoader />
+      </div>
+      }
     </div>
   );
 };
