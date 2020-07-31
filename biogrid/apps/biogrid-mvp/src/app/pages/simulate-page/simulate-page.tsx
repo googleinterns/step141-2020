@@ -14,13 +14,15 @@ import './simulate-page.css';
 import { Client } from '../../client';
 import { BiogridSimulationResults } from '../../build';
 import SimulationBoard, {
-  GridItemRet, GridItemLines,
+  GridItemRet,
+  GridItemLines,
 } from '../../components/simulation-board';
 
 export const SimulatePage = () => {
   const [simulationResults, setSimulationResults] = useState<
     BiogridSimulationResults
   >();
+  const [currentStateFrame, setCurrentStateFrame] = useState(0);
 
   const client = Client.getInstance();
 
@@ -60,8 +62,20 @@ export const SimulatePage = () => {
       return {
         fromItem: edge.v,
         toItem: edge.w,
+        powerThroughLinesKiloWatts: edge.value.power,
       };
     });
+  };
+
+  const playSimulation = () => {
+    const simResultsStateLen = simulationResults?.states.length || 0;
+    if (currentStateFrame >= simResultsStateLen) {
+      return;
+    }
+    setTimeout(() => {
+      setCurrentStateFrame(currentStateFrame + 1);
+      playSimulation();
+    }, 1000);
   };
 
   useEffect(() => {
@@ -70,54 +84,74 @@ export const SimulatePage = () => {
 
   return (
     <div className="simulation">
-      {simulationResults && (
-        <div className="results">
-          <table>
-            <tr>
-              <td>Time without energy</td>
-              <td>{simulationResults.timeWithoutEnoughEnergy}</td>
-            </tr>
-            <tr>
-              <td>Energy wasted from source</td>
-              <td>{simulationResults.energyWastedFromSource}</td>
-            </tr>
-            <tr>
-              <td>Energy wasted in transport</td>
-              <td>{simulationResults.energyWastedInTransportation}</td>
-            </tr>
-          </table>
-          <SimulationBoard
-            grid_height_km={simulationResults.townSize.height}
-            grid_width_km={simulationResults.townSize.width}
-            // TODO add changing indices to show the progression of time for each subsequent state
-            // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
-            items={stateToGridItemRet(simulationResults.states[0])}
-            lines={stateToGridItemLines(simulationResults.states[0])}
-          />
-          {simulationResults.states.map((stateGraph) => (
-            <table className="state-graph">
-              {((stateGraph as any).nodes as any[]).map((node: any) => (
-                <tr className="gridItem">
-                  <td>{node.v}</td>
-                  <table className="grid-item-values">
-                    {Object.keys(node.value).map((key: string) => (
-                      <>
-                        <tr>
-                          <td>{key}</td>
-                          <td>{JSON.stringify(node.value[key])}</td>
-                        </tr>
-                      </>
-                    ))}
-                  </table>
-                </tr>
-              ))}
-            </table>
-          ))}
-        </div>
-      )}
       <button onClick={redirectToHome} className="redirect">
         Change your Inputs!
       </button>
+      {simulationResults && (
+        <div className="results">
+          <div className="table-results-container">
+            <div className="metrics-container">
+              <h2>Metrics</h2>
+              <table>
+                <tr>
+                  <td>Time without energy</td>
+                  <td>{simulationResults.timeWithoutEnoughEnergy}</td>
+                </tr>
+                <tr>
+                  <td>Energy wasted from source</td>
+                  <td>{simulationResults.energyWastedFromSource}</td>
+                </tr>
+                <tr>
+                  <td>Energy wasted in transport</td>
+                  <td>{simulationResults.energyWastedInTransportation}</td>
+                </tr>
+              </table>
+            </div>
+            <div className="states-container">
+              <h2>States Table</h2>
+              {simulationResults.states.map((stateGraph) => (
+                <table className="state-graph">
+                  {((stateGraph as any).nodes as any[]).map((node: any) => (
+                    <tr className="gridItem">
+                      <td>{node.v}</td>
+                      <table className="grid-item-values">
+                        {Object.keys(node.value).map((key: string) => (
+                          <>
+                            <tr>
+                              <td>{key}</td>
+                              <td>{JSON.stringify(node.value[key])}</td>
+                            </tr>
+                          </>
+                        ))}
+                      </table>
+                    </tr>
+                  ))}
+                </table>
+              ))}
+            </div>
+          </div>
+
+          <div className="simboard-container">
+            <h2>Simulation Board</h2>
+            <div className="simboard-controls">
+              <button onClick={() => playSimulation()}>Play</button>
+              <button onClick={() => setCurrentStateFrame(0)}>Stop</button>
+            </div>
+            <SimulationBoard
+              grid_height_km={simulationResults.townSize.height}
+              grid_width_km={simulationResults.townSize.width}
+              // TODO add changing indices to show the progression of time for each subsequent state
+              // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
+              items={stateToGridItemRet(
+                simulationResults.states[currentStateFrame < simulationResults.states.length ? currentStateFrame : 0]
+              )}
+              lines={stateToGridItemLines(
+                simulationResults.states[currentStateFrame < simulationResults.states.length ? currentStateFrame : 0]
+              )}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

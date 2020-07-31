@@ -31,6 +31,10 @@ export default {
       message: 'entity error',
     },
   },
+  simulation: {
+    NUMBER_OF_SIM_HOURS: 10,
+  },
+
   get errorMap() {
     return {
       ValidateError: this.errorTypes.validation,

@@ -4,16 +4,17 @@ import {
   Building,
   BioBrain,
   GRID_ITEM_NAMES,
-  BUILDING
+  BUILDING,
 } from '@biogrid/biogrid-simulator';
 import { ItemPosition, TownSize } from '@biogrid/grid-simulator';
+import constants from '../config/constants';
 export interface BiogridSimulationResults {
   energyWastedFromSource?: number;
   energyWastedInTransportation?: number;
   timeWithoutEnoughEnergy?: number;
   townSize: {
-    width: number,
-    height: number,
+    width: number;
+    height: number;
   };
   states: any[];
 }
@@ -53,12 +54,12 @@ export async function simulateNewBiogrid(
       body.townHeight
     );
     buildings.push(
-      new Building(
-        BUILDING.DEFAULT_INITIAL_ENERGY,
-        randomPos.x,
-        randomPos.y,
-        `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`
-      )
+      new Building({
+        energy: BUILDING.DEFAULT_INITIAL_ENERGY,
+        x: randomPos.x,
+        y: randomPos.y,
+        gridItemName: `${GRID_ITEM_NAMES.ENERGY_USER}-${i}`,
+      })
     );
   }
   const town = new RuralArea(buildings, body.townWidth, body.townHeight);
@@ -70,9 +71,16 @@ export async function simulateNewBiogrid(
   const biobrain = BioBrain.Instance;
   const initState = biogrid.getSystemState();
   const statesJson = [biogrid.getJsonGraphDetails()];
-  const action = await biobrain.computeAction(initState);
-  biogrid.takeAction(action);
-  statesJson.push(biogrid.getJsonGraphDetails());
+  const currentDate = body.startDate;
+  for (let i = 0; i < constants.simulation.NUMBER_OF_SIM_HOURS; i++) {
+    // Start at midnight, increment hours until NUMBER_OF_SIM_HOURS reached
+    currentDate.setHours(i);
+    biogrid.updateEnergyUsage(currentDate);
+    const action = await biobrain.computeAction(initState, currentDate);
+    biogrid.takeAction(action);
+    statesJson.push(biogrid.getJsonGraphDetails());
+  }
+
   return {
     energyWastedFromSource: 10,
     energyWastedInTransportation: 12,

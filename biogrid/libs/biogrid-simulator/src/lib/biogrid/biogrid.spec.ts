@@ -3,7 +3,7 @@ import { RuralArea } from '../community';
 import { Building, BuildingParams } from '../building';
 import { GRID_ITEM_NAMES, BUILDING, GRID_DISTANCES } from '../config';
 import { BioBrain } from '../biobrain';
-import { ItemPosition } from '@biogrid/grid-simulator';
+import { EnergyUser, GridItem, ItemPosition } from '@biogrid/grid-simulator';
 
 let grid: Biogrid;
 let brain: BioBrain;
@@ -17,7 +17,7 @@ const townWidth = 10;
 
 beforeAll(() => {
   brain = BioBrain.Instance;
-  const ruralArea = [
+  const buildingList = [
     new Building({
       energy: BUILDING.DEFAULT_INITIAL_ENERGY,
       x: 3,
@@ -51,7 +51,7 @@ beforeAll(() => {
   ];
   grid = new Biogrid(
     new RuralArea(
-      ruralArea,
+      buildingList,
       /* townWidth = */ townWidth,
       /* townHeight = */ townHeight
     ),
@@ -110,6 +110,31 @@ describe('classes', () => {
     ]);
   });
 
+  test('drainEnergyUser removes energy from all users', async () => {
+    const midnight = new Date();
+    midnight.setHours(0);
+    const state = grid.getSystemState();
+    const energyUsers: EnergyUser[] = state
+      .getAllVertices()
+      .map((vertex: string) => state.getGridItem(vertex))
+      .filter((item: GridItem) =>
+        item.gridItemName.includes(GRID_ITEM_NAMES.ENERGY_USER)
+      ) as EnergyUser[];
+    energyUsers.forEach((energyUser) =>
+      energyUser.increaseEnergy(/* energy in kilowatts = */ 8)
+    );
+    const energyBeforeDrain: number[] = energyUsers.map((user) =>
+      user.getEnergyInJoules()
+    );
+    grid.updateEnergyUsage(midnight);
+    const energyAfterDrain: number[] = energyUsers.map((user) =>
+      user.getEnergyInJoules()
+    );
+    energyBeforeDrain.forEach((energyIndividualUserBefore, i) => {
+      expect(energyIndividualUserBefore).toBeGreaterThan(energyAfterDrain[i]);
+    });
+  });
+
   test("Biogrid works with the brain's compute action", async () => {
     // Expect the two buildings to be at maxCapacity
     const expected = [BUILDING.MAX_CAPACITY, BUILDING.MAX_CAPACITY];
@@ -120,7 +145,7 @@ describe('classes', () => {
     // Energy may come from the solar panels but two buildings must be refiled
     expect(
       Object.keys(action.getSupplyingPaths()).length
-    ).toBeGreaterThanOrEqual(2);
+    ).toEqual(2);
   });
 
   test("takeAction works on a returned brain's action", async () => {
