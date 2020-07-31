@@ -136,32 +136,32 @@ export const SimulationBoard = (props: SimBoardProps) => {
                 <defs>
                   <marker
                     id="arrowhead"
-                    markerWidth="10"
-                    markerHeight="7"
+                    markerWidth="5"
+                    markerHeight="4"
                     refX="0"
                     refY="3.5"
                     orient="auto"
                   >
-                    <polygon points="0 0, 10 3.5, 0 7" />
+                    <polygon points="0 0, 5 2, 0 4" />
                   </marker>
                 </defs>
                 <line
                   // Add half of the icon width in order to center the lines
                   x1={`${kilometersToCSSWidth(
                     itemsByName[line.fromItem].x,
-                    (SIZES.ICON_WIDTH_PERCENT / 2) //- lineThickness
+                    (SIZES.ICON_WIDTH_PERCENT / 2)
                   )}`}
                   y1={`${kilometersToCSSHeight(
                     itemsByName[line.fromItem].y,
-                    (SIZES.ICON_WIDTH_PERCENT / 2) //- lineThickness
+                    (SIZES.ICON_WIDTH_PERCENT / 2)
                   )}`}
                   x2={`${kilometersToCSSWidth(
                     itemsByName[line.toItem].x,
-                    (SIZES.ICON_WIDTH_PERCENT / 2)// - lineThickness
+                    (SIZES.ICON_WIDTH_PERCENT / 2)
                   )}`}
                   y2={`${kilometersToCSSHeight(
                     itemsByName[line.toItem].y,
-                    (SIZES.ICON_WIDTH_PERCENT / 2) //- lineThickness
+                    (SIZES.ICON_WIDTH_PERCENT / 2)
                   )}`}
                   markerEnd="url(#arrowhead)"
                   stroke={
