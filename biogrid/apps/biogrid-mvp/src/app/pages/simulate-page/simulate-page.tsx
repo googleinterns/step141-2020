@@ -9,12 +9,72 @@ import SimulationBoard, {
   GridItemLines,
 } from '../../components/simulation-board';
 
+interface SimBoardPlayableState {
+  stateFrame: number;
+  isPlaying: boolean;
+}
+
+const SimBoardPlayable = (props: {
+  simulationResults: BiogridSimulationResults;
+  stateFrame: number;
+}) => {
+
+  const stateToGridItemRet = (state: any): GridItemRet[] => {
+    return state.nodes.map((node: any) => {
+      return {
+        gridItemName: node.value.gridItemName,
+        relativePosition: node.value.position ||
+          node.value.relativePosition || { x: 0, y: 0 },
+      };
+    });
+  };
+  const stateToGridItemLines = (state: any): GridItemLines[] => {
+    return state.edges.map((edge: any) => {
+      return {
+        fromItem: edge.v,
+        toItem: edge.w,
+        // TODO this is not a correct value
+        powerThroughLinesKiloWatts: edge.value.power,
+      };
+    });
+  };
+  return (
+    <>
+      <div>
+        Time of day: {props.stateFrame % 12 === 0 ? 12 : props.stateFrame % 12}
+        :00 {props.stateFrame >= 12 ? 'PM' : 'AM'}
+      </div>
+      <SimulationBoard
+        grid_height_km={props.simulationResults.townSize.height}
+        grid_width_km={props.simulationResults.townSize.width}
+        // TODO add changing indices to show the progression of time for each subsequent state
+        // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
+        items={stateToGridItemRet(
+          props.simulationResults.states[
+            props.stateFrame < props.simulationResults.states.length
+              ? props.stateFrame
+              : 0
+          ]
+        )}
+        lines={stateToGridItemLines(
+          props.simulationResults.states[
+            props.stateFrame < props.simulationResults.states.length
+              ? props.stateFrame
+              : 0
+          ]
+        )}
+      />
+      ;
+    </>
+  );
+};
+
 export const SimulatePage = () => {
+  const [stateFrame, setStateFrame] = useState(0);
+  const [controlSimulation, setControlSimultation] = useState<{ pauseFN: () => void }>();
   const [simulationResults, setSimulationResults] = useState<
     BiogridSimulationResults
   >();
-  const [currentStateFrame, setCurrentStateFrame] = useState(0);
-
   const client = Client.getInstance();
 
   async function getSimulationResults() {
@@ -39,40 +99,31 @@ export const SimulatePage = () => {
     history.push('/');
   };
 
-  const stateToGridItemRet = (state: any): GridItemRet[] => {
-    return state.nodes.map((node: any) => {
-      return {
-        gridItemName: node.value.gridItemName,
-        relativePosition: node.value.position ||
-          node.value.relativePosition || { x: 0, y: 0 },
-      };
-    });
-  };
-  const stateToGridItemLines = (state: any): GridItemLines[] => {
-    return state.edges.map((edge: any) => {
-      return {
-        fromItem: edge.v,
-        toItem: edge.w,
-        // TODO this is not a correct value
-        powerThroughLinesKiloWatts: edge.value.power,
-      };
-    });
+  const pauseSimulation = async () => {
+    controlSimulation?.pauseFN()
   };
 
-  const playSimulation = async () => {
+  const play = () => {
     const simResultsStateLen = simulationResults?.states.length || 0;
-    if (currentStateFrame >= simResultsStateLen) {
-      return;
-    }
-    const simResultsLen = simulationResults?.states.length || 0;
-    for (let i = 0; i < simResultsStateLen; i++) {
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          setCurrentStateFrame(i);
-          resolve();
-        }, 1000);
-      });
-    }
+    let finished = false;
+    let pause = () => {
+      finished = true;
+    };
+    const runThroughSteps = async () => {
+      for (let i = stateFrame; i < simResultsStateLen; i++) {
+        if (finished) {
+          return;
+        }
+        await new Promise((res, rej) =>
+          setTimeout(() => {
+            setStateFrame(i);
+            res();
+          }, 1000)
+        );
+      }
+    };
+    runThroughSteps();
+    return pause;
   };
 
   useEffect(() => {
@@ -131,33 +182,21 @@ export const SimulatePage = () => {
           <div className="simboard-container">
             <h2>Simulation Board</h2>
             <div className="simboard-controls">
-              <button onClick={() => playSimulation()}>Play</button>
-              <button onClick={() => setCurrentStateFrame(0)}>Reset</button>
+              <button
+                onClick={() => {
+                  const pauseFn = play();
+                  setControlSimultation({ pauseFN: pauseFn });
+                }}
+              >
+                Play
+              </button>
+              <button onClick={() => pauseSimulation()}>Pause</button>
+              <button onClick={() => setStateFrame(0)}>Reset</button>
             </div>
-            <div>
-              Time of day:{' '}
-              {currentStateFrame % 12 === 0 ? 12 : currentStateFrame % 12}:00{' '}
-              {currentStateFrame >= 12 ? 'PM' : 'AM'}
-            </div>
-            <SimulationBoard
-              grid_height_km={simulationResults.townSize.height}
-              grid_width_km={simulationResults.townSize.width}
-              // TODO add changing indices to show the progression of time for each subsequent state
-              // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
-              items={stateToGridItemRet(
-                simulationResults.states[
-                  currentStateFrame < simulationResults.states.length
-                    ? currentStateFrame
-                    : 0
-                ]
-              )}
-              lines={stateToGridItemLines(
-                simulationResults.states[
-                  currentStateFrame < simulationResults.states.length
-                    ? currentStateFrame
-                    : 0
-                ]
-              )}
+
+            <SimBoardPlayable
+              simulationResults={simulationResults}
+              stateFrame={stateFrame}
             />
           </div>
         </div>
