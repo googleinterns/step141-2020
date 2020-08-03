@@ -75,7 +75,7 @@ const SimBoardPlayable = (props: {
 export const SimulatePage = () => {
   const [stateFrame, setStateFrame] = useState(0);
   const [controlSimulation, setControlSimultation] = useState<{
-    pauseFN: () => void;
+    pauseFN: (reset: boolean) => void;
   }>();
   const [isPlaying, setIsPlaying] = useState(false);
   const [simulationResults, setSimulationResults] = useState<
@@ -105,9 +105,9 @@ export const SimulatePage = () => {
     history.push('/');
   };
 
-  const pauseSimulation = async () => {
+  const pauseSimulation = async (reset = false) => {
     setIsPlaying(false);
-    controlSimulation?.pauseFN();
+    controlSimulation?.pauseFN(reset);
   };
 
   const stateToGridItemRet = (state: any): GridItemRet[] => {
@@ -129,20 +129,22 @@ export const SimulatePage = () => {
     });
   };
 
-  const play = () => {
+  const play = (): ((reset: boolean) => void) | null => {
     if (isPlaying) {
-      return () => {};
+      return null;
     }
     const simResultsStateLen = simulationResults?.states.length || 0;
     let finished = false;
-    let pause = () => {
+    let reset = false;
+    let pause = (shouldReset: boolean) => {
       finished = true;
+      reset = shouldReset;
     };
     const runThroughSteps = async () => {
       setIsPlaying(true);
       for (let i = stateFrame; i < simResultsStateLen; i++) {
         if (finished) {
-          if (i > 1) {
+          if (i > 1 && !reset) {
             // This rewinds the simulation back one extra frame
             // So, when pause is pressed, the simulation pauses on the same frame
             setStateFrame(i - 2);
@@ -220,8 +222,10 @@ export const SimulatePage = () => {
             <div className="simboard-controls">
               <button
                 onClick={() => {
-                  const pauseFn = play();
-                  setControlSimultation({ pauseFN: pauseFn });
+                  const playRet = play();
+                  if (playRet instanceof Function) {
+                    setControlSimultation({ pauseFN: playRet });
+                  }
                 }}
               >
                 Play
@@ -229,7 +233,7 @@ export const SimulatePage = () => {
               <button onClick={() => pauseSimulation()}>Pause</button>
               <button
                 onClick={() => {
-                  setIsPlaying(false);
+                  pauseSimulation(true);
                   setStateFrame(0);
                 }}
               >
