@@ -45,7 +45,7 @@ label {
   text-align: center;
 }
 
-.datePicker {
+.dateSlider {
   display: inline-block;
   margin-top: 1.25rem;
   margin-right: 1.25rem;
@@ -53,10 +53,22 @@ label {
   width: 75%;
 }
 
-.datePicker .horizontal-slider {
+.dateSlider .inputBox {
+  width: 100%;
+}
+
+.dateSlider .horizontal-slider {
   background: white;
-  padding: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
   height: 1rem;
+}
+
+.dateSlider .thumb {
+  border: 1px black solid;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
 }
 
 .tooltip {

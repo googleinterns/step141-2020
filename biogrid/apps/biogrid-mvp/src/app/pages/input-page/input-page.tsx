@@ -126,18 +126,23 @@ export const InputPage = () => {
           .
         </p>
 
-        <div className="tooltip slider">
+        {/* TODO add an end date option so that simulations can span over multiple days
+            See issue:
+        */}
+        <div className="tooltip dateSlider">
           <span className="tooltiptext">
             The date where we will start collecting sunlight data from
           </span>
           <div className="inputBox">
-            <label>Start Date Slider </label>
+            <label>Simulation Date Slider</label>
             <ReactSlider
               className="horizontal-slider"
               onChange={(val) => {
-                const daysFromStart = (val as unknown) as number;
-                const newDate = new Date();
-                newDate.setDate(EARLIEST_DATE.getDate() + daysFromStart);
+                // Days from today last week. So if daysFromLastWeek = 1 and today is Sunday
+                // Then daysFromLastWeek signifies last Monday
+                const daysFromLastWeek = (val as unknown) as number;
+                const newDate = new Date(EARLIEST_DATE);
+                newDate.setDate(EARLIEST_DATE.getDate() + daysFromLastWeek);
                 setStartDate(newDate);
               }}
               renderThumb={(props, state) => (

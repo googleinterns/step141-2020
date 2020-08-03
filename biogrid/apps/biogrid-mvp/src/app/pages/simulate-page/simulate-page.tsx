@@ -77,6 +77,7 @@ export const SimulatePage = () => {
   const [controlSimulation, setControlSimultation] = useState<{
     pauseFN: () => void;
   }>();
+  const [isPlaying, setIsPlaying] = useState(false);
   const [simulationResults, setSimulationResults] = useState<
     BiogridSimulationResults
   >();
@@ -105,6 +106,7 @@ export const SimulatePage = () => {
   };
 
   const pauseSimulation = async () => {
+    setIsPlaying(false);
     controlSimulation?.pauseFN();
   };
 
@@ -128,14 +130,23 @@ export const SimulatePage = () => {
   };
 
   const play = () => {
+    if (isPlaying) {
+      return () => {};
+    }
     const simResultsStateLen = simulationResults?.states.length || 0;
     let finished = false;
     let pause = () => {
       finished = true;
     };
     const runThroughSteps = async () => {
+      setIsPlaying(true);
       for (let i = stateFrame; i < simResultsStateLen; i++) {
         if (finished) {
+          if (i > 1) {
+            // This rewinds the simulation back one extra frame
+            // So, when pause is pressed, the simulation pauses on the same frame
+            setStateFrame(i - 2);
+          }
           return;
         }
         await new Promise((res, rej) =>
@@ -145,6 +156,7 @@ export const SimulatePage = () => {
           }, 1000)
         );
       }
+      setIsPlaying(false);
     };
     runThroughSteps();
     return pause;
@@ -215,7 +227,14 @@ export const SimulatePage = () => {
                 Play
               </button>
               <button onClick={() => pauseSimulation()}>Pause</button>
-              <button onClick={() => setStateFrame(0)}>Reset</button>
+              <button
+                onClick={() => {
+                  setIsPlaying(false);
+                  setStateFrame(0);
+                }}
+              >
+                Reset
+              </button>
             </div>
 
             <SimBoardPlayable
