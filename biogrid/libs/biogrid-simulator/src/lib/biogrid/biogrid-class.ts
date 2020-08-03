@@ -106,7 +106,8 @@ export class Biogrid implements Grid {
   }
 
   getEfficiency() {
-    return this.efficiency;
+    // Round off the efficiency to 3 dps
+    return this.efficiency.toFixed(3);
   }
 
   getJsonGraphDetails() {
