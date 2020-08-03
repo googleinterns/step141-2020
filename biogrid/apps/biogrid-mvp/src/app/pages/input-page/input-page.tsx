@@ -3,7 +3,7 @@
  * @author Awad Osman <awado@google.com>
  * @author Lev Stambler <levst@google.com>
  * @author Roland Naijuka <rnaijuka@google.com>
- * 
+ *
  * Created at    : 2020-07-01 11:53:16
  * Last modified : 2020-07-28 11:27:22
  */
@@ -11,9 +11,8 @@
 import React, { useState } from 'react';
 import './input-page.css';
 import './input-page.scss';
-import DatePicker from 'react-datepicker';
-import { Client } from '../../client';
 import { useHistory } from 'react-router-dom';
+import { Slider } from '@material-ui/core';
 
 function useInput<T>(opts: { default: T }) {
   const [value, setValue] = useState(opts.default);
@@ -36,8 +35,11 @@ function useInput<T>(opts: { default: T }) {
 }
 
 export const InputPage = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const LATEST_DATE = new Date();
+  LATEST_DATE.setHours(0);
+  const EARLIEST_DATE = new Date();
+  EARLIEST_DATE.setDate(LATEST_DATE.getDate() - 6);
+  const [startDate, setStartDate] = useState(EARLIEST_DATE);
   const [smallBatteryCells, smallBatteryCellInput] = useInput({
     default: 5,
   });
@@ -62,7 +64,7 @@ export const InputPage = () => {
   const redirectToInfo = (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
     history.push('/info');
-  }
+  };
 
   const onSubmit = async (e: React.SyntheticEvent<EventTarget>) => {
     e.preventDefault();
@@ -81,7 +83,6 @@ export const InputPage = () => {
 
     const params = {
       startDate,
-      endDate,
       smallBatteryCells,
       largeBatteryCells,
       numBuildings,
@@ -91,47 +92,90 @@ export const InputPage = () => {
     };
     history.push(`/simulate?${serialize(params)}`);
   };
+
+  function formatDate(date=(startDate || new Date())) {
+    return `${
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()}`;
+  }
+
   return (
     <div className="input-page">
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
-      <h1>Welcome to the Biogrid Simulator!</h1>
-      
-      <p>This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 
-        optimize energy use in a community by using <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">biomimicry</a> to 
-        imitate the human body's glucose regulation procedures. </p>
+        <h1>Welcome to the Biogrid Simulator!</h1>
 
-        <p>Hover over the inputs to learn how they're used in the simulation!</p>
+        <p>
+          This website will simulate how a{' '}
+          <a
+            href="https://www.sciencedirect.com/science/article/pii/S136403211830128X"
+            target="_blank"
+          >
+            microgrid
+          </a>{' '}
+          can optimize energy use in a community by using{' '}
+          <a href="https://biomimicry.org/what-is-biomimicry/" target="_blank">
+            biomimicry
+          </a>{' '}
+          to imitate the human body's glucose regulation procedures.{' '}
+        </p>
 
-        <p>If you would like to learn more about how we designed this project click <a href="" onClick={redirectToInfo}>here</a>.</p>
-          
-        <div className="tooltip">
-          <span className="tooltiptext">The date where we will start collecting sunlight data from</span>
+        <p>
+          Hover over the inputs to learn how they're used in the simulation!
+        </p>
+
+        <p>
+          If you would like to learn more about how we designed this project
+          click{' '}
+          <a href="" onClick={redirectToInfo}>
+            here
+          </a>
+          .
+        </p>
+
+        {/* TODO add an end date option so that simulations can span over multiple days
+            See issue:
+        */}
+        <div className="dateSlider">
           <div className="inputBox">
-            <label>Start Date</label>
-            <DatePicker
-              showPopperArrow={false}
-              selected={startDate}
-              onChange={(date: Date) => setStartDate(date)}
-            />
+            <label>Select a Simulation Date</label>
+            <label>(the date chosen determines the amount of sunlight)</label>
+            <div className="slider-wrapper">
+              <Slider
+                defaultValue={0}
+                onChange={(e, val) => {
+                  // Days from today last week. So if daysFromLastWeek = 1 and today is Sunday
+                  // Then daysFromLastWeek signifies last Monday
+                  const daysFromLastWeek = (val as unknown) as number;
+                  const newDate = new Date(EARLIEST_DATE);
+                  newDate.setDate(EARLIEST_DATE.getDate() + daysFromLastWeek);
+                  setStartDate(newDate);
+                }}
+                getAriaValueText={() => formatDate()}
+                aria-labelledby="discrete-slider-small-steps"
+                step={1}
+                marks={Array.from(Array(7)).map((val, i) => {
+                  const newDate = new Date(EARLIEST_DATE);
+                  newDate.setDate(EARLIEST_DATE.getDate() + i);
+                  return {
+                    value: i,
+                    label: formatDate(newDate)
+                  }
+                })}
+                min={0}
+                valueLabelFormat={() => formatDate()}
+                max={6}
+                valueLabelDisplay="auto"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="tooltip">
-          <span className="tooltiptext">The date where we will stop collecting sunlight data</span>
-          <div className="inputBox">
-            <label>End Date</label>
-            <DatePicker
-              showPopperArrow={false}
-              selected={endDate}
-              onChange={(date: Date) => setEndDate(date)}
-            />
-          </div>
-        </div>
-
-        <br/>
+        <br />
 
         <div className="tooltip">
-          <span className="tooltiptext">SBC's are used for quick sources of energy</span>
+          <span className="tooltiptext">
+            SBC's are used for quick sources of energy
+          </span>
           <div className="inputBox">
             <label>Small Battery Cells</label>
             {smallBatteryCellInput}
@@ -139,17 +183,21 @@ export const InputPage = () => {
         </div>
 
         <div className="tooltip">
-          <span className="tooltiptext">LBC's are used as backup energy sources to the solar panels</span>
+          <span className="tooltiptext">
+            LBC's are used as backup energy sources to the solar panels
+          </span>
           <div className="inputBox">
             <label>Large Battery Cells</label>
             {largeBatteryCellInput}
           </div>
         </div>
 
-        <br/>
+        <br />
 
         <div className="tooltip">
-          <span className="tooltiptext">Buildings are reperesented as energy consumers in the grid</span>
+          <span className="tooltiptext">
+            Buildings are reperesented as energy consumers in the grid
+          </span>
           <div className="inputBox">
             <label>Buildings</label>
             {numBuildingsInput}
@@ -157,17 +205,21 @@ export const InputPage = () => {
         </div>
 
         <div className="tooltip">
-          <span className="tooltiptext">Solar Panels are the main energy source in the grid</span>
+          <span className="tooltiptext">
+            Solar Panels are the main energy source in the grid
+          </span>
           <div className="inputBox">
             <label>Solar Panels</label>
             {numSolarPanelsInput}
           </div>
         </div>
 
-        <br/>
+        <br />
 
         <div className="tooltip">
-          <span className="tooltiptext">Used for even distribution of objects on the grid</span>
+          <span className="tooltiptext">
+            Used for even distribution of objects on the grid
+          </span>
           <div className="inputBox">
             <label>Town Width (Kilometers)</label>
             {townWidthInput}
@@ -175,7 +227,9 @@ export const InputPage = () => {
         </div>
 
         <div className="tooltip">
-          <span className="tooltiptext">Used for even distribution of objects on the grid</span>
+          <span className="tooltiptext">
+            Used for even distribution of objects on the grid
+          </span>
           <div className="inputBox">
             <label>Town Height (Kilometers)</label>
             {townHeightInput}
