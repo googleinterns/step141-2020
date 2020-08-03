@@ -11,8 +11,6 @@
 import React, { useState } from 'react';
 import './input-page.css';
 import './input-page.scss';
-import ReactSlider from 'react-slider';
-import { Client } from '../../client';
 import { useHistory } from 'react-router-dom';
 import { Slider } from '@material-ui/core';
 
@@ -95,10 +93,10 @@ export const InputPage = () => {
     history.push(`/simulate?${serialize(params)}`);
   };
 
-  function formatDate() {
+  function formatDate(date=(startDate || new Date())) {
     return `${
-      startDate.getMonth() + 1
-    }/${startDate.getDate()}/${startDate.getFullYear()}`;
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()}`;
   }
 
   return (
@@ -137,12 +135,10 @@ export const InputPage = () => {
         {/* TODO add an end date option so that simulations can span over multiple days
             See issue:
         */}
-        <div className="tooltip dateSlider">
-          <span className="tooltiptext">
-            The date where we will start collecting sunlight data from
-          </span>
+        <div className="dateSlider">
           <div className="inputBox">
             <label>Select a Simulation Date</label>
+            <label>(the date chosen determines the amount of sunlight)</label>
             <div className="slider-wrapper">
               <Slider
                 defaultValue={0}
@@ -154,12 +150,19 @@ export const InputPage = () => {
                   newDate.setDate(EARLIEST_DATE.getDate() + daysFromLastWeek);
                   setStartDate(newDate);
                 }}
-                getAriaValueText={formatDate}
+                getAriaValueText={() => formatDate()}
                 aria-labelledby="discrete-slider-small-steps"
                 step={1}
-                marks
+                marks={Array.from(Array(7)).map((val, i) => {
+                  const newDate = new Date(EARLIEST_DATE);
+                  newDate.setDate(EARLIEST_DATE.getDate() + i);
+                  return {
+                    value: i,
+                    label: formatDate(newDate)
+                  }
+                })}
                 min={0}
-                valueLabelFormat={formatDate}
+                valueLabelFormat={() => formatDate()}
                 max={6}
                 valueLabelDisplay="auto"
               />
