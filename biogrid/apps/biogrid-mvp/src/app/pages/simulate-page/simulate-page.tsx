@@ -46,6 +46,11 @@ export const SimulatePage = () => {
     history.push('/');
   };
 
+  const redirectToInfo = (e: React.SyntheticEvent<EventTarget>) => {
+    e.preventDefault();
+    history.push('/info');
+  }
+
   const stateToGridItemRet = (state: any): GridItemRet[] => {
     return state.nodes.map((node: any) => {
       return {
@@ -70,6 +75,10 @@ export const SimulatePage = () => {
 
   return (
     <div className="simulation">
+      <div className="navbar">
+        <a href="" onClick={redirectToHome}>Home</a>
+        <a href="" onClick={redirectToInfo}>Info</a>
+      </div>
       {simulationResults && (
         <div className="results">
           <table>
