@@ -84,6 +84,7 @@ export async function simulateNewBiogrid(
     efficiencies.push(biogrid.getEfficiency());
   }
   const efficienciesAddedUp = efficiencies
+    // Filters for any NaN values
     .filter((efficiency) => efficiency)
     .reduce((prev, curr) => prev + curr, 0);
 
