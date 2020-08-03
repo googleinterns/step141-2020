@@ -185,7 +185,6 @@ export const SimulatePage = () => {
                   <td>Average Efficiency</td>
                   <td>{simulationResults.averageEfficiency}%</td>
                 </tr>
-
               </table>
             </div>
             <div className="states-container">

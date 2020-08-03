@@ -135,24 +135,26 @@ export const InputPage = () => {
           </span>
           <div className="inputBox">
             <label>Simulation Date Slider</label>
-            <ReactSlider
-              className="horizontal-slider"
-              onChange={(val) => {
-                // Days from today last week. So if daysFromLastWeek = 1 and today is Sunday
-                // Then daysFromLastWeek signifies last Monday
-                const daysFromLastWeek = (val as unknown) as number;
-                const newDate = new Date(EARLIEST_DATE);
-                newDate.setDate(EARLIEST_DATE.getDate() + daysFromLastWeek);
-                setStartDate(newDate);
-              }}
-              renderThumb={(props, state) => (
-                <div {...props}>{`${
-                  startDate.getMonth() + 1
-                }/${startDate.getDate()}/${startDate.getFullYear()}`}</div>
-              )}
-              min={0}
-              max={6}
-            />
+            <div className="slider-wrapper">
+              <ReactSlider
+                className="horizontal-slider"
+                onChange={(val) => {
+                  // Days from today last week. So if daysFromLastWeek = 1 and today is Sunday
+                  // Then daysFromLastWeek signifies last Monday
+                  const daysFromLastWeek = (val as unknown) as number;
+                  const newDate = new Date(EARLIEST_DATE);
+                  newDate.setDate(EARLIEST_DATE.getDate() + daysFromLastWeek);
+                  setStartDate(newDate);
+                }}
+                renderThumb={(props, state) => (
+                  <div {...props}>{`${
+                    startDate.getMonth() + 1
+                  }/${startDate.getDate()}/${startDate.getFullYear()}`}</div>
+                )}
+                min={0}
+                max={6}
+              />
+            </div>
           </div>
         </div>
 
