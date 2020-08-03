@@ -99,12 +99,13 @@ export function calculateVoltageFromPower(power: number, resistance: number) {
 /**
  * This function calculates the efficiency of the circuit or system.
  * It bases this from the physics equation for calculting efficiency in a circuit
- * Efficiency = P_output / P_input %
+ * Efficiency = P_output / (P_input * 1000) * 100 %
+ * Change P_input to watts
  * where P_output is the power output of the circuit, and P_input is the power input into that same circuit
  * @param input is the input Power at the beginning of the circuit
  * @param output is the output power at the end of the the circuit
  * @returns the efficiency of the system which is in percentages
  */
 export function calculateEfficiency(input: Power, output: Power) {
-  return (output / input);
+  return (output / (input * 1000)) *100;
 }
