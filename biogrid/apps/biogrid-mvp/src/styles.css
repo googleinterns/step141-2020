@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*
+  Fix Material UI slider thumb height and width to fit content
+ */
+.MuiSlider-valueLabel > span {
+  height: 5rem;
+  width: 5rem;
+}
+
+.MuiSlider-valueLabel {
+  left: -2rem!important;
+  top: -6rem!important;
+}

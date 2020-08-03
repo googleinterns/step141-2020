@@ -14,6 +14,7 @@ import './input-page.scss';
 import ReactSlider from 'react-slider';
 import { Client } from '../../client';
 import { useHistory } from 'react-router-dom';
+import { Slider } from '@material-ui/core';
 
 function useInput<T>(opts: { default: T }) {
   const [value, setValue] = useState(opts.default);
@@ -93,6 +94,13 @@ export const InputPage = () => {
     };
     history.push(`/simulate?${serialize(params)}`);
   };
+
+  function formatDate() {
+    return `${
+      startDate.getMonth() + 1
+    }/${startDate.getDate()}/${startDate.getFullYear()}`;
+  }
+
   return (
     <div className="input-page">
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
@@ -134,11 +142,11 @@ export const InputPage = () => {
             The date where we will start collecting sunlight data from
           </span>
           <div className="inputBox">
-            <label>Simulation Date Slider</label>
+            <label>Select a Simulation Date</label>
             <div className="slider-wrapper">
-              <ReactSlider
-                className="horizontal-slider"
-                onChange={(val) => {
+              <Slider
+                defaultValue={0}
+                onChange={(e, val) => {
                   // Days from today last week. So if daysFromLastWeek = 1 and today is Sunday
                   // Then daysFromLastWeek signifies last Monday
                   const daysFromLastWeek = (val as unknown) as number;
@@ -146,13 +154,14 @@ export const InputPage = () => {
                   newDate.setDate(EARLIEST_DATE.getDate() + daysFromLastWeek);
                   setStartDate(newDate);
                 }}
-                renderThumb={(props, state) => (
-                  <div {...props}>{`${
-                    startDate.getMonth() + 1
-                  }/${startDate.getDate()}/${startDate.getFullYear()}`}</div>
-                )}
+                getAriaValueText={formatDate}
+                aria-labelledby="discrete-slider-small-steps"
+                step={1}
+                marks
                 min={0}
+                valueLabelFormat={formatDate}
                 max={6}
+                valueLabelDisplay="auto"
               />
             </div>
           </div>
