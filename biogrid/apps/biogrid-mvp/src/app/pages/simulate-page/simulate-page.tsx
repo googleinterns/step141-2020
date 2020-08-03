@@ -137,14 +137,17 @@ export const SimulatePage = () => {
     let finished = false;
     let reset = false;
     let pause = (shouldReset: boolean) => {
-      finished = true;
       reset = shouldReset;
+      console.log(reset);
+      finished = true;
     };
     const runThroughSteps = async () => {
       setIsPlaying(true);
       for (let i = stateFrame; i < simResultsStateLen; i++) {
         if (finished) {
-          if (i > 1 && !reset) {
+          if (reset) {
+            setStateFrame(0);
+          } else if (i > 1) {
             // This rewinds the simulation back one extra frame
             // So, when pause is pressed, the simulation pauses on the same frame
             setStateFrame(i - 2);
@@ -234,6 +237,8 @@ export const SimulatePage = () => {
               <button
                 onClick={() => {
                   pauseSimulation(true);
+                  // State frame is also set to zero here to account for
+                  // When the simulation is already paused
                   setStateFrame(0);
                 }}
               >
