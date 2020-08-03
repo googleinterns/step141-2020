@@ -75,8 +75,9 @@ const SimBoardPlayable = (props: {
 export const SimulatePage = () => {
   const [stateFrame, setStateFrame] = useState(0);
   const [controlSimulation, setControlSimultation] = useState<{
-    pauseFN: () => void;
+    pauseFN: (reset: boolean) => void;
   }>();
+  const [isPlaying, setIsPlaying] = useState(false);
   const [simulationResults, setSimulationResults] = useState<
     BiogridSimulationResults
   >();
@@ -104,8 +105,11 @@ export const SimulatePage = () => {
     history.push('/');
   };
 
-  const pauseSimulation = async () => {
-    controlSimulation?.pauseFN();
+  const pauseSimulation = async (reset = false) => {
+    setIsPlaying(false);
+    controlSimulation?.pauseFN(reset);
+  };
+
   const stateToGridItemRet = (state: any): GridItemRet[] => {
     return state.nodes.map((node: any) => {
       return {
@@ -125,15 +129,28 @@ export const SimulatePage = () => {
     });
   };
 
-  const play = () => {
+  const play = (): ((reset: boolean) => void) | null => {
+    if (isPlaying) {
+      return null;
+    }
     const simResultsStateLen = simulationResults?.states.length || 0;
     let finished = false;
-    let pause = () => {
+    let reset = false;
+    let pause = (shouldReset: boolean) => {
+      reset = shouldReset;
       finished = true;
     };
     const runThroughSteps = async () => {
+      setIsPlaying(true);
       for (let i = stateFrame; i < simResultsStateLen; i++) {
         if (finished) {
+          if (reset) {
+            setStateFrame(0);
+          } else if (i > 1) {
+            // This rewinds the simulation back one extra frame
+            // So, when pause is pressed, the simulation pauses on the same frame
+            setStateFrame(i - 2);
+          }
           return;
         }
         await new Promise((res, rej) =>
@@ -143,6 +160,7 @@ export const SimulatePage = () => {
           }, 1000)
         );
       }
+      setIsPlaying(false);
     };
     runThroughSteps();
     return pause;
@@ -164,16 +182,8 @@ export const SimulatePage = () => {
               <h2>Metrics</h2>
               <table>
                 <tr>
-                  <td>Time without energy</td>
-                  <td>{simulationResults.timeWithoutEnoughEnergy}</td>
-                </tr>
-                <tr>
-                  <td>Energy wasted from source</td>
-                  <td>{simulationResults.energyWastedFromSource}</td>
-                </tr>
-                <tr>
-                  <td>Energy wasted in transport</td>
-                  <td>{simulationResults.energyWastedInTransportation}</td>
+                  <td>Average Efficiency</td>
+                  <td>{simulationResults.averageEfficiency}%</td>
                 </tr>
               </table>
             </div>
@@ -206,14 +216,25 @@ export const SimulatePage = () => {
             <div className="simboard-controls">
               <button
                 onClick={() => {
-                  const pauseFn = play();
-                  setControlSimultation({ pauseFN: pauseFn });
+                  const playRet = play();
+                  if (playRet instanceof Function) {
+                    setControlSimultation({ pauseFN: playRet });
+                  }
                 }}
               >
                 Play
               </button>
               <button onClick={() => pauseSimulation()}>Pause</button>
-              <button onClick={() => setStateFrame(0)}>Reset</button>
+              <button
+                onClick={() => {
+                  pauseSimulation(true);
+                  // State frame is also set to zero here to account for
+                  // When the simulation is already paused
+                  setStateFrame(0);
+                }}
+              >
+                Reset
+              </button>
             </div>
 
             <SimBoardPlayable
@@ -223,11 +244,11 @@ export const SimulatePage = () => {
           </div>
         </div>
       )}
-      {!simulationResults &&
-      <div className="loading-container">
-        <PacmanLoader />
-      </div>
-      }
+      {!simulationResults && (
+        <div className="loading-container">
+          <PacmanLoader />
+        </div>
+      )}
     </div>
   );
 };

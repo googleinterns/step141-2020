@@ -329,7 +329,7 @@ export class Biogrid implements Grid {
     while (
       (this.positionOutOfBounds(newPos, townSize) ||
         this.positionOccupied(newPos)) &&
-      outOfBoundsCount < 4
+      outOfBoundsCount <= 3
     ) {
       if (this.positionOutOfBounds(newPos, townSize)) {
         outOfBoundsCount++;

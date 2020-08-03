@@ -45,7 +45,7 @@ label {
   text-align: center;
 }
 
-.datePicker {
+.dateSlider {
   display: inline-block;
   margin-top: 1.25rem;
   margin-right: 1.25rem;
@@ -53,15 +53,41 @@ label {
   width: 75%;
 }
 
-.datePicker .horizontal-slider {
-  background: white;
-  padding: 0.5rem;
-  height: 1rem;
+.dateSlider .inputBox {
+  width: 100%;
+}
+
+.dateSlider .horizontal-slider {
+  background: black;
+  height: 2px;
+}
+
+.dateSlider .slider-wrapper {
+  height: auto;
+  display: grid;
+  height: 3rem;
+  align-items: center;
+}
+
+.dateSlider .thumb {
+  border: 1px black solid;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  top: -1.2rem;
 }
 
 .tooltip {
   position: relative;
   display: inline-block;
+}
+
+.tooltip.slider {
+  width: 100%;
+}
+
+.tooltip.slider .inputBox {
+  width: 100%;
 }
 
 .tooltip .tooltiptext {
