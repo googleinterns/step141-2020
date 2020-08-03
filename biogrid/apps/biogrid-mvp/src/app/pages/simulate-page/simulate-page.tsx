@@ -138,7 +138,6 @@ export const SimulatePage = () => {
     let reset = false;
     let pause = (shouldReset: boolean) => {
       reset = shouldReset;
-      console.log(reset);
       finished = true;
     };
     const runThroughSteps = async () => {
