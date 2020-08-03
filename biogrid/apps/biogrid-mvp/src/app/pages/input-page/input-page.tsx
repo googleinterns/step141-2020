@@ -94,6 +94,10 @@ export const InputPage = () => {
   return (
     <div className="input-page">
       <form onSubmit={(e: React.SyntheticEvent<EventTarget>) => onSubmit(e)}>
+      <div className="navbar">
+        <a className="active">Home</a>
+        <a href="" onClick={redirectToInfo}>Info</a>
+      </div>
       <h1>Welcome to the Biogrid Simulator!</h1>
       
       <p>This website will simulate how a <a href="https://www.sciencedirect.com/science/article/pii/S136403211830128X" target="_blank">microgrid</a> can 

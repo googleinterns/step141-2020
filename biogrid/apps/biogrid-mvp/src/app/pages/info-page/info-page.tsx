@@ -8,12 +8,26 @@
  */
 
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import './info-page.css';
 import Visual from './EnergyFlowVisual.png';
 
 export const InfoPage = () => {
+
+  const history = useHistory();
+
+  const redirectToHome = () => {
+    history.push('/');
+  };
+
   return (
     <div className="info-page">
+
+    <div className="navbar">
+      <a href="" onClick={redirectToHome}>Home</a>
+      <a className="active">Info</a>
+    </div>
+
       <h1>The Logic</h1>
 
       <img src={Visual} id="EnergyFlow"></img>
