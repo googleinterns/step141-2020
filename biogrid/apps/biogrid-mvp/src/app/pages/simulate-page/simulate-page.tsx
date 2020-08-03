@@ -182,17 +182,10 @@ export const SimulatePage = () => {
               <h2>Metrics</h2>
               <table>
                 <tr>
-                  <td>Time without energy</td>
-                  <td>{simulationResults.timeWithoutEnoughEnergy}</td>
+                  <td>Average Efficiency</td>
+                  <td>{simulationResults.averageEfficiency}%</td>
                 </tr>
-                <tr>
-                  <td>Energy wasted from source</td>
-                  <td>{simulationResults.energyWastedFromSource}</td>
-                </tr>
-                <tr>
-                  <td>Energy wasted in transport</td>
-                  <td>{simulationResults.energyWastedInTransportation}</td>
-                </tr>
+
               </table>
             </div>
             <div className="states-container">

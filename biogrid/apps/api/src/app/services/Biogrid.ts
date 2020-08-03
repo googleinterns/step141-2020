@@ -17,6 +17,7 @@ export interface BiogridSimulationResults {
     height: number;
   };
   states: any[];
+  averageEfficiency: number;
 }
 
 export interface NewBiogridOpts {
@@ -72,6 +73,7 @@ export async function simulateNewBiogrid(
   const initState = biogrid.getSystemState();
   const statesJson = [];
   const currentDate = body.startDate;
+  const efficiencies: number[] = [];
   for (let i = 0; i < constants.simulation.NUMBER_OF_SIM_HOURS; i++) {
     // Start at midnight, increment hours until NUMBER_OF_SIM_HOURS reached
     currentDate.setHours(i);
@@ -79,7 +81,11 @@ export async function simulateNewBiogrid(
     const action = await biobrain.computeAction(initState, currentDate);
     biogrid.takeAction(action);
     statesJson.push(biogrid.getJsonGraphDetails());
+    efficiencies.push(biogrid.getEfficiency());
   }
+  const efficienciesAddedUp = efficiencies
+    .filter((efficiency) => efficiency)
+    .reduce((prev, curr) => prev + curr, 0);
 
   return {
     energyWastedFromSource: 10,
@@ -87,5 +93,6 @@ export async function simulateNewBiogrid(
     timeWithoutEnoughEnergy: 24,
     states: statesJson,
     townSize: biogrid.getTownSize(),
+    averageEfficiency: efficienciesAddedUp / efficiencies.length,
   };
 }
