@@ -16,12 +16,12 @@ import {
 import { BUILDING, RESISTANCE } from '../config';
 
 export interface BuildingParams {
-  energy: number,
-  x: Distance,
-  y: Distance,
-  gridItemName: string,
-  minCapacity?: Energy,
-  maxCapacity?: Energy,
+  energy: number;
+  x: Distance;
+  y: Distance;
+  gridItemName: string;
+  minCapacity?: Energy;
+  maxCapacity?: Energy;
 }
 
 // TODO rename energy to power consumption
@@ -29,8 +29,7 @@ export interface BuildingParams {
  * A structure such as a building or house which uses energy to operate.
  */
 export class Building implements EnergyUser {
-
-  private energyInJoules: number;
+  private energyInKilowattHour: number;
   // Initial id value, will be changed by rural area.
   private buildingId = -1;
   // Label to be used in the graph
@@ -51,7 +50,7 @@ export class Building implements EnergyUser {
     this.relativePosition = { x: buildingParams.x, y: buildingParams.y };
     this.gridItemName = buildingParams.gridItemName;
     if (this.isPositive(buildingParams.energy)) {
-      this.energyInJoules = buildingParams.energy;
+      this.energyInKilowattHour = buildingParams.energy;
     } else {
       throw new Error("Can't create a building with negative energy!");
     }
@@ -87,8 +86,8 @@ export class Building implements EnergyUser {
     this.buildingId = Id;
   }
 
-  getEnergyInJoules(): number {
-    return this.energyInJoules;
+  getEnergyInKilowattHour(): number {
+    return this.energyInKilowattHour;
   }
 
   decreaseEnergyAccordingToTimeOfDay(date: Date) {
@@ -101,7 +100,7 @@ export class Building implements EnergyUser {
    */
   increaseEnergy(energy: number) {
     if (this.isPositive(energy)) {
-      this.energyInJoules += energy;
+      this.energyInKilowattHour += energy;
     } else {
       throw new Error("Can't add negative energy!");
     }
@@ -115,14 +114,14 @@ export class Building implements EnergyUser {
       throw new Error("Can't use a negative amount of energy!");
     }
     // Building can't have a negative amount of energy in store.
-    if (energy >= this.energyInJoules) {
-      this.energyInJoules = 0;
+    if (energy >= this.energyInKilowattHour) {
+      this.energyInKilowattHour = 0;
     } else {
-      this.energyInJoules -= energy;
+      this.energyInKilowattHour -= energy;
     }
   }
 
   private getAverageEnergyUsagePerDay(hourOfDay: number): Energy {
-    return BUILDING.ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY[hourOfDay.toString()]
+    return BUILDING.ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY[hourOfDay.toString()];
   }
 }

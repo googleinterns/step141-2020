@@ -30,7 +30,7 @@ describe('tests for Building class', () => {
     const building = new Building({energy: 5, x, y, gridItemName} as BuildingParams);
     building.increaseEnergy(5);
     const expectedEnergy = 10;
-    expect(building.getEnergyInJoules()).toEqual(expectedEnergy);
+    expect(building.getEnergyInKilowattHour()).toEqual(expectedEnergy);
   });
 
   test('negative input for decreaseEnergy()', () => {
@@ -44,13 +44,13 @@ describe('tests for Building class', () => {
     const building = new Building({energy: 5, x, y, gridItemName} as BuildingParams);
     building.decreaseEnergy(80);
     const expectedEnergy = 0;
-    expect(building.getEnergyInJoules()).toEqual(expectedEnergy);
+    expect(building.getEnergyInKilowattHour()).toEqual(expectedEnergy);
   });
 
   test('decreaseEnergy()', () => {
     const building = new Building({energy: 5, x, y, gridItemName} as BuildingParams);
     building.decreaseEnergy(4);
     const expectedEnergy = 1;
-    expect(building.getEnergyInJoules()).toEqual(expectedEnergy);
+    expect(building.getEnergyInKilowattHour()).toEqual(expectedEnergy);
   });
 });

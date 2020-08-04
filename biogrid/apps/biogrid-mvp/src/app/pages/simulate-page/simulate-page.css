@@ -2,10 +2,19 @@
  * @summary Styles page where user sees results from the simulation.
  * @author Awad Osman <awado@google.com>
  * @author Lev Stambler <levst@google.com>
- * 
+ *
  * Created at    : 2020-06-23 10:12:21
  * Last modified : 2020-07-28 10:43:35
  */
+
+.loading-container {
+  align-items: center;
+  display: grid;
+  height: 100%;
+  justify-content: center;
+  padding: 2rem;
+  width: 100%;
+}
 
 .redirect {
   margin-top: 1.25rem;
@@ -46,10 +55,14 @@ table {
   text-align: left;
 }
 
+.table-results-container {
+  margin-right: 2rem;
+}
+
 table td {
   padding: 0.2rem;
 }
 
-table.state-graph > tr  {
+table.state-graph > tr {
   outline: thin solid;
 }

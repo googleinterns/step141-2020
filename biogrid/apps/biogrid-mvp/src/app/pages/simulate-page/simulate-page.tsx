@@ -2,7 +2,7 @@
  * @summary Designs page where user sees results from the simulation.
  * @author Awad Osman <awado@google.com>
  * @author Lev Stambler <levst@google.com>
- * 
+ *
  * Created at    : 2020-07-07 09:31:49
  * Last modified : 2020-07-21 16:34:17
  */
@@ -17,13 +17,70 @@ import SimulationBoard, {
   GridItemRet,
   GridItemLines,
 } from '../../components/simulation-board';
+import PacmanLoader from 'react-spinners/PacmanLoader';
+
+const SimBoardPlayable = (props: {
+  simulationResults: BiogridSimulationResults;
+  stateFrame: number;
+}) => {
+  const stateToGridItemRet = (state: any): GridItemRet[] => {
+    return state.nodes.map((node: any) => {
+      return {
+        gridItemName: node.value.gridItemName,
+        relativePosition: node.value.position ||
+          node.value.relativePosition || { x: 0, y: 0 },
+      };
+    });
+  };
+  const stateToGridItemLines = (state: any): GridItemLines[] => {
+    return state.edges.map((edge: any) => {
+      return {
+        fromItem: edge.v,
+        toItem: edge.w,
+        powerThroughLinesKiloWatts: edge.value.power,
+      };
+    });
+  };
+  return (
+    <>
+      <div>
+        Time of day: {props.stateFrame % 12 === 0 ? 12 : props.stateFrame % 12}
+        :00 {props.stateFrame >= 12 ? 'PM' : 'AM'}
+      </div>
+      <SimulationBoard
+        grid_height_km={props.simulationResults.townSize.height}
+        grid_width_km={props.simulationResults.townSize.width}
+        // TODO add changing indices to show the progression of time for each subsequent state
+        // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
+        items={stateToGridItemRet(
+          props.simulationResults.states[
+            props.stateFrame < props.simulationResults.states.length
+              ? props.stateFrame
+              : 0
+          ]
+        )}
+        lines={stateToGridItemLines(
+          props.simulationResults.states[
+            props.stateFrame < props.simulationResults.states.length
+              ? props.stateFrame
+              : 0
+          ]
+        )}
+      />
+      ;
+    </>
+  );
+};
 
 export const SimulatePage = () => {
+  const [stateFrame, setStateFrame] = useState(0);
+  const [controlSimulation, setControlSimultation] = useState<{
+    pauseFN: (reset: boolean) => void;
+  }>();
+  const [isPlaying, setIsPlaying] = useState(false);
   const [simulationResults, setSimulationResults] = useState<
     BiogridSimulationResults
   >();
-  const [currentStateFrame, setCurrentStateFrame] = useState(0);
-
   const client = Client.getInstance();
 
   async function getSimulationResults() {
@@ -48,6 +105,11 @@ export const SimulatePage = () => {
     history.push('/');
   };
 
+  const pauseSimulation = async (reset = false) => {
+    setIsPlaying(false);
+    controlSimulation?.pauseFN(reset);
+  };
+
   const stateToGridItemRet = (state: any): GridItemRet[] => {
     return state.nodes.map((node: any) => {
       return {
@@ -67,15 +129,41 @@ export const SimulatePage = () => {
     });
   };
 
-  const playSimulation = () => {
-    const simResultsStateLen = simulationResults?.states.length || 0;
-    if (currentStateFrame >= simResultsStateLen) {
-      return;
+  const play = (): ((reset: boolean) => void) | null => {
+    if (isPlaying) {
+      return null;
     }
-    setTimeout(() => {
-      setCurrentStateFrame(currentStateFrame + 1);
-      playSimulation();
-    }, 1000);
+    const simResultsStateLen = simulationResults?.states.length || 0;
+    let finished = false;
+    let reset = false;
+    let pause = (shouldReset: boolean) => {
+      reset = shouldReset;
+      finished = true;
+    };
+    const runThroughSteps = async () => {
+      setIsPlaying(true);
+      for (let i = stateFrame; i < simResultsStateLen; i++) {
+        if (finished) {
+          if (reset) {
+            setStateFrame(0);
+          } else if (i > 1) {
+            // This rewinds the simulation back one extra frame
+            // So, when pause is pressed, the simulation pauses on the same frame
+            setStateFrame(i - 2);
+          }
+          return;
+        }
+        await new Promise((res, rej) =>
+          setTimeout(() => {
+            setStateFrame(i);
+            res();
+          }, 1000)
+        );
+      }
+      setIsPlaying(false);
+    };
+    runThroughSteps();
+    return pause;
   };
 
   useEffect(() => {
@@ -94,16 +182,8 @@ export const SimulatePage = () => {
               <h2>Metrics</h2>
               <table>
                 <tr>
-                  <td>Time without energy</td>
-                  <td>{simulationResults.timeWithoutEnoughEnergy}</td>
-                </tr>
-                <tr>
-                  <td>Energy wasted from source</td>
-                  <td>{simulationResults.energyWastedFromSource}</td>
-                </tr>
-                <tr>
-                  <td>Energy wasted in transport</td>
-                  <td>{simulationResults.energyWastedInTransportation}</td>
+                  <td>Average Efficiency</td>
+                  <td>{simulationResults.averageEfficiency}%</td>
                 </tr>
               </table>
             </div>
@@ -134,22 +214,39 @@ export const SimulatePage = () => {
           <div className="simboard-container">
             <h2>Simulation Board</h2>
             <div className="simboard-controls">
-              <button onClick={() => playSimulation()}>Play</button>
-              <button onClick={() => setCurrentStateFrame(0)}>Stop</button>
+              <button
+                onClick={() => {
+                  const playRet = play();
+                  if (playRet instanceof Function) {
+                    setControlSimultation({ pauseFN: playRet });
+                  }
+                }}
+              >
+                Play
+              </button>
+              <button onClick={() => pauseSimulation()}>Pause</button>
+              <button
+                onClick={() => {
+                  pauseSimulation(true);
+                  // State frame is also set to zero here to account for
+                  // When the simulation is already paused
+                  setStateFrame(0);
+                }}
+              >
+                Reset
+              </button>
             </div>
-            <SimulationBoard
-              grid_height_km={simulationResults.townSize.height}
-              grid_width_km={simulationResults.townSize.width}
-              // TODO add changing indices to show the progression of time for each subsequent state
-              // Find the GitHub issue: https://github.com/googleinterns/step141-2020/issues/64
-              items={stateToGridItemRet(
-                simulationResults.states[currentStateFrame < simulationResults.states.length ? currentStateFrame : 0]
-              )}
-              lines={stateToGridItemLines(
-                simulationResults.states[currentStateFrame < simulationResults.states.length ? currentStateFrame : 0]
-              )}
+
+            <SimBoardPlayable
+              simulationResults={simulationResults}
+              stateFrame={stateFrame}
             />
           </div>
+        </div>
+      )}
+      {!simulationResults && (
+        <div className="loading-container">
+          <PacmanLoader />
         </div>
       )}
     </div>

@@ -18,7 +18,7 @@ describe('test for BioBattery class', () => {
       y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
-      energyInJoules: currentpower,
+      energyInKiloWattHour: currentpower,
       maxCapacity
     } as BatteryParams)).toThrow(
       `Cannot create a battery with values: (${currentpower}, ${maxCapacity})`
@@ -33,7 +33,7 @@ describe('test for BioBattery class', () => {
       y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
-      energyInJoules: currentpower,
+      energyInKiloWattHour: currentpower,
       maxCapacity
     } as BatteryParams)).toThrow(
       `Cannot create a battery with values: (${currentpower}, ${maxCapacity})`
@@ -48,7 +48,7 @@ describe('test for BioBattery class', () => {
       y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
-      energyInJoules: currentpower,
+      energyInKiloWattHour: currentpower,
       maxCapacity
     } as BatteryParams);
     const outputenergy = 25;
@@ -62,7 +62,7 @@ describe('test for BioBattery class', () => {
       y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
-      energyInJoules: 20,
+      energyInKiloWattHour: 20,
       maxCapacity: 20
     } as BatteryParams);
     const expected = true;
@@ -75,7 +75,7 @@ describe('test for BioBattery class', () => {
       y: 5,
       gridItemName: 'small_battery',
       gridItemResistance: RESISTANCE.SMALL_BATTERY,
-      energyInJoules: 1,
+      energyInKiloWattHour: 1,
       maxCapacity: 10
     } as BatteryParams);
     const expected = false;

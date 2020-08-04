@@ -18,6 +18,7 @@ import {
   TownSize,
 } from '@biogrid/grid-simulator';
 import { GRID_ITEM_NAMES, ShortestDistances, RESISTANCE } from '../config';
+import { MAIN_GRID } from './main-grid-item';
 
 interface EdgeLabel {
   distance: number;
@@ -33,17 +34,7 @@ export class BiogridState implements StateGraph {
     this.graph = new graphlib.Graph({ directed: true });
 
     // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
-    const grid: GridItem = {
-      gridItemName: GRID_ITEM_NAMES.GRID,
-      gridItemResistance: RESISTANCE.GRID,
-      // Add the grid in the center of the town based on the townSize
-      getRelativePosition() {
-        return {
-          x: Math.floor(townSize.width / 2),
-          y: Math.floor(townSize.height / 2),
-        };
-      }
-    }
+    const grid: GridItem = new MAIN_GRID(townSize);
     this.graph.setNode(grid.gridItemName, (grid as GridItem));
 
     // Add all the vertices as nodes/vertices of the graph, with a name for
@@ -91,8 +82,22 @@ export class BiogridState implements StateGraph {
   public setPowerBetweenNodes(v: string, w: string, power: Power) {
     const labelFromV: EdgeLabel = this.graph.edge(v, GRID_ITEM_NAMES.GRID);
     const labelToW: EdgeLabel = this.graph.edge(GRID_ITEM_NAMES.GRID, w);
-    this.graph.setEdge(v, GRID_ITEM_NAMES.GRID, { distance: labelFromV.distance, power });
-    this.graph.setEdge("grid", w, { distance: labelToW.distance, power });
+    this.graph.setEdge(v, GRID_ITEM_NAMES.GRID, {
+      distance: labelFromV.distance,
+      power,
+    });
+    this.graph.setEdge(GRID_ITEM_NAMES.GRID, w, {
+      distance: labelToW.distance,
+      power,
+    });
+  }
+
+  /**
+   * Set all edge power to 0
+   */
+  public resetPowerOnEdges() {
+    const edges = this.graph.edges();
+    edges.forEach((edge) => this.resetEdge(edge));
   }
 
   /**
@@ -135,6 +140,17 @@ export class BiogridState implements StateGraph {
     return function (edge: graphlib.Edge): Distance {
       return graph.edge(edge).distance;
     };
+  }
+
+  /**
+   * Reset an edge by changing its power to 0
+   */
+  private resetEdge(edge: graphlib.Edge): void {
+    const labels = this.graph.edge(edge);
+    this.graph.setEdge(edge.v, edge.w, {
+      distance: labels.distance,
+      power: 0,
+    });
   }
 
   /**

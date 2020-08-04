@@ -21,12 +21,12 @@ export interface BatteryParams {
   y: Distance,
   gridItemName: string,
   gridItemResistance: number,
-  energyInJoules: Energy,
+  energyInKiloWattHour: Energy,
   maxCapacity?: Energy,
 }
 
 export class BioBattery implements Battery {
-  private energyInJoules: Energy;
+  private energyInKiloWattHour: Energy;
   private readonly maxCapacity: Energy = SMALL_BATTERY.MAX_CAPACITY;
   // name of the grid item is unique to the battery type, but they have a similar prefix
   gridItemName: string;
@@ -43,13 +43,13 @@ export class BioBattery implements Battery {
    */
   constructor(batteryParams: BatteryParams) {
     this.relativePosition = { x: batteryParams.x, y: batteryParams.y };
-    if (!this.validateInputs(batteryParams.energyInJoules, batteryParams.maxCapacity)) {
+    if (!this.validateInputs(batteryParams.energyInKiloWattHour, batteryParams.maxCapacity)) {
       // TODO return a tuple of from validate to with the boolean and unpassed validations
       throw new Error(
-        `Cannot create a battery with values: (${batteryParams.energyInJoules}, ${batteryParams.maxCapacity})`
+        `Cannot create a battery with values: (${batteryParams.energyInKiloWattHour}, ${batteryParams.maxCapacity})`
       );
     }
-    this.energyInJoules = batteryParams.energyInJoules;
+    this.energyInKiloWattHour = batteryParams.energyInKiloWattHour;
     if (batteryParams.maxCapacity) {
       this.maxCapacity = batteryParams.maxCapacity;
     }
@@ -62,40 +62,40 @@ export class BioBattery implements Battery {
   }
 
   startCharging(inputPower: Energy): void {
-    if (this.energyInJoules + inputPower > this.maxCapacity) {
-      this.energyInJoules = this.maxCapacity;
+    if (this.energyInKiloWattHour + inputPower > this.maxCapacity) {
+      this.energyInKiloWattHour = this.maxCapacity;
     }
-    this.energyInJoules += inputPower;
+    this.energyInKiloWattHour += inputPower;
   }
 
   // TODO implement when you use a formula for charging a battery
   stopCharging(): void {}
 
   supplyPower(outputenergy: Energy): Energy {
-    if (this.energyInJoules - outputenergy < 0) {
+    if (this.energyInKiloWattHour - outputenergy < 0) {
       //TODO implement the function to notify the request with amount of output left
-      const temp: Energy = this.energyInJoules;
-      this.energyInJoules = 0;
+      const temp: Energy = this.energyInKiloWattHour;
+      this.energyInKiloWattHour = 0;
       return temp;
     }
-    this.energyInJoules -= outputenergy;
+    this.energyInKiloWattHour -= outputenergy;
     return outputenergy;
   }
 
   private validateInputs(
-    energyInJoules: Energy,
+    energyInKiloWattHour: Energy,
     maxCapacity: Energy = this.maxCapacity
   ) {
     const batteryValidator: Validatable = {
-      value: energyInJoules,
+      value: energyInKiloWattHour,
       max: maxCapacity,
-      isPositive: energyInJoules >= 0 && maxCapacity >= 0,
+      isPositive: energyInKiloWattHour >= 0 && maxCapacity >= 0,
     };
     return validate(batteryValidator);
   }
 
-  getEnergyInJoules(): Energy {
-    return this.energyInJoules;
+  getEnergyInKilowattHour(): Energy {
+    return this.energyInKiloWattHour;
   }
 
   getMaxCapacity(): Energy {
@@ -103,10 +103,10 @@ export class BioBattery implements Battery {
   }
 
   isEmpty(): boolean {
-    return this.energyInJoules === 0;
+    return this.energyInKiloWattHour === 0;
   }
 
   isFull(): boolean {
-    return this.energyInJoules === this.maxCapacity;
+    return this.energyInKiloWattHour === this.maxCapacity;
   }
 }

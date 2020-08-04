@@ -19,7 +19,7 @@ export interface EnergyUsageByTimeOfDay {
 }
 
 export interface EnergyUser extends GridItem {
-  getEnergyInJoules(): number;
+  getEnergyInKilowattHour(): number;
   increaseEnergy(energy: number): void;
   decreaseEnergy(energy: number): void;
   decreaseEnergyAccordingToTimeOfDay(date: Date): void;
