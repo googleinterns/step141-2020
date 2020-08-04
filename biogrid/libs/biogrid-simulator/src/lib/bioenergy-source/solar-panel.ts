@@ -1,6 +1,6 @@
 /**
- * @file defines the @class SolarPanel which describes solar panels that are considered as the primary source of energy considered in this microgrid.
- * It @extends EnergySource which add the functionalities the energy source
+ * @file defines the SolarPanel class which describes solar panels that are considered as the primary source of energy considered in this microgrid.
+ * It extends EnergySource which add the functionalities the energy source
  *
  * @summary is abstract class for an energy source
  * @author Lev Stambler <levst@google.com>

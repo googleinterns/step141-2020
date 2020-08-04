@@ -1,5 +1,5 @@
 /**
- * @summary defines the @class BioBattery which represents the batteries used for storing energy
+ * @summary defines the BioBattery class which represents the batteries used for storing energy
  * @author Lev Stambler <levst@google.com>
  * @author Roland Naijuka <rnaijuka@google.com>
  *

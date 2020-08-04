@@ -1,6 +1,6 @@
 /**
- * @file defines the @abstract @class EnergySource which describes energy sources.
- * It @implements @interface EnergySourceInterface which add the functionalities the energy source
+ * @file defines an abstract class EnergySource which describes energy sources.
+ * It implements interface EnergySourceInterface which add the functionalities the energy source
  * The class defines the psosition of the energy source relative to the town as well as relative to the earth using longititude and latitudes
  *
  * @summary is abstract class for an energy source
