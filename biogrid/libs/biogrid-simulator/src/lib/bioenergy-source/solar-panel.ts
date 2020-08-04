@@ -1,3 +1,14 @@
+/**
+ * @file defines the SolarPanel class which describes solar panels that are considered as the primary source of energy considered in this microgrid.
+ * It extends EnergySource which add the functionalities the energy source
+ *
+ * @summary is abstract class for an energy source
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 7/16/2020, 7:01:09 AM
+ * Last modified  : 7/29/2020, 9:55:17 AM
+ */
 import { WeatherLib } from '@biogrid/weather';
 import { EnergySource, EnergySourceParams } from './bioenergy-source';
 import {

@@ -1,3 +1,13 @@
+/**
+ * @summary describes a rural area where a microgrid can be implemented. It contains the buildings which are
+ * in the rural area
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ *
+ * Created at     : 6/29/2020, 4:26:17 PM
+ * Last modified  : 7/28/2020, 5:32:02 PM
+ */
+
 import { Town, TownSize, Distance } from '@biogrid/grid-simulator';
 import { Building } from '../building';
 

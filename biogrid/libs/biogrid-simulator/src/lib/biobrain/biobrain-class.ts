@@ -1,3 +1,10 @@
+/**
+ * @summary defines the brain of the grid responsible for deciding what action the grid should take.
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/29/2020, 4:33:42 PM
+ * Last modified  : 7/29/2020, 10:21:17 AM
+ */
 import {
   Brain,
   GridAction,

@@ -1,3 +1,11 @@
+/**
+ * @summary defines functions which are used to calculate power, current, voltage and resistance in both wires and
+ * gridItems which is used in calculating the efficiency of the grid
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 7/22/2020, 5:39:10 PM
+ * Last modified  : 7/28/2020, 4:44:35 PM
+ */
 import { RESISTANCE } from ".";
 import { Power } from '@biogrid/grid-simulator';
 /**

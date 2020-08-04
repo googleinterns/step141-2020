@@ -1,3 +1,12 @@
+/**
+ * @summary defines the main grid or control centre in the microgrid where all components of the grid
+ * are connected to the grid.
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/26/2020, 3:33:10 PM
+ * Last modified  : 7/29/2020, 9:43:17 AM
+ */
 import {
   Grid,
   GridAction,

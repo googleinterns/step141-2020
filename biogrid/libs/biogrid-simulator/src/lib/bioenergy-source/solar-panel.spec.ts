@@ -1,3 +1,11 @@
+/**
+ * @summary defines the unit tests for the @class SolarPanel
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 7/16/2020, 7:01:09 AM
+ * Last modified  : 7/29/2020, 10:41:45 AM
+ */
 import { WeatherLib } from '@biogrid/weather';
 import { SolarPanel } from './';
 import { GRID_ITEM_NAMES } from '../config';

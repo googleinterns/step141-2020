@@ -1,3 +1,11 @@
+/**
+ * @summary defines the BioBattery class which represents the batteries used for storing energy
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/29/2020, 4:33:42 PM
+ * Last modified  : 7/29/2020, 10:29:17 AM
+ */
 import {
   Battery,
   Distance,

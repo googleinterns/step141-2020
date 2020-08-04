@@ -1,3 +1,11 @@
+/**
+ * @summary defines the graph which connects all the items of the grid
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/29/2020, 8:56:21 AM
+ * Last modified  : 7/29/2020, 9:26:02 AM
+ */
 import * as graphlib from 'graphlib';
 import {
   StateGraphVertex,

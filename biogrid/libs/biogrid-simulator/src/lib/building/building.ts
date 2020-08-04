@@ -1,3 +1,12 @@
+/**
+ * @summary defines the buildings which are found in the town
+ * @author Awad Osman <awado@google.com>
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/29/2020, 4:26:17 PM
+ * Last modified  : 7/29/2020, 9:16:02 AM
+ */
 import {
   EnergyUser,
   ItemPosition,

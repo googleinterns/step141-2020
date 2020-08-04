@@ -1,4 +1,16 @@
 /**
+ * This files contains the names for the types of measurements and their units
+ * which are are used in this project. These constants / names are used in the 
+ * interfaces to highlight what kind of input or output paramater that is expected
+ * 
+ * @summary exports all the constants names which are synonmous for the project
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/26/2020, 3:33:10 PM
+ * Last modified  : 7/28/2020, 1:41:02 PM
+ */
+/**
  * In Miles
  * Distance must be a positive number
  */

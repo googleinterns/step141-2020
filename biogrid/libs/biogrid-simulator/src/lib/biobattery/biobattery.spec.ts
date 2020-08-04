@@ -1,3 +1,11 @@
+/**
+ * @summary defines the unit tests for the @class BioBattery
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 6/30/2020, 7:18:04 PM
+ * Last modified  : 7/29/2020, 10:33:54 AM
+ */
 import { BioBattery, BatteryParams } from "./";
 import { RESISTANCE } from "../config";
 

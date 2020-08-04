@@ -1,3 +1,12 @@
+/**
+ * @summary defines the constants which are used in calculations in the algorithms.
+ * @author Lev Stambler <levst@google.com>
+ * @author Roland Naijuka <rnaijuka@google.com>
+ * 
+ * Created at     : 7/15/2020, 6:48:11 AM
+ * Last modified  : 7/28/2020, 5:26:02 PM
+ */
+
 import { BioBattery, Building, SolarPanel } from '@biogrid/biogrid-simulator';
 import { Path } from 'graphlib';
 import { EnergyUsageByTimeOfDay } from '@biogrid/grid-simulator';
